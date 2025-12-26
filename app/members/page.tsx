@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import AuthGuard from '@/components/AuthGuard'
 

@@ -68,6 +68,7 @@ export default function Navigation() {
               width={64}
               height={64}
               className="h-16 w-auto"
+              style={{ width: 'auto', height: '4rem' }}
               priority
             />
             <span className="text-xl font-bold">EAA 690</span>
