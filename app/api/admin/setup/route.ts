@@ -155,14 +155,6 @@ export async function POST(request: NextRequest) {
 
     // If we don't have a userId yet (from existing user), get it from the result
     if (!userId && result) {
-      if (result.error) {
-        console.error('BetterAuth signup error:', result.error)
-        return NextResponse.json(
-          { error: result.error.message || 'Failed to create account', code: result.error.code },
-          { status: 400 }
-        )
-      }
-      
       // Log the full result to debug the structure
       console.log('Full BetterAuth result:', JSON.stringify(result, null, 2))
       console.log('Result data:', result.data)
