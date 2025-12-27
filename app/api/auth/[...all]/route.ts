@@ -24,6 +24,47 @@ export async function OPTIONS(request: NextRequest) {
   return new Response(null, { status: 200 })
 }
 
-// Better Auth handles CORS automatically, but we ensure OPTIONS is handled
-export { authGET as GET, authPOST as POST }
+// Wrap handlers with error handling
+async function handleWithError(
+  handler: (request: NextRequest) => Promise<Response>,
+  request: NextRequest
+) {
+  try {
+    return await handler(request)
+  } catch (error) {
+    console.error("Better Auth API Error:", error)
+    const errorMessage = error instanceof Error ? error.message : "Unknown error"
+    const errorStack = error instanceof Error ? error.stack : undefined
+    
+    // Log full error details for debugging
+    console.error("Error details:", {
+      message: errorMessage,
+      stack: errorStack,
+      url: request.url,
+      method: request.method,
+    })
+    
+    return new Response(
+      JSON.stringify({
+        error: "Internal server error",
+        message: errorMessage,
+        ...(process.env.NODE_ENV === "development" && { stack: errorStack }),
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+  }
+}
+
+export async function GET(request: NextRequest) {
+  return handleWithError(authGET, request)
+}
+
+export async function POST(request: NextRequest) {
+  return handleWithError(authPOST, request)
+}
 
