@@ -44,12 +44,21 @@ async function handleWithError(
   try {
     // Validate secret at runtime (not during build)
     validateSecret()
+    
+    // Log request for debugging
+    const url = new URL(request.url)
+    console.log("Better Auth request:", {
+      path: url.pathname,
+      method: request.method,
+      hasDatabase: !!process.env.DATABASE_URL,
+      hasSecret: !!process.env.BETTER_AUTH_SECRET,
+    })
+    
     const response = await handler(request)
     
-    // Log 403 errors for debugging
-    if (response.status === 403) {
-      const url = new URL(request.url)
-      console.error("403 Forbidden error:", {
+    // Log errors for debugging
+    if (response.status >= 400) {
+      console.error(`${response.status} error:`, {
         path: url.pathname,
         method: request.method,
         url: request.url,
@@ -59,7 +68,7 @@ async function handleWithError(
       try {
         const clonedResponse = response.clone()
         const body = await clonedResponse.text()
-        console.error("403 Response body:", body)
+        console.error(`${response.status} Response body:`, body)
       } catch (e) {
         // Ignore if we can't read the body
       }
@@ -72,17 +81,23 @@ async function handleWithError(
     const errorStack = error instanceof Error ? error.stack : undefined
     
     // Log full error details for debugging
+    const url = new URL(request.url)
     console.error("Error details:", {
       message: errorMessage,
       stack: errorStack,
       url: request.url,
+      path: url.pathname,
       method: request.method,
+      hasDatabase: !!process.env.DATABASE_URL,
+      hasSecret: !!process.env.BETTER_AUTH_SECRET,
+      errorType: error?.constructor?.name,
     })
     
     return new Response(
       JSON.stringify({
         error: "Internal server error",
         message: errorMessage,
+        path: url.pathname,
         ...(process.env.NODE_ENV === "development" && { stack: errorStack }),
       }),
       {
