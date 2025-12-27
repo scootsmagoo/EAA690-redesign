@@ -2,6 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/better-auth'
 import { Pool } from 'pg'
 
+// Helper function to get base URL (same as in better-auth.ts)
+function getBaseURL(): string {
+  if (process.env.BETTER_AUTH_URL) {
+    return process.env.BETTER_AUTH_URL
+  }
+  if (process.env.NEXT_PUBLIC_BETTER_AUTH_URL) {
+    return process.env.NEXT_PUBLIC_BETTER_AUTH_URL
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+  return "http://localhost:3000"
+}
+
 /**
  * Initial Admin Setup API Route
  * 
@@ -88,8 +102,9 @@ export async function POST(request: NextRequest) {
     // Create user using BetterAuth's signUpEmail API
     // Use direct HTTP request to avoid internal API issues
     console.log('Creating user account...')
-    const baseURL = auth.config.baseURL || process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
-    const signUpURL = `${baseURL}${auth.config.basePath}/sign-up/email`
+    const baseURL = getBaseURL()
+    const basePath = "/api/auth"
+    const signUpURL = `${baseURL}${basePath}/sign-up/email`
     console.log('Sign-up URL:', signUpURL)
     
     let result: { token: null | string; user: { id: string } } | undefined
