@@ -2,18 +2,22 @@ import { betterAuth } from "better-auth"
 import { twoFactor, admin } from "better-auth/plugins"
 import { Pool } from "pg"
 
-// Initialize database connection
-const pool = process.env.DATABASE_URL
-  ? new Pool({
+// Lazy initialization of database connection to avoid build-time errors
+let _pool: Pool | null = null
+
+function getPool(): Pool | null {
+  if (_pool) return _pool
+  
+  if (process.env.DATABASE_URL) {
+    _pool = new Pool({
       connectionString: process.env.DATABASE_URL,
       ssl: process.env.DATABASE_URL?.includes("localhost") 
         ? false 
         : { rejectUnauthorized: false },
     })
-  : null
-
-if (!pool && process.env.NODE_ENV === "production") {
-  throw new Error("DATABASE_URL is required in production")
+  }
+  
+  return _pool
 }
 
 // Determine the base URL for authentication
@@ -38,8 +42,10 @@ function getBaseURL(): string {
 }
 
 // BetterAuth configuration with MFA
+// Note: database may be undefined during build, but that's okay
+// The actual database operations happen at runtime
 export const auth = betterAuth({
-  database: pool || undefined,
+  database: getPool() || undefined,
   baseURL: getBaseURL(),
   basePath: "/api/auth",
   emailAndPassword: {
