@@ -9,12 +9,25 @@ function getPool(): Pool | null {
   if (_pool) return _pool
   
   if (process.env.DATABASE_URL) {
-    _pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: process.env.DATABASE_URL?.includes("localhost") 
-        ? false 
-        : { rejectUnauthorized: false },
-    })
+    try {
+      _pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: process.env.DATABASE_URL?.includes("localhost") 
+          ? false 
+          : { rejectUnauthorized: false },
+      })
+      
+      // Test the connection
+      _pool.on('error', (err) => {
+        console.error('Unexpected database pool error:', err)
+        _pool = null // Reset pool on error
+      })
+    } catch (error) {
+      console.error('Failed to create database pool:', error)
+      _pool = null
+    }
+  } else {
+    console.warn('DATABASE_URL not set - Better Auth will run without database')
   }
   
   return _pool
