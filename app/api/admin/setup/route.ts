@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update user role to admin in the database
-    // BetterAuth admin plugin stores roles differently - let's try multiple approaches
+    // BetterAuth admin plugin uses a separate admin table or role column
     console.log('Setting admin role for user:', userId)
     let roleSet = false
     
@@ -211,11 +211,51 @@ export async function POST(request: NextRequest) {
       `)
       console.log('User table columns:', columnCheck.rows.map(r => r.column_name))
       
+      // Mark email as verified first (required for login)
+      const emailVerifiedColumn = columnCheck.rows.find(r => 
+        r.column_name === 'email_verified' || r.column_name === 'emailVerified'
+      )
+      if (emailVerifiedColumn) {
+        const columnName = emailVerifiedColumn.column_name
+        await pool.query(
+          `UPDATE "user" SET "${columnName}" = true WHERE id = $1`,
+          [userId]
+        )
+        console.log('Email verified')
+      }
+      
+      // Better Auth admin plugin might use:
+      // 1. A 'role' column in the user table
+      // 2. A separate 'admin' table
+      // 3. A 'data' JSONB column with role info
+      
       // Try updating the role column if it exists
       if (columnCheck.rows.some(r => r.column_name === 'role')) {
         await pool.query('UPDATE "user" SET role = $1 WHERE id = $2', ['admin', userId])
         roleSet = true
         console.log('Role set via role column')
+      }
+      
+      // Check if there's an admin table
+      const adminTableCheck = await pool.query(`
+        SELECT table_name 
+        FROM information_schema.tables 
+        WHERE table_schema = 'public' 
+        AND table_name = 'admin'
+      `)
+      
+      if (adminTableCheck.rows.length > 0) {
+        // Insert into admin table if it exists
+        try {
+          await pool.query(
+            'INSERT INTO admin (user_id) VALUES ($1) ON CONFLICT (user_id) DO NOTHING',
+            [userId]
+          )
+          roleSet = true
+          console.log('Admin role set via admin table')
+        } catch (adminError) {
+          console.error('Failed to insert into admin table:', adminError)
+        }
       }
       
       // Also try updating the data JSONB column
@@ -228,22 +268,24 @@ export async function POST(request: NextRequest) {
         console.log('Role set via data column')
       }
       
+      // If no role column exists, try creating one and setting it
+      if (!roleSet && !columnCheck.rows.some(r => r.column_name === 'role')) {
+        try {
+          await pool.query('ALTER TABLE "user" ADD COLUMN IF NOT EXISTS role TEXT')
+          await pool.query('UPDATE "user" SET role = $1 WHERE id = $2', ['admin', userId])
+          roleSet = true
+          console.log('Role column created and set')
+        } catch (alterError) {
+          console.error('Failed to create role column:', alterError)
+        }
+      }
+      
       if (!roleSet) {
-        console.warn('Could not set role - neither role nor data column found')
+        console.warn('Could not set role - trying alternative methods')
       }
     } catch (roleError) {
       console.error('Failed to set admin role:', roleError)
       // Continue - user was created, role can be set manually if needed
-    }
-
-    // Also mark email as verified for admin setup
-    try {
-      await pool.query(
-        'UPDATE "user" SET email_verified = true WHERE id = $1',
-        [userId]
-      )
-    } catch (verifyError) {
-      console.error('Failed to verify email:', verifyError)
     }
 
     // Fetch the final user data
