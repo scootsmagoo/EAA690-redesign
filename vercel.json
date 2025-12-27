@@ -3,13 +3,6 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["iad1"],
-  "redirects": [
-    {
-      "source": "/login",
-      "destination": "/sign-in",
-      "permanent": false
-    }
-  ]
+  "regions": ["iad1"]
 }
 

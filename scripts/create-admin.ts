@@ -35,7 +35,7 @@ async function createAdmin() {
       },
     })
 
-    if (result.error) {
+    if ('error' in result && result.error) {
       console.error("Error creating account:", result.error)
       process.exit(1)
     }

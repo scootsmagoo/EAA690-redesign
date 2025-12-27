@@ -16,10 +16,31 @@ if (!pool && process.env.NODE_ENV === "production") {
   throw new Error("DATABASE_URL is required in production")
 }
 
+// Determine the base URL for authentication
+// Priority: explicit env var > Vercel URL > localhost
+function getBaseURL(): string {
+  // If explicitly set, use that
+  if (process.env.BETTER_AUTH_URL) {
+    return process.env.BETTER_AUTH_URL
+  }
+  if (process.env.NEXT_PUBLIC_BETTER_AUTH_URL) {
+    return process.env.NEXT_PUBLIC_BETTER_AUTH_URL
+  }
+  
+  // For Vercel deployments, use the deployment URL
+  // VERCEL_URL is available server-side (no NEXT_PUBLIC_ prefix needed)
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+  
+  // Fallback for local development
+  return "http://localhost:3000"
+}
+
 // BetterAuth configuration with MFA
 export const auth = betterAuth({
   database: pool || undefined,
-  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
+  baseURL: getBaseURL(),
   basePath: "/api/auth",
   emailAndPassword: {
     enabled: true,
