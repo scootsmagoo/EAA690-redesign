@@ -26,8 +26,8 @@ export default function LoginPage() {
         password,
       })
 
-      if (result.error) {
-        setError(result.error.message || 'Invalid email or password')
+      if ('error' in result && result.error) {
+        setError((result.error as { message?: string }).message || 'Invalid email or password')
       } else {
         // Successful login - redirect to the intended page or members area
         router.push(redirect)

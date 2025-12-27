@@ -39,8 +39,8 @@ export default function SignupPage() {
         name,
       })
 
-      if (result.error) {
-        setError(result.error.message || 'Failed to create account')
+      if ('error' in result && result.error) {
+        setError((result.error as { message?: string }).message || 'Failed to create account')
       } else {
         // Successful signup - redirect to login or verification page
         router.push('/sign-in?message=Account created. Please check your email to verify your account.')
