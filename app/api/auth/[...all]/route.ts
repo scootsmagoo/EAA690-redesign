@@ -44,7 +44,28 @@ async function handleWithError(
   try {
     // Validate secret at runtime (not during build)
     validateSecret()
-    return await handler(request)
+    const response = await handler(request)
+    
+    // Log 403 errors for debugging
+    if (response.status === 403) {
+      const url = new URL(request.url)
+      console.error("403 Forbidden error:", {
+        path: url.pathname,
+        method: request.method,
+        url: request.url,
+      })
+      
+      // Try to get the response body for more details
+      try {
+        const clonedResponse = response.clone()
+        const body = await clonedResponse.text()
+        console.error("403 Response body:", body)
+      } catch (e) {
+        // Ignore if we can't read the body
+      }
+    }
+    
+    return response
   } catch (error) {
     console.error("Better Auth API Error:", error)
     const errorMessage = error instanceof Error ? error.message : "Unknown error"
@@ -81,4 +102,3 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   return handleWithError(authPOST, request)
 }
-
