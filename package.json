@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sanity/client": "^7.14.1",
+    "@sanity/image-url": "^2.0.3",
     "@types/pg": "^8.16.0",
     "better-auth": "^1.4.9",
     "next": "14.0.4",
