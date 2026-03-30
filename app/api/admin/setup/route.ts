@@ -253,8 +253,16 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Admin setup error:', error)
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    let errorMessage = error instanceof Error ? error.message : 'Unknown error'
     const errorStack = error instanceof Error ? error.stack : undefined
+
+    const dbHint =
+      /tenant or user not found|password authentication failed|could not translate host/i.test(
+        errorMessage
+      )
+        ? ' Check DATABASE_URL / POSTGRES_URL in Vercel: use the exact string from Neon, Supabase, or Vercel Postgres (Supabase user is often postgres.<project-ref>).'
+        : ''
+    if (dbHint) errorMessage = errorMessage + dbHint
     
     // Log full error details for debugging
     console.error('Full error details:', {

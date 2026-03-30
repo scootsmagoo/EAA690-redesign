@@ -152,7 +152,10 @@ export async function ensureBetterAuthSchema(): Promise<void> {
     schemaReady = (async () => {
       const ctx = await getAuth().$context
       await ctx.runMigrations()
-    })()
+    })().catch((err) => {
+      schemaReady = null
+      throw err
+    })
   }
   await schemaReady
 }

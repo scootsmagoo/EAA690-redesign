@@ -4,11 +4,20 @@ import path from "path"
  * Resolves which database Better Auth should use.
  * - If `DATABASE_URL` is unset in development, defaults to SQLite at `./eaa-auth.db`
  *   (no hosted Postgres required for local work).
- * - In production, `DATABASE_URL` must be set explicitly (Postgres on Vercel, etc.).
+ * - In production, prefer `DATABASE_URL`, then common Vercel / Prisma fallbacks (many teams
+ *   only set `POSTGRES_URL` from the Vercel Postgres integration).
  */
 export function getEffectiveDatabaseUrl(): string | undefined {
-  const v = process.env.DATABASE_URL?.trim()
-  if (v) return v
+  const candidates = [
+    process.env.DATABASE_URL,
+    process.env.POSTGRES_URL,
+    process.env.POSTGRES_PRISMA_URL,
+    process.env.PRISMA_DATABASE_URL,
+  ]
+  for (const c of candidates) {
+    const v = c?.trim()
+    if (v) return v
+  }
   if (process.env.NODE_ENV !== "production") {
     return "./eaa-auth.db"
   }
