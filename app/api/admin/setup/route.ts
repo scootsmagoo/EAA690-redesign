@@ -1,20 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/better-auth'
+import { ensureBetterAuthSchema } from '@/lib/better-auth'
+import { getEffectiveDatabaseUrl, isPostgresUrl } from '@/lib/db-resolver'
+import { runSqliteAdminSetup } from '@/lib/admin-setup-sqlite'
+import { getSiteBaseURL } from '@/lib/site-url'
 import { Pool } from 'pg'
-
-// Helper function to get base URL (same as in better-auth.ts)
-function getBaseURL(): string {
-  if (process.env.BETTER_AUTH_URL) {
-    return process.env.BETTER_AUTH_URL
-  }
-  if (process.env.NEXT_PUBLIC_BETTER_AUTH_URL) {
-    return process.env.NEXT_PUBLIC_BETTER_AUTH_URL
-  }
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`
-  }
-  return "http://localhost:3000"
-}
 
 /**
  * Initial Admin Setup API Route
@@ -41,20 +30,46 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if DATABASE_URL is set
-    if (!process.env.DATABASE_URL) {
+    await ensureBetterAuthSchema()
+
+    const dbUrl = getEffectiveDatabaseUrl()
+    if (!dbUrl) {
       return NextResponse.json(
-        { error: 'DATABASE_URL environment variable is not set' },
+        {
+          error:
+            'DATABASE_URL is not set. In production, set it to your PostgreSQL connection string. For local development, this should not appear — contact support.',
+        },
         { status: 500 }
       )
     }
 
-    // Get database connection
+    if (!isPostgresUrl(dbUrl)) {
+      const sqliteResult = await runSqliteAdminSetup({
+        email,
+        password,
+        name,
+        dbUrl,
+      })
+      if ('error' in sqliteResult) {
+        return NextResponse.json(
+          {
+            error: sqliteResult.error,
+            ...(sqliteResult.details && { details: sqliteResult.details }),
+          },
+          { status: sqliteResult.status }
+        )
+      }
+      return NextResponse.json({
+        success: true,
+        message: 'Admin account created successfully',
+        user: sqliteResult.user,
+      })
+    }
+
+    // PostgreSQL
     pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: process.env.DATABASE_URL?.includes("localhost") 
-        ? false 
-        : { rejectUnauthorized: false },
+      connectionString: dbUrl,
+      ssl: dbUrl.includes('localhost') ? false : { rejectUnauthorized: false },
     })
 
     // Test database connection
@@ -102,7 +117,7 @@ export async function POST(request: NextRequest) {
     // Create user using BetterAuth's signUpEmail API
     // Use direct HTTP request to avoid internal API issues
     console.log('Creating user account...')
-    const baseURL = getBaseURL()
+    const baseURL = getSiteBaseURL()
     const basePath = "/api/auth"
     const signUpURL = `${baseURL}${basePath}/sign-up/email`
     console.log('Sign-up URL:', signUpURL)

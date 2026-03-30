@@ -1,4 +1,5 @@
-import { auth } from "@/lib/better-auth"
+import { auth, DEV_SECRET_FALLBACK, ensureBetterAuthSchema } from "@/lib/better-auth"
+import { getEffectiveDatabaseUrl } from "@/lib/db-resolver"
 import { toNextJsHandler } from "better-auth/next-js"
 import { NextRequest } from "next/server"
 
@@ -24,15 +25,24 @@ export async function OPTIONS(request: NextRequest) {
   return new Response(null, { status: 200 })
 }
 
-// Validate that BETTER_AUTH_SECRET is set at runtime
+// Validate that BETTER_AUTH_SECRET is set at runtime (production / Vercel)
 function validateSecret() {
-  if (!process.env.BETTER_AUTH_SECRET || process.env.BETTER_AUTH_SECRET === 'dev-secret-change-in-production') {
-    if (process.env.VERCEL_URL || process.env.NODE_ENV === 'production') {
-      throw new Error(
-        'BETTER_AUTH_SECRET environment variable is required in production. ' +
-        'Generate one using: openssl rand -base64 32'
-      )
-    }
+  const isProd =
+    Boolean(process.env.VERCEL_URL) || process.env.NODE_ENV === "production"
+  if (!isProd) return
+
+  const s = process.env.BETTER_AUTH_SECRET?.trim()
+  const insecure =
+    !s ||
+    s.length < 32 ||
+    s === DEV_SECRET_FALLBACK ||
+    s === "dev-secret-change-in-production"
+
+  if (insecure) {
+    throw new Error(
+      "BETTER_AUTH_SECRET must be set in production and be at least 32 characters. " +
+        "Generate one using: openssl rand -base64 32"
+    )
   }
 }
 
@@ -44,10 +54,12 @@ async function handleWithError(
   try {
     // Validate secret at runtime (not during build)
     validateSecret()
+
+    await ensureBetterAuthSchema()
     
     // Log request for debugging
     const url = new URL(request.url)
-    const dbUrl = process.env.DATABASE_URL
+    const dbUrl = getEffectiveDatabaseUrl()
     console.log("Better Auth request:", {
       path: url.pathname,
       method: request.method,
@@ -86,7 +98,7 @@ async function handleWithError(
     
     // Log full error details for debugging
     const url = new URL(request.url)
-    const dbUrl = process.env.DATABASE_URL
+    const dbUrl = getEffectiveDatabaseUrl()
     console.error("Error details:", {
       message: errorMessage,
       code: errorCode,

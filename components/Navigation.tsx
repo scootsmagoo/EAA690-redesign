@@ -19,6 +19,20 @@ export default function Navigation() {
     router.refresh()
   }
 
+  /** Desktop: first name only when `name` has multiple words; full string in `title` on hover. */
+  const navUserLabel = session?.user
+    ? (() => {
+        const u = session.user
+        const nameTrim = u.name?.trim()
+        const full = nameTrim || u.email || ''
+        const compact =
+          nameTrim && nameTrim.includes(' ')
+            ? nameTrim.split(/\s+/)[0] ?? full
+            : full
+        return { full, compact }
+      })()
+    : null
+
   const navigation = [
     { name: 'Home', href: '/' },
     {
@@ -108,9 +122,15 @@ export default function Navigation() {
             {isPending ? (
               <div className="px-4 py-2 text-sm font-medium opacity-0">Login</div>
             ) : session ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-200">
-                  {session.user?.name || session.user?.email}
+              <div className="flex items-center space-x-4 min-w-0">
+                <span
+                  className="text-sm text-gray-200 min-w-0 max-w-[10rem] xl:max-w-[13rem] truncate"
+                  title={navUserLabel?.full || undefined}
+                >
+                  {navUserLabel?.compact ||
+                    session.user?.name ||
+                    session.user?.email ||
+                    'Account'}
                 </span>
                 <button
                   onClick={handleLogout}
