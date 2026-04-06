@@ -54,7 +54,6 @@ export default function Navigation() {
       name: 'Programs',
       href: '/programs',
       submenu: [
-        { name: 'AOPA Teen Membership', href: '/programs/aopa-teen-membership' },
         { name: 'Eagle Flights', href: '/programs/eagle-flights' },
         { name: 'Ground School', href: '/programs/ground-school' },
         { name: 'Outreach', href: '/programs/outreach' },
