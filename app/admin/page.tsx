@@ -1,48 +1,50 @@
 import AdminGuard from '@/components/AdminGuard'
+import Link from 'next/link'
 
 export default function AdminPage() {
   return (
     <AdminGuard>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl font-bold text-eaa-blue mb-8">Admin Dashboard</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-eaa-blue mb-2">User Management</h2>
-            <p className="text-gray-600 mb-4">Manage user accounts and permissions</p>
-            <button className="px-4 py-2 bg-eaa-blue text-white rounded-md hover:bg-eaa-light-blue">
+        <h1 className="text-4xl font-bold text-eaa-blue mb-2">Admin Dashboard</h1>
+        <p className="text-gray-500 mb-8">EAA 690 site administration</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
+            <h2 className="text-lg font-bold text-eaa-blue mb-1">User Management</h2>
+            <p className="text-gray-500 text-sm mb-4 flex-1">
+              View all members and assign Admin, Editor, or Member roles.
+            </p>
+            <Link
+              href="/admin/users"
+              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
+            >
               Manage Users
-            </button>
+            </Link>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-eaa-blue mb-2">Content Management</h2>
-            <p className="text-gray-600 mb-4">Edit site content and pages</p>
-            <button className="px-4 py-2 bg-eaa-blue text-white rounded-md hover:bg-eaa-light-blue">
-              Manage Content
-            </button>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
+            <h2 className="text-lg font-bold text-eaa-blue mb-1">Content Studio</h2>
+            <p className="text-gray-500 text-sm mb-4 flex-1">
+              Edit events, news, presentations, board members, and site settings via Sanity CMS.
+            </p>
+            <Link
+              href="/studio"
+              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
+            >
+              Open Studio
+            </Link>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-eaa-blue mb-2">Settings</h2>
-            <p className="text-gray-600 mb-4">Configure site settings</p>
-            <button className="px-4 py-2 bg-eaa-blue text-white rounded-md hover:bg-eaa-light-blue">
-              Site Settings
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Quick Actions</h2>
-          <div className="space-y-2">
-            <button className="block w-full text-left px-4 py-2 hover:bg-gray-50 rounded-md">
-              View All Users
-            </button>
-            <button className="block w-full text-left px-4 py-2 hover:bg-gray-50 rounded-md">
-              View System Logs
-            </button>
-            <button className="block w-full text-left px-4 py-2 hover:bg-gray-50 rounded-md">
-              Backup Database
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col opacity-60">
+            <h2 className="text-lg font-bold text-eaa-blue mb-1">Site Settings</h2>
+            <p className="text-gray-500 text-sm mb-4 flex-1">
+              Configure global site settings (coming soon — use Sanity Site Settings for now).
+            </p>
+            <button
+              disabled
+              className="inline-block px-4 py-2 bg-gray-300 text-gray-500 text-sm rounded-md cursor-not-allowed text-center"
+            >
+              Coming Soon
             </button>
           </div>
         </div>

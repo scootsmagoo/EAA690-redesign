@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSession, signOut } from '@/lib/better-auth-client'
-import { useIsAdmin } from '@/lib/auth-utils'
+import { useIsAdmin, useIsEditor } from '@/lib/auth-utils'
 import Image from 'next/image'
 
 export default function Navigation() {
@@ -13,6 +13,7 @@ export default function Navigation() {
   const [isProgramsOpen, setIsProgramsOpen] = useState(false)
   const { data: session, isPending } = useSession()
   const isAdmin = useIsAdmin()
+  const isEditor = useIsEditor()
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -142,6 +143,14 @@ export default function Navigation() {
                     Admin
                   </Link>
                 )}
+                {(isAdmin || isEditor) && (
+                  <Link
+                    href="/studio"
+                    className="px-3 py-1 text-xs font-semibold rounded border border-gray-400 text-gray-300 hover:bg-gray-400 hover:text-eaa-blue transition-colors"
+                  >
+                    Studio
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
                   className="px-4 py-2 text-sm font-medium hover:text-eaa-yellow transition-colors"
@@ -249,6 +258,15 @@ export default function Navigation() {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Admin Dashboard
+                    </Link>
+                  )}
+                  {(isAdmin || isEditor) && (
+                    <Link
+                      href="/studio"
+                      className="block px-3 py-2 text-base font-medium text-gray-300 hover:bg-eaa-light-blue rounded-md"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Content Studio
                     </Link>
                   )}
                   <button
