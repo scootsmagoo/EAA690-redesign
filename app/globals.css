@@ -30,7 +30,7 @@
   }
 }
 
-/* ─── Modal animation ─────────────────────────────────────────────────────── */
+/* Modal animation */
 @keyframes slide-up {
   from { opacity: 0; transform: translateY(1.5rem); }
   to   { opacity: 1; transform: translateY(0); }
@@ -39,20 +39,19 @@
   animation: slide-up 0.2s ease-out both;
 }
 
-/* ─── FullCalendar — EAA brand overrides ──────────────────────────────────── */
+/* FullCalendar - EAA brand overrides */
 .fc-eaa {
-  /* CSS custom properties used by FullCalendar */
-  --fc-button-bg-color:          #003366;
-  --fc-button-border-color:      #002244;
-  --fc-button-hover-bg-color:    #002244;
-  --fc-button-hover-border-color:#001833;
-  --fc-button-active-bg-color:   #001833;
+  --fc-button-bg-color:           #003366;
+  --fc-button-border-color:       #002244;
+  --fc-button-hover-bg-color:     #002244;
+  --fc-button-hover-border-color: #001833;
+  --fc-button-active-bg-color:    #001833;
   --fc-button-active-border-color:#001122;
-  --fc-today-bg-color:           rgba(255, 215, 0, 0.12);
-  --fc-border-color:             #e2e8f0;
-  --fc-page-bg-color:            transparent;
-  --fc-neutral-bg-color:         #f8fafc;
-  --fc-list-event-hover-bg-color:rgba(0, 51, 102, 0.06);
+  --fc-today-bg-color:            rgba(255, 215, 0, 0.12);
+  --fc-border-color:              #e2e8f0;
+  --fc-page-bg-color:             transparent;
+  --fc-neutral-bg-color:          #f8fafc;
+  --fc-list-event-hover-bg-color: rgba(0, 51, 102, 0.06);
 }
 
 /* Toolbar title */
@@ -74,7 +73,7 @@
   box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.35);
 }
 
-/* Column headers (Sun, Mon…) */
+/* Column headers (Sun, Mon...) */
 .fc-eaa .fc-col-header-cell-cushion {
   color: #003366;
   font-weight: 600;
@@ -100,7 +99,7 @@
   font-weight: 700;
 }
 
-/* Events pill */
+/* Event pills */
 .fc-eaa .fc-event {
   cursor: pointer;
   font-size: 0.775rem;
@@ -124,7 +123,7 @@
   font-size: 0.75rem;
 }
 
-/* List view — day header */
+/* List view - day header */
 .fc-eaa .fc-list-day .fc-list-day-cushion {
   background-color: #003366;
   color: #ffffff;
@@ -136,7 +135,7 @@
   display: none;
 }
 
-/* List view — event row */
+/* List view - event row */
 .fc-eaa .fc-list-event td {
   padding: 0.6rem 1rem;
   font-size: 0.875rem;
@@ -161,7 +160,7 @@
   font-size: 0.875rem;
 }
 
-/* ─── Mobile overrides ────────────────────────────────────────────────────── */
+/* Mobile overrides */
 @media (max-width: 639px) {
   /* Wrap toolbar so prev/next + today don't fight the title for space */
   .fc-eaa .fc-header-toolbar {
@@ -197,7 +196,7 @@
     font-size: 0.7rem;
   }
 
-  /* Event pill: hide time, show only title as a compact dot+text */
+  /* Event pill: hide time, show only title */
   .fc-eaa .fc-event-time {
     display: none;
   }
@@ -221,4 +220,3 @@
     min-width: 5.5rem;
   }
 }
-

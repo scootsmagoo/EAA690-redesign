@@ -1,0 +1,18 @@
+feat: add 'Add to calendar' buttons and subscribable ICS feed
+
+Per-event calendar integration (EventDetail modal):
+- Google Calendar: opens prefilled event creation page in a new tab
+- Outlook.com: opens prefilled event creation page in a new tab
+- .ics download: generates and downloads a standards-compliant ICS file
+  for Apple Calendar, Outlook desktop, and any other calendar app
+
+Subscribable feed (/api/calendar.ics):
+- RFC 5545-compliant ICS feed generated live from Sanity events
+- Supports all-day and timed events with America/New_York timezone
+- Long lines folded at 75 octets per spec
+- 1-hour Cache-Control for calendar app polling
+- Subscribe button on /calendar page for Google Calendar and Apple/Outlook
+
+Also fix: strip box-drawing chars from globals.css comments (Turbopack
+unicode panic) and split [-:.] regex character class into separate
+replaces (Tailwind JIT scanner was generating invalid CSS from it).
