@@ -1,0 +1,7 @@
+fix: relabel calendar buttons to remove cryptic .ics reference
+
+- Rename ".ics file" button in event detail modal to "Apple Calendar"
+  with the Apple Calendar icon and a tooltip explaining what it does
+- Split "Apple / Outlook (.ics)" subscribe button into two separate
+  buttons: "Apple Calendar" (webcal:// link, opens Calendar.app
+  directly on Mac/iPhone) and "Outlook" (Outlook.com subscribe URL)

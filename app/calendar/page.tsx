@@ -125,13 +125,35 @@ export default async function CalendarPage() {
             Google Calendar
           </a>
           <a
-            href="/api/calendar.ics"
+            href="webcal://eaa-960-redesign.vercel.app/api/calendar.ics"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+            title="Opens Apple Calendar on Mac or iPhone and prompts you to subscribe"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            {/* Apple Calendar icon */}
+            <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true" fill="none">
+              <rect width="24" height="24" rx="5" fill="#FF3B30"/>
+              <rect x="2" y="6" width="20" height="16" rx="3" fill="white"/>
+              <rect x="2" y="6" width="20" height="5" fill="#FF3B30"/>
+              <rect x="7" y="2" width="2" height="5" rx="1" fill="#FF3B30"/>
+              <rect x="15" y="2" width="2" height="5" rx="1" fill="#FF3B30"/>
             </svg>
-            Apple / Outlook (.ics)
+            Apple Calendar
+          </a>
+          <a
+            href="https://outlook.live.com/calendar/0/addfromweb?url=https://eaa-960-redesign.vercel.app/api/calendar.ics&name=EAA+690+Events"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+            title="Subscribe in Outlook.com — events update automatically"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M24 7.387v11.24c0 .958-.774 1.735-1.73 1.735H7.73C6.773 20.362 6 19.585 6 18.627V16.5l6.729-2.318L24 7.387z" fill="#0078D4"/>
+              <path d="M24 7.387L12.729 14.182 6 16.5V7.373c0-.957.773-1.734 1.73-1.734h14.54c.956 0 1.73.777 1.73 1.748z" fill="#0078D4"/>
+              <path d="M6 7.373v9.127L1.73 20.362C.773 20.362 0 19.585 0 18.627V5.373C0 4.416.773 3.64 1.73 3.64L6 7.373z" fill="#28A8E8"/>
+              <path d="M6 5.639V7.373L0 5.373V3.64c0-.957.773-1.734 1.73-1.734L6 5.639z" fill="#0078D4"/>
+              <path d="M12.729 9.5L6 5.639v1.734l6.729 3.861L24 5.387V3.747L12.729 9.5z" fill="#28A8E8"/>
+            </svg>
+            Outlook
           </a>
         </div>
       </div>
