@@ -1,0 +1,8 @@
+fix: improve calendar mobile experience
+
+- Auto-default to list view on screens < 640px — month grid cells are
+  too narrow on mobile for event pills to show useful content
+- Add responsive CSS overrides for mobile month view:
+  hide event time in pills (show title only), tighter day numbers and
+  column headers, wrap toolbar so title/nav don't overlap, compact
+  list view rows

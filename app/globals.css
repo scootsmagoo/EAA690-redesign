@@ -161,3 +161,64 @@
   font-size: 0.875rem;
 }
 
+/* ─── Mobile overrides ────────────────────────────────────────────────────── */
+@media (max-width: 639px) {
+  /* Wrap toolbar so prev/next + today don't fight the title for space */
+  .fc-eaa .fc-header-toolbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .fc-eaa .fc-toolbar-title {
+    font-size: 1.1rem;
+    width: 100%;
+    text-align: center;
+    order: -1;
+  }
+  .fc-eaa .fc-toolbar-chunk {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Tighter column headers */
+  .fc-eaa .fc-col-header-cell-cushion {
+    font-size: 0.65rem;
+    padding: 3px 1px;
+  }
+
+  /* Tighter day number */
+  .fc-eaa .fc-daygrid-day-number {
+    font-size: 0.7rem;
+    padding: 2px 3px;
+  }
+  .fc-eaa .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+    width: 1.4rem;
+    height: 1.4rem;
+    font-size: 0.7rem;
+  }
+
+  /* Event pill: hide time, show only title as a compact dot+text */
+  .fc-eaa .fc-event-time {
+    display: none;
+  }
+  .fc-eaa .fc-event {
+    font-size: 0.6rem;
+    padding: 1px 2px;
+    border-radius: 2px;
+  }
+  .fc-eaa .fc-event-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* List view rows: slightly more compact */
+  .fc-eaa .fc-list-event td {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  .fc-eaa .fc-list-event-time {
+    min-width: 5.5rem;
+  }
+}
+

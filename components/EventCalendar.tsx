@@ -143,8 +143,12 @@ export default function EventCalendar({ events }: { events: Event[] }) {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const calendarRef = useRef<FullCalendar>(null)
 
-  // Prevent SSR / hydration mismatch
-  useEffect(() => { setMounted(true) }, [])
+  // On mobile default to list view — month grid cells are too narrow for event pills.
+  // Also gates SSR to prevent hydration mismatch.
+  useEffect(() => {
+    if (window.innerWidth < 640) setView('listYear')
+    setMounted(true)
+  }, [])
 
   const calendarEvents: EventInput[] = events.map((event) => {
     const colors = EVENT_COLORS[event.eventType ?? 'default']
