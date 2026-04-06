@@ -27,12 +27,20 @@ export default function AdminPage() {
             <p className="text-gray-500 text-sm mb-4 flex-1">
               Edit events, news, presentations, board members, and site settings via Sanity CMS.
             </p>
-            <Link
-              href="/studio"
-              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
-            >
-              Open Studio
-            </Link>
+            <div className="flex gap-2">
+              <Link
+                href="/studio"
+                className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
+              >
+                Open Studio
+              </Link>
+              <Link
+                href="/admin/content"
+                className="inline-block px-4 py-2 border border-eaa-blue text-eaa-blue text-sm rounded-md hover:bg-blue-50 transition-colors text-center"
+              >
+                Publish Queue
+              </Link>
+            </div>
           </div>
 
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col opacity-60">
