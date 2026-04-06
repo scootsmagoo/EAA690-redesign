@@ -1,168 +1,61 @@
 export default function YouthAviationPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-bold text-eaa-blue mb-8">Youth Aviation Program</h1>
-      
-      <div className="prose max-w-none">
-        <section className="mb-8">
-          <p className="text-lg text-gray-700 mb-6">
-            EAA 690&apos;s Youth Aviation Program is a comprehensive initiative designed to inspire and educate young
-            people about aviation. Through hands-on activities, educational programs, and flight experiences, we help
-            youth discover their passion for aviation and explore potential career paths.
-          </p>
-        </section>
+      <h1 className="text-4xl font-bold text-eaa-blue mb-4">Youth Aviation Program</h1>
+      <p className="text-lg text-gray-600 mb-8">EAA 690 has a very active Youth Aviation Program — with a robust build program too.</p>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Program Components</h2>
-          <p className="text-gray-700 mb-4">
-            Our Youth Aviation Program includes a variety of activities and opportunities:
-          </p>
-          
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <ul className="list-disc list-inside space-y-3 text-gray-700">
-              <li>
-                <strong>Young Eagles Flights:</strong> Free introductory flights for youth ages 8-17, giving them
-                their first experience in a general aviation aircraft.
-              </li>
-              <li>
-                <strong>Youth Build Programs:</strong> Hands-on aircraft building projects where youth learn
-                construction techniques, aircraft systems, and teamwork.
-              </li>
-              <li>
-                <strong>Aviation Education:</strong> Classes and workshops covering aerodynamics, navigation,
-                weather, and aviation careers.
-              </li>
-              <li>
-                <strong>Flight Simulators:</strong> Access to flight simulators for practice and learning.
-              </li>
-              <li>
-                <strong>Mentorship:</strong> Opportunities to work with experienced pilots and builders.
-              </li>
-              <li>
-                <strong>Scholarships:</strong> Financial assistance for flight training and aviation education.
-              </li>
-              <li>
-                <strong>Summer Camps:</strong> Intensive aviation education experiences during summer break.
-              </li>
-            </ul>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {[
+          { title: 'Dream it', body: "The build program currently meets on the 2nd, 3rd & 4th Saturday each month from 9:00 AM to 1:00 PM. Our mentors guide youth through the process of building real airplanes. Current projects include a Zenith 601XLB, a Thorpe T-18, a full motion simulator, and various radio-controlled models." },
+          { title: 'Build it', body: 'The program is available for youth age 14 and up. Participants earn credits for the time they work, which can be applied toward flight training in the future. The program has a maximum capacity of twelve participants.' },
+          { title: 'The Details', body: 'As with anything, there is paperwork involved. See the documents below for program information, the student pledge, photo/tool permission, and medical guidelines.' },
+        ].map((item) => (
+          <div key={item.title} className="bg-eaa-blue text-white p-6 rounded-lg">
+            <h2 className="text-xl font-bold mb-3">{item.title}</h2>
+            <p className="text-sm leading-relaxed">{item.body}</p>
           </div>
-        </section>
+        ))}
+      </div>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Age Groups</h2>
-          <p className="text-gray-700 mb-4">
-            Programs are designed for different age groups:
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-eaa-blue mb-2">Ages 8-12</h3>
-              <p className="text-gray-700 text-sm">
-                Introduction to aviation through Young Eagles flights and basic activities.
-              </p>
-            </div>
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-eaa-blue mb-2">Ages 13-17</h3>
-              <p className="text-gray-700 text-sm">
-                More advanced programs including build projects, ground school, and career exploration.
-              </p>
-            </div>
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-eaa-blue mb-2">Ages 18+</h3>
-              <p className="text-gray-700 text-sm">
-                Transition programs and support for young adults pursuing aviation careers.
-              </p>
-            </div>
-          </div>
-        </section>
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 className="text-2xl font-bold text-eaa-blue mb-4">Program Documents</h2>
+        <ul className="space-y-3">
+          {[
+            { label: 'Youth Aviation Program Overview', url: 'https://drive.google.com/file/d/1lwDiW5br67uh6k5EHPL2QDkIBrDCVpkw/view?usp=sharing' },
+            { label: 'Student Pledge of Participation', url: 'https://drive.google.com/file/d/1rKzGUB_J_3Xx-Vj68qaIizG_Y1eVhtTv/view?usp=sharing' },
+            { label: 'Photo and Tool Permission Form', url: 'https://drive.google.com/file/d/16mKQYIqzUePRp9UNdF81DDtUHdN108Bq/view?usp=sharing' },
+            { label: 'Medical Guidelines', url: 'https://drive.google.com/file/d/1RtRbCIyPlbqc7n-7SpJIPpzi941WlPhn/view?usp=sharing' },
+          ].map((doc) => (
+            <li key={doc.label}>
+              <a
+                href={doc.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-eaa-light-blue hover:underline flex items-center gap-2"
+              >
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                {doc.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Youth Credits Program</h2>
-          <p className="text-gray-700 mb-4">
-            The Youth Aviation Program includes a credits system that rewards participation and achievement. Youth
-            can earn credits through:
-          </p>
-          
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Participating in Young Eagles flights</li>
-            <li>Attending educational programs and workshops</li>
-            <li>Completing build projects</li>
-            <li>Volunteering at chapter events</li>
-            <li>Achieving educational milestones</li>
-          </ul>
-          
-          <p className="text-gray-700 mt-4">
-            Credits can be used toward scholarships, flight training, and other program benefits.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">How to Participate</h2>
-          <p className="text-gray-700 mb-4">
-            Youth and their families are welcome to participate in our programs. To get started:
-          </p>
-          
-          <div className="bg-blue-50 p-6 rounded-lg mb-6">
-            <ol className="list-decimal list-inside space-y-2 text-gray-700">
-              <li>Attend a chapter event (like our monthly pancake breakfast)</li>
-              <li>Sign up for a Young Eagles flight</li>
-              <li>Join a build project or educational program</li>
-              <li>Get involved in chapter activities</li>
-            </ol>
-          </div>
-          
-          <p className="text-gray-700">
-            For more information about specific programs and how to get involved, please{' '}
-            <a href="/contact" className="text-eaa-light-blue hover:underline">contact us</a> or check our{' '}
-            <a href="/calendar" className="text-eaa-light-blue hover:underline">calendar</a> for upcoming youth
-            activities.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Parental Involvement</h2>
-          <p className="text-gray-700 mb-4">
-            Parents and guardians are encouraged to be involved in their child&apos;s aviation journey. We welcome
-            parents to:
-          </p>
-          
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Attend events and activities with their children</li>
-            <li>Volunteer to help with programs</li>
-            <li>Learn about aviation alongside their children</li>
-            <li>Support their child&apos;s interest in aviation</li>
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Success Stories</h2>
-          <p className="text-gray-700 mb-4">
-            Many youth who have participated in our programs have gone on to:
-          </p>
-          
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Earn their private pilot certificates</li>
-            <li>Pursue careers in aviation</li>
-            <li>Continue their aviation education</li>
-            <li>Become active members of the aviation community</li>
-            <li>Share their passion with others</li>
-          </ul>
-        </section>
-
-        <section className="bg-eaa-yellow text-eaa-blue p-6 rounded-lg">
-          <h3 className="text-xl font-bold mb-2">Inspiring the Next Generation</h3>
-          <p className="mb-2">
-            The Youth Aviation Program is one of EAA 690&apos;s most important initiatives. By introducing young
-            people to aviation and supporting their journey, we help ensure a bright future for general aviation
-            and inspire the next generation of pilots, builders, and aviation enthusiasts.
-          </p>
-          <p>
-            Ready to get started? <a href="/contact" className="underline hover:text-eaa-light-blue">Contact us</a> to
-            learn more about our Youth Aviation Program!
-          </p>
-        </section>
+      <div className="bg-eaa-yellow text-eaa-blue p-6 rounded-lg">
+        <h2 className="text-2xl font-bold mb-3">Interested in Joining or Mentoring?</h2>
+        <p className="mb-4">
+          If you have a youth with a keen interest in aviation, or if you&apos;re interested in becoming a mentor,
+          please reach out to our youth program leadership.
+        </p>
+        <a
+          href="mailto:youth@eaa690.org?subject=Youth Aviation Program Inquiry"
+          className="inline-block bg-eaa-blue text-white px-6 py-3 rounded-md font-semibold hover:bg-eaa-light-blue transition-colors"
+        >
+          Email Youth Program Leadership
+        </a>
       </div>
     </div>
   )
 }
-

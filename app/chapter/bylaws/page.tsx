@@ -12,15 +12,19 @@ export default function BylawsPage() {
           </p>
           
           <div className="bg-gray-50 p-6 rounded-lg mb-6">
-            <h3 className="text-xl font-bold text-eaa-blue mb-4">Accessing Bylaws</h3>
+            <h3 className="text-xl font-bold text-eaa-blue mb-4">Download the Bylaws</h3>
             <p className="text-gray-700 mb-4">
-              Chapter bylaws are available to all members. If you need access to the current bylaws, please{' '}
-              <a href="/contact" className="text-eaa-light-blue hover:underline">contact us</a>.
+              The chapter bylaws may be downloaded using the link below. Bylaws are reviewed periodically and may be
+              amended by the membership according to the procedures outlined within.
             </p>
-            <p className="text-gray-700">
-              Bylaws are reviewed periodically and may be amended by the membership according to the procedures
-              outlined in the bylaws themselves.
-            </p>
+            <a
+              href="https://drive.google.com/file/d/1efLhPJE2XmoRK376OFLHMqHBwJ1AZZzx/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-eaa-blue text-white px-6 py-2 rounded-md font-semibold hover:bg-eaa-light-blue transition-colors"
+            >
+              Download Bylaws (PDF)
+            </a>
           </div>
         </section>
 

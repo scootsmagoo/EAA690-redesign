@@ -1,124 +1,118 @@
 export default function ScholarshipsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-bold text-eaa-blue mb-8">Scholarships</h1>
-      
-      <div className="prose max-w-none">
-        <section className="mb-8">
-          <p className="text-lg text-gray-700 mb-6">
-            EAA 690 is committed to supporting aviation education through scholarship programs. Our scholarships
-            help deserving students pursue their dreams of flight training, aviation education, and careers in
-            aviation.
-          </p>
-        </section>
+      <h1 className="text-4xl font-bold text-eaa-blue mb-4">Scholarship Programs</h1>
+      <p className="text-lg text-gray-600 mb-8">
+        EAA 690, a 501(c)(3) non-profit, is proud of its work providing scholarships to assist young people in
+        furthering their aviation dreams.
+      </p>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Available Scholarships</h2>
+      <div className="space-y-8">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-eaa-blue mb-4">How to Apply</h2>
           <p className="text-gray-700 mb-4">
-            EAA 690 offers scholarships to support various aspects of aviation education and training:
+            Our chapter offers two primary scholarships: the <strong>EAA Ray Scholarship</strong> and the{' '}
+            <strong>EAA Chapter 690 Scholarship</strong>. Candidates apply by submitting an EAA 690 Scholarship
+            Application. All applications are reviewed by our scholarship committee and forwarded to the Board of
+            Directors with a recommendation for action.
           </p>
-          
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <ul className="list-disc list-inside space-y-3 text-gray-700">
-              <li>
-                <strong>Flight Training Scholarships:</strong> Financial assistance for students pursuing pilot
-                certificates and ratings.
-              </li>
-              <li>
-                <strong>Aviation Education Scholarships:</strong> Support for students enrolled in aviation-related
-                degree programs.
-              </li>
-              <li>
-                <strong>Youth Program Scholarships:</strong> Assistance for youth participating in aviation programs
-                and activities.
-              </li>
-              <li>
-                <strong>Technical Training Scholarships:</strong> Support for students pursuing aircraft maintenance
-                and technical aviation careers.
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Eligibility</h2>
           <p className="text-gray-700 mb-4">
-            Scholarship eligibility requirements vary by program. Generally, applicants should:
+            Scholarships are also available for young people interested in pursuing aviation careers beyond piloting.
+            The chapter will not award a flight instruction scholarship until a candidate has reached the milestone
+            of soloing.
           </p>
-          
-          <div className="bg-blue-50 p-6 rounded-lg mb-6">
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
-              <li>Demonstrate a genuine interest in aviation</li>
-              <li>Show academic achievement or potential</li>
-              <li>Be actively pursuing aviation education or training</li>
-              <li>Meet any age or program-specific requirements</li>
-              <li>Submit a complete application by the deadline</li>
-            </ul>
-          </div>
-        </section>
+          <a
+            href="https://drive.google.com/file/d/1uhbK2Q8RKnO_kWB5lTDNr4AANKZ1uEJb/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-eaa-blue text-white px-6 py-3 rounded-md font-semibold hover:bg-eaa-light-blue transition-colors"
+          >
+            Download Scholarship Application
+          </a>
+        </div>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Application Process</h2>
-          <p className="text-gray-700 mb-4">
-            Scholarship applications are typically accepted on an annual basis. The application process includes:
+        <div className="bg-eaa-yellow text-eaa-blue p-6 rounded-lg">
+          <h2 className="text-2xl font-bold mb-3">Ray Aviation Scholarship</h2>
+          <p className="mb-3">
+            Through the generous support of the Ray Foundation, EAA provides up to <strong>$10,000</strong> to
+            deserving youths for their flight training expenses — totaling nearly $1.2 million in scholarships annually
+            across 100+ chapters.
           </p>
-          
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <ol className="list-decimal list-inside space-y-2 text-gray-700">
-              <li>Complete the scholarship application form</li>
-              <li>Submit required documentation (transcripts, letters of recommendation, etc.)</li>
-              <li>Write a personal statement or essay</li>
-              <li>Meet application deadlines</li>
-            </ol>
-          </div>
-          
-          <p className="text-gray-700">
-            Scholarship recipients are selected by the chapter&apos;s scholarship committee based on established
-            criteria including academic achievement, aviation interest, financial need, and potential for success.
+          <p className="mb-4">
+            Each year, our chapter supports one scholar between the ages of 16 and 19 with funding and mentorship to
+            help earn their private pilot certificate. The Ray Scholarship is applied for in January of every year.
           </p>
-        </section>
+          <a
+            href="https://drive.google.com/file/d/12dww6BVkD-kc04q2H6J8OKme6lJGU6Bt/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-eaa-blue text-white px-6 py-3 rounded-md font-semibold hover:opacity-90 transition-colors"
+          >
+            Ray Scholarship Application
+          </a>
+        </div>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Application Deadlines</h2>
-          <p className="text-gray-700 mb-4">
-            Scholarship application deadlines vary by program. For information about current scholarship opportunities,
-            application deadlines, and requirements, please{' '}
-            <a href="/contact" className="text-eaa-light-blue hover:underline">contact us</a>.
-          </p>
-          <p className="text-gray-700">
-            You can also check our <a href="/news" className="text-eaa-light-blue hover:underline">news page</a> or{' '}
-            <a href="/calendar" className="text-eaa-light-blue hover:underline">calendar</a> for scholarship
-            announcements and deadlines.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Supporting Scholarships</h2>
-          <p className="text-gray-700 mb-4">
-            EAA 690 scholarships are made possible through the generosity of chapter members, donors, and fundraising
-            activities. If you&apos;re interested in supporting our scholarship program through donations or
-            fundraising, please{' '}
-            <a href="/contact" className="text-eaa-light-blue hover:underline">contact us</a>.
-          </p>
-          <p className="text-gray-700">
-            Donations to our scholarship fund help ensure that financial barriers don&apos;t prevent deserving
-            students from pursuing their aviation dreams.
-          </p>
-        </section>
-
-        <section className="bg-eaa-yellow text-eaa-blue p-6 rounded-lg">
-          <h3 className="text-xl font-bold mb-2">Investing in the Future of Aviation</h3>
-          <p className="mb-2">
-            Scholarships are an investment in the future of aviation. By supporting students in their aviation
-            education and training, we help ensure a strong and vibrant aviation community for years to come.
-          </p>
-          <p>
-            Interested in applying for a scholarship or supporting our scholarship program?{' '}
-            <a href="/contact" className="underline hover:text-eaa-light-blue">Contact us</a> to learn more!
-          </p>
-        </section>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Additional Scholarship Resources</h2>
+          <ul className="space-y-4">
+            <li>
+              <a
+                href="https://www.eaa.org/eaa/learn-to-fly/scholarships"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-eaa-light-blue hover:underline font-semibold"
+              >
+                EAA Flight Training & Post-Secondary Scholarships
+              </a>
+              <p className="text-gray-600 text-sm mt-1">
+                Whether you dream of becoming a pilot or earning an additional rating, EAA offers additional
+                scholarship opportunities through their national programs.
+              </p>
+            </li>
+            <li>
+              <a
+                href="https://www.aopa.org/training-and-safety/students/flight-training-scholarships"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-eaa-light-blue hover:underline font-semibold"
+              >
+                AOPA Flight Training Scholarships
+              </a>
+              <p className="text-gray-600 text-sm mt-1">
+                The Aircraft Owners and Pilots Association offers a range of scholarships for student pilots.
+              </p>
+            </li>
+            <li>
+              <a
+                href="https://valeri-aviation.thinkific.com/courses/aerospace-scholarships-guide"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-eaa-light-blue hover:underline font-semibold"
+              >
+                Valeri Aviation Scholarship Guide
+              </a>
+              <p className="text-gray-600 text-sm mt-1">
+                A comprehensive list of 50+ aviation scholarships updated annually from public and private sources.
+                EAA 690 is not directly affiliated; access is currently $10/year.
+              </p>
+            </li>
+            <li>
+              <a
+                href="https://gbaa11.wildapricot.org/scholarships"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-eaa-light-blue hover:underline font-semibold"
+              >
+                Georgia Business Aviation Association (gbAA) Scholarships
+              </a>
+              <p className="text-gray-600 text-sm mt-1">
+                Available to Georgia high school graduates (3.0 GPA or better) enrolling full-time in accredited
+                U.S. colleges or technical schools in aviation fields.
+              </p>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   )
 }
-

@@ -65,42 +65,36 @@ export default function Home() {
               Hosted by the Gwinnett EAA Chapter 690 of the Experimental Aircraft Association.
             </p>
             <div className="bg-white text-eaa-blue p-6 rounded-lg max-w-2xl mx-auto">
-              <p className="text-2xl font-bold mb-2">December 6, 2025</p>
-              <p className="text-xl mb-4">Breakfast served 8:00 to 10:00 AM</p>
+              <p className="text-xl mb-2">Breakfast served 8:00 to 10:00 AM</p>
               <p className="text-xl mb-4">Program at 10:00 AM</p>
               <p className="text-red-600 font-bold text-lg">
-                ⚠️ PLEASE NOTE: BREAKFAST HAS INCREASED TO $10/EACH!
+                Please Note: Breakfast has increased to $10/each!
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* December Presentation */}
+      {/* April Presentation */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">DECEMBER 6 PRESENTATION</h2>
-          <h3 className="text-xl font-bold text-gray-800 mb-6">Jeff Lange</h3>
-          <h4 className="text-lg font-semibold text-gray-700 mb-4">
-            &quot;Performance Enhancement for My Sonerai Skyeracer&quot;
-          </h4>
-          <div className="prose max-w-none">
+          <h2 className="text-2xl font-bold text-eaa-blue mb-4">April 5th Presentation at 10 AM</h2>
+          <h3 className="text-xl font-bold text-gray-800 mb-2">Alex Ortlano &mdash; &quot;Dust Off&quot;</h3>
+          <div className="prose max-w-none mt-6">
             <p className="text-gray-700 mb-4">
-              Jeff started flying in 1997, after a few years of being an avid RC model builder and flyer. He possesses an
-              academic background in both music and Aircraft Maintenance (A&P).
+              While in his senior year of college, Alex learned to fly in the first year of the Army ROTC Flight Training Program.
+              He received his Private Pilot&apos;s Single Engine Land license, and was commissioned as a Second Lieutenant upon graduation.
             </p>
             <p className="text-gray-700 mb-4">
-              Jeff has +30 years as an application engineer for large audio system installations, such as arenas and stadiums.
+              Alex learned to fly helicopters while attending Army Flight School in Ft. Wolters, TX and Ft. Rucker, AL. He served
+              in Vietnam in 1965 with the 57th Medical Detachment (Dustoff), flying out of Tan Son Nhut Airfield in Saigon.
             </p>
             <p className="text-gray-700 mb-4">
-              He started building his Sonerai soon after obtaining his PPL in 1998 and first flew it in 2003. For nine years
-              Jeff was a crew chief at the Reno Air Races maintaining a Thunder Mustang, RV Rocket 6, Super Glasair and a L-39 Jet.
+              After leaving the Army he applied for and received a Commercial Helicopter License and never flew again.
             </p>
             <p className="text-gray-700">
-              He is currently working on five other aircraft projects. The next one slated for completion is a Glasair 1 TD.
-            </p>
-            <p className="text-gray-700 mt-4">
-              Jeff also finds time between work and 5 airplane projects to fly his Sonerai I and IIL.
+              In civilian life he was an automobile executive with Ford Motor Company, American Motors Corporation, and Toyota Motor
+              Sales, retiring from Toyota in 1998.
             </p>
           </div>
         </div>

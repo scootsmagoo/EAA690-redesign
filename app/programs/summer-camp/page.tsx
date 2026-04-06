@@ -1,145 +1,89 @@
 export default function SummerCampPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-bold text-eaa-blue mb-8">Aviation STEM Summer Camp</h1>
-      
-      <div className="prose max-w-none">
-        <section className="mb-8">
-          <p className="text-lg text-gray-700 mb-6">
-            EAA 690 offers exciting Aviation STEM Summer Camps for kids ages 12-18 in the Atlanta Metro area
-            (Lawrenceville, Gwinnett County, GA). Our camps combine hands-on aviation activities with STEM education,
-            providing an unforgettable summer experience.
-          </p>
-        </section>
+      <h1 className="text-4xl font-bold text-eaa-blue mb-4">Aviation STEM Summer Camp</h1>
+      <p className="text-lg text-gray-600 mb-8">
+        For youth ages 12&ndash;18 &bull; Gwinnett County Airport (KLZU) &bull; Lawrenceville, Georgia
+      </p>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Camp Overview</h2>
-          <p className="text-gray-700 mb-4">
-            Our Aviation STEM Summer Camps provide participants with a comprehensive introduction to aviation through
-            a combination of classroom learning, hands-on activities, and flight experiences.
-          </p>
-          
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h3 className="text-xl font-bold text-eaa-blue mb-4">What Campers Will Experience</h3>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
-              <li>Introduction to aviation principles and aerodynamics</li>
-              <li>Hands-on aircraft building and construction projects</li>
-              <li>Flight simulators and aviation technology</li>
-              <li>Young Eagles flight experience (weather permitting)</li>
-              <li>Aviation career exploration</li>
-              <li>Team-building activities</li>
-              <li>Aviation safety and procedures</li>
-            </ul>
-          </div>
-        </section>
+      <div className="bg-eaa-yellow text-eaa-blue p-6 rounded-lg mb-8">
+        <h2 className="text-xl font-bold mb-2">2026 Camp Update</h2>
+        <p className="mb-3">
+          As of February 18, 2026, seats and waitlists are filled for our 2026 Aviation Summer Camp Alpha and Bravo
+          Groups. Students ages 16&ndash;18 may join the waitlist for Charlie Group.
+        </p>
+        <a
+          href="https://forms.gle/ZkthngGxEveyuAhcA"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-eaa-blue text-white px-6 py-3 rounded-md font-semibold hover:opacity-90 transition-colors"
+        >
+          Join the Charlie Group Waitlist
+        </a>
+      </div>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Age Groups</h2>
-          <p className="text-gray-700 mb-4">
-            Camps are designed for different age groups to ensure age-appropriate activities and learning:
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-eaa-blue mb-2">Ages 12-14</h3>
-              <p className="text-gray-700">
-                Introduction to aviation with hands-on projects and basic flight concepts.
-              </p>
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 className="text-2xl font-bold text-eaa-blue mb-4">2026 Camp Details</h2>
+        <p className="text-gray-700 mb-4">
+          Our immersive aviation-focused STEM program is held in our chapter hangar at Gwinnett County Airport.
+          The <strong>2026 camp runs June 15&ndash;19</strong>, with a free Young Eagles flight on Saturday, June 20th.
+        </p>
+        <p className="text-gray-700 mb-4">
+          Students in 7th through 12th grade may apply. Sample topics include Aircraft Construction Methods,
+          Principles of Aeronautics, Unmanned Aircraft, Helicopter Flight, and Ground and Flight Instruction.
+          Camp is held daily from 9:00 AM to 4:00 PM. Students provide their lunches Monday&ndash;Thursday;
+          Friday lunch is provided.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          {[
+            { group: 'Alpha Group', ages: 'Ages 12&ndash;13', cost: '$375', note: 'Waitlist full' },
+            { group: 'Bravo Group', ages: 'Ages 14&ndash;15', cost: '$375', note: 'Waitlist full' },
+            { group: 'Charlie Group', ages: 'Ages 16&ndash;18', cost: '$575', note: 'Waitlist open' },
+          ].map((g) => (
+            <div key={g.group} className="bg-gray-50 rounded-lg p-4 text-center">
+              <h3 className="font-bold text-eaa-blue text-lg mb-1">{g.group}</h3>
+              <p className="text-gray-600 text-sm mb-1" dangerouslySetInnerHTML={{ __html: g.ages }} />
+              <p className="font-semibold text-eaa-blue text-xl mb-2">{g.cost}</p>
+              <p className="text-sm text-gray-500">{g.note}</p>
             </div>
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-eaa-blue mb-2">Ages 15-18</h3>
-              <p className="text-gray-700">
-                More advanced aviation topics, flight planning, and career exploration.
-              </p>
-            </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </div>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Camp Details</h2>
-          <div className="bg-gray-50 p-6 rounded-lg mb-6">
-            <h3 className="text-xl font-bold text-eaa-blue mb-4">Location</h3>
-            <p className="text-gray-700 mb-2">
-              <strong>EAA 690 Hangar</strong><br />
-              690 Airport Road<br />
-              Hangar 1, Briscoe Field<br />
-              Lawrenceville, Georgia 30046
-            </p>
-            <p className="text-gray-700">
-              <strong>Airport:</strong> Briscoe Field (KLZU)
-            </p>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h3 className="text-xl font-bold text-eaa-blue mb-4">Schedule</h3>
-            <p className="text-gray-700 mb-2">
-              Summer camps are typically held during June and July. Specific dates and times vary by year.
-            </p>
-            <p className="text-gray-700">
-              Camps may be offered as day camps or multi-day programs. Check with us for current year schedules.
-            </p>
-          </div>
-        </section>
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 className="text-2xl font-bold text-eaa-blue mb-4">A Six-Year Journey</h2>
+        <p className="text-gray-700 mb-4">
+          Our Aviation Focused STEM Summer Camp program has been carefully planned to give a 12-year-old six years of
+          camp experiences — provided both by EAA 690 and by the national EAA organization in Oshkosh, Wisconsin.
+        </p>
+        <ul className="space-y-2 text-gray-700 list-disc list-inside">
+          <li>Age 12: EAA 690 Alpha STEM Camp</li>
+          <li>Age 13: EAA <a href="https://www.eaa.org/eaa/youth/eaa-aviation-and-flight-summer-camps/eaa-air-academy" target="_blank" rel="noopener noreferrer" className="text-eaa-light-blue hover:underline">Air Academy Camp</a> in Oshkosh</li>
+          <li>Age 14: EAA 690 Bravo STEM Camp</li>
+          <li>Age 15: EAA Air Academy (new experience) in Oshkosh</li>
+          <li>Age 16: EAA 690 Charlie STEM Flight Training Camp</li>
+          <li>Age 17: EAA Oshkosh — most advanced camp + AirVenture</li>
+        </ul>
+        <p className="text-gray-600 text-sm mt-4">
+          The chapter works hard to help campers going to Oshkosh with travel expenses as funds allow. National{' '}
+          <a href="https://www.eaa.org/eaa/learn-to-fly/scholarships/eaa-air-academy-camperships" target="_blank" rel="noopener noreferrer" className="text-eaa-light-blue hover:underline">Camperships</a>{' '}
+          are also available for those attending EAA camps.
+        </p>
+      </div>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Registration</h2>
-          <p className="text-gray-700 mb-4">
-            Registration for summer camps typically opens in the spring. Space is limited, so early registration
-            is encouraged.
-          </p>
-          
-          <div className="bg-blue-50 p-6 rounded-lg mb-6">
-            <h3 className="text-xl font-bold text-eaa-blue mb-4">To Register or Get More Information</h3>
-            <p className="text-gray-700 mb-4">
-              For information about upcoming summer camps, registration, fees, and schedules, please{' '}
-              <a href="/contact" className="text-eaa-light-blue hover:underline">contact us</a>.
-            </p>
-            <p className="text-gray-700">
-              You can also check our <a href="/news" className="text-eaa-light-blue hover:underline">news page</a> or{' '}
-              <a href="/calendar" className="text-eaa-light-blue hover:underline">calendar</a> for camp announcements.
-            </p>
-          </div>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">What to Bring</h2>
-          <p className="text-gray-700 mb-4">
-            Campers should come prepared for a day of learning and fun:
-          </p>
-          
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Lunch and snacks (unless provided)</li>
-            <li>Water bottle</li>
-            <li>Comfortable clothing appropriate for working with tools and aircraft</li>
-            <li>Closed-toe shoes</li>
-            <li>Sunscreen and hat (for outdoor activities)</li>
-            <li>Notebook and pen</li>
-            <li>Enthusiasm and curiosity!</li>
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Safety</h2>
-          <p className="text-gray-700 mb-4">
-            Safety is our top priority. All camp activities are supervised by experienced instructors and volunteers.
-            Campers will receive safety briefings and instruction before participating in any activities.
-          </p>
-        </section>
-
-        <section className="bg-eaa-yellow text-eaa-blue p-6 rounded-lg">
-          <h3 className="text-xl font-bold mb-2">An Unforgettable Summer Experience</h3>
-          <p className="mb-2">
-            Our Aviation STEM Summer Camps provide a unique opportunity for young people to explore aviation,
-            learn new skills, and discover potential career paths. It&apos;s an experience they&apos;ll remember
-            for a lifetime!
-          </p>
-          <p>
-            Ready to sign up? <a href="/contact" className="underline hover:text-eaa-light-blue">Contact us</a> to
-            learn more about our summer camp programs!
-          </p>
-        </section>
+      <div className="bg-eaa-blue text-white p-6 rounded-lg">
+        <h2 className="text-xl font-bold mb-3">Stay Informed for 2027</h2>
+        <p className="mb-3">
+          Sign up for our newsletter to receive updates. Chapter members receive priority for our 2027 Aviation
+          Summer Camp.
+        </p>
+        <a
+          href="/store"
+          className="inline-block bg-eaa-yellow text-eaa-blue px-6 py-3 rounded-md font-semibold hover:bg-yellow-400 transition-colors"
+        >
+          Join / Renew Membership
+        </a>
       </div>
     </div>
   )
 }
-
