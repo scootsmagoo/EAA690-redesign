@@ -269,7 +269,7 @@ function EventDetail({ event, onClose }: { event: Event; onClose: () => void }) 
 
               <button
                 onClick={() => downloadIcs(event)}
-                title="Downloads a calendar file — double-click it to add the event to Apple Calendar, Outlook, or any other calendar app"
+                title="Downloads a calendar file — open it to add the event to Apple Calendar, Outlook, or any other calendar app"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
               >
                 {/* Apple Calendar icon */}
