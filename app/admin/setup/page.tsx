@@ -1,24 +1,46 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 
 /**
  * Admin Setup Page
- * 
- * This page allows creating the first admin account.
- * In production, you should restrict access to this page or remove it entirely
- * after creating the first admin account.
+ *
+ * Only accessible when no admin account exists yet.
+ * Once setup is complete this page redirects to /sign-in automatically.
  */
 export default function AdminSetupPage() {
   const router = useRouter()
-  
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [checking, setChecking] = useState(true)
+
+  // Redirect away if setup is already complete
+  useEffect(() => {
+    fetch('/api/admin/setup')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.setupComplete) {
+          router.replace('/sign-in')
+        } else {
+          setChecking(false)
+        }
+      })
+      .catch(() => setChecking(false))
+  }, [router])
+
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p className="text-gray-500 text-sm">Checking setup status…</p>
+      </div>
+    )
+  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -75,7 +97,7 @@ export default function AdminSetupPage() {
             Set up the first administrator account for EAA 690
           </p>
           <p className="mt-2 text-center text-xs text-yellow-600 bg-yellow-50 p-2 rounded">
-            ⚠️ This page should be removed or protected after creating the first admin account
+            This page is only accessible before the first admin account is created.
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

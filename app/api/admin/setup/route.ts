@@ -6,17 +6,66 @@ import { runSqliteAdminSetup } from '@/lib/admin-setup-sqlite'
 import { Pool } from 'pg'
 
 /**
+ * Shared helper: returns true if at least one admin user already exists in the database.
+ * Works for both Postgres and SQLite.
+ */
+async function adminAlreadyExists(): Promise<boolean> {
+  const dbUrl = getEffectiveDatabaseUrl()
+  if (!dbUrl) return false
+
+  if (isPostgresUrl(dbUrl)) {
+    const pool = new Pool({
+      connectionString: dbUrl,
+      ssl: dbUrl.includes('localhost') ? false : { rejectUnauthorized: false },
+      max: 1,
+    })
+    try {
+      const result = await pool.query<{ count: string }>(
+        `SELECT COUNT(*)::text AS count FROM "user" WHERE role = 'admin'`
+      )
+      return parseInt(result.rows[0]?.count ?? '0', 10) > 0
+    } catch {
+      return false
+    } finally {
+      await pool.end().catch(() => {})
+    }
+  } else {
+    // SQLite
+    try {
+      const Database = require('better-sqlite3') as typeof import('better-sqlite3')
+      const { resolveSqliteFilePath } = await import('@/lib/db-resolver')
+      const db = new Database(resolveSqliteFilePath(dbUrl))
+      const row = db.prepare(`SELECT COUNT(*) AS count FROM user WHERE role = 'admin'`).get() as { count: number }
+      db.close()
+      return (row?.count ?? 0) > 0
+    } catch {
+      return false
+    }
+  }
+}
+
+/**
+ * GET — returns whether initial admin setup has already been completed.
+ * The setup page calls this on load to redirect away if setup is done.
+ */
+export async function GET() {
+  const setupComplete = await adminAlreadyExists()
+  return NextResponse.json({ setupComplete })
+}
+
+/**
  * Initial Admin Setup API Route
- * 
- * This route allows creating the first admin account without authentication.
- * It should be protected or removed after the first admin is created.
- * 
- * Security: In production, consider adding additional checks like:
- * - IP whitelist
- * - Secret token in headers
- * - Environment variable flag
+ *
+ * Blocked once an admin account already exists — subsequent calls return 403.
  */
 export async function POST(request: NextRequest) {
+  // Refuse if setup has already been completed
+  if (await adminAlreadyExists()) {
+    return NextResponse.json(
+      { error: 'Admin setup is already complete. Use the admin dashboard to manage users.' },
+      { status: 403 }
+    )
+  }
   let pool: Pool | null = null
   
   try {
