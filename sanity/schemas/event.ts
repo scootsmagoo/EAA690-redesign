@@ -20,6 +20,23 @@ export default {
       },
     },
     {
+      name: 'eventType',
+      title: 'Event Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Pancake Breakfast', value: 'breakfast' },
+          { title: 'Fly-Out', value: 'flyout' },
+          { title: 'Young Eagles', value: 'young-eagles' },
+          { title: 'Monthly Meeting', value: 'meeting' },
+          { title: 'Special Event', value: 'special' },
+          { title: 'General', value: 'general' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'general',
+    },
+    {
       name: 'date',
       title: 'Date',
       type: 'date',

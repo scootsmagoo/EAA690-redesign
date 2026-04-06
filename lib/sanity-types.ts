@@ -14,6 +14,8 @@ export interface SanityImage {
   }
 }
 
+export type EventType = 'breakfast' | 'flyout' | 'young-eagles' | 'meeting' | 'special' | 'general'
+
 export interface Event {
   _id: string
   title: string
@@ -27,6 +29,7 @@ export interface Event {
   image?: SanityImage
   isRecurring?: boolean
   recurringInfo?: string
+  eventType?: EventType
 }
 
 export interface NewsArticle {

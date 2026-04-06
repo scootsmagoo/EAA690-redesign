@@ -1,0 +1,12 @@
+feat: add FullCalendar interactive calendar widget to /calendar
+
+- Install @fullcalendar/react, daygrid, list, and interaction plugins
+- Add EventCalendar client component with month/list view toggle, color-coded
+  event types, and a click-to-expand event detail modal
+- Add eventType field to Sanity event schema (breakfast, flyout, young-eagles,
+  meeting, special, general) for per-type color coding
+- Add getAllEvents() GROQ query to fetch all events (past + future) for the
+  full calendar view; update getUpcomingEvents() to include new fields
+- Extend Event interface with EventType and new schema fields
+- Add scoped FullCalendar CSS overrides (.fc-eaa) using EAA brand colors,
+  today highlight in EAA yellow, and slide-up modal animation

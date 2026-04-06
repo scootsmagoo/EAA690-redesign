@@ -1,98 +1,120 @@
-import { getUpcomingEvents } from '@/lib/sanity'
+import { getAllEvents } from '@/lib/sanity'
 import type { Event } from '@/lib/sanity-types'
+import EventCalendar from '@/components/EventCalendar'
 
-// Fallback data when Sanity isn't configured or has no events
-const fallbackEvents = [
+const fallbackEvents: Event[] = [
   {
     _id: 'fallback-1',
-    date: '2026-02-07',
+    date: '2026-04-05',
     startTime: '8:00 AM',
     endTime: '10:00 AM',
     title: '1st Saturday Pancake Breakfast',
-    description: 'Breakfast served 8:00 to 10:00 AM, Program at 10:00 AM',
+    description: 'Breakfast served 8:00 to 10:00 AM, Program at 10:00 AM. Alex Ortlano — "Dust Off" presentation.',
     location: 'Briscoe Field (KLZU)',
+    eventType: 'breakfast',
+    isRecurring: true,
+    recurringInfo: '1st Saturday of each month',
   },
   {
     _id: 'fallback-2',
-    date: '2026-03-07',
+    date: '2026-05-03',
     startTime: '8:00 AM',
     endTime: '10:00 AM',
     title: '1st Saturday Pancake Breakfast',
-    description: 'Monthly pancake breakfast and aviation program',
+    description: 'Monthly pancake breakfast and aviation program.',
     location: 'Briscoe Field (KLZU)',
+    eventType: 'breakfast',
+    isRecurring: true,
+    recurringInfo: '1st Saturday of each month',
   },
   {
     _id: 'fallback-3',
-    date: '2026-04-04',
+    date: '2026-06-07',
     startTime: '8:00 AM',
     endTime: '10:00 AM',
     title: '1st Saturday Pancake Breakfast',
-    description: 'Monthly pancake breakfast and aviation program',
+    description: 'Monthly pancake breakfast and aviation program.',
     location: 'Briscoe Field (KLZU)',
+    eventType: 'breakfast',
+    isRecurring: true,
+    recurringInfo: '1st Saturday of each month',
+  },
+  {
+    _id: 'fallback-4',
+    date: '2026-05-17',
+    startTime: '9:00 AM',
+    endTime: '2:00 PM',
+    title: 'Young Eagles Rally',
+    description: 'Free airplane rides for young people ages 8–17. Volunteers and pilots welcome!',
+    location: 'Briscoe Field (KLZU)',
+    eventType: 'young-eagles',
+  },
+  {
+    _id: 'fallback-5',
+    date: '2026-06-20',
+    startTime: '9:00 AM',
+    title: 'Chapter Fly-Out',
+    description: 'Group fly-out to a local destination. Details TBD — check the newsletter.',
+    location: 'Briscoe Field (KLZU)',
+    eventType: 'flyout',
   },
 ]
 
-function formatDate(dateString: string): string {
-  const date = new Date(dateString + 'T00:00:00')
-  return date.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
 export default async function CalendarPage() {
-  // Try to fetch from Sanity, fall back to hardcoded data
   let events: Event[] = fallbackEvents
-  
+
   try {
-    const sanityEvents = await getUpcomingEvents()
+    const sanityEvents = await getAllEvents()
     if (sanityEvents && sanityEvents.length > 0) {
       events = sanityEvents
     }
-  } catch (error) {
-    // Sanity not configured or error - use fallback
-    console.log('Using fallback events (Sanity not configured)')
+  } catch {
+    console.log('Using fallback events (Sanity not configured or unreachable)')
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-bold text-eaa-blue mb-8">Calendar</h1>
-
-      <div className="space-y-6">
-        {events.map((event) => (
-          <div key={event._id} className="bg-white rounded-lg shadow-md p-6 border-l-4 border-eaa-yellow">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-              <h2 className="text-2xl font-bold text-eaa-blue">{event.title}</h2>
-              <div className="text-gray-600 mt-2 md:mt-0">
-                <p className="font-semibold">{formatDate(event.date)}</p>
-                {event.startTime && event.endTime && (
-                  <p>{event.startTime} - {event.endTime}</p>
-                )}
-              </div>
-            </div>
-            {event.description && (
-              <p className="text-gray-700 mb-2">{event.description}</p>
-            )}
-            <p className="text-gray-600">
-              <strong>Location:</strong> {event.location}
-            </p>
-          </div>
-        ))}
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-bold text-eaa-blue">Calendar</h1>
+          <p className="text-gray-500 mt-2">
+            Click any event for details. Use Month or List view to browse.
+          </p>
+        </div>
+        <a
+          href="https://sanity.io/manage"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-sm text-eaa-light-blue hover:text-eaa-blue transition-colors font-medium"
+          title="Manage events in Sanity Studio"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Manage Events
+        </a>
       </div>
 
-      <div className="mt-8 bg-blue-50 p-6 rounded-lg">
-        <h2 className="text-xl font-bold text-eaa-blue mb-4">Regular Events</h2>
-        <ul className="space-y-2 text-gray-700">
+      <EventCalendar events={events} />
+
+      <div className="mt-10 bg-blue-50 border border-blue-100 rounded-xl p-6">
+        <h2 className="text-lg font-bold text-eaa-blue mb-3">Regular Events</h2>
+        <ul className="space-y-2 text-gray-700 text-sm">
           <li>
-            <strong>1st Saturday of each month:</strong> Pancake Breakfast and Aviation Program
+            <span className="font-semibold">1st Saturday of each month —</span>{' '}
+            Pancake Breakfast (8–10 AM) &amp; Aviation Program (10 AM), Briscoe Field
           </li>
           <li>
-            <strong>Monthly meetings:</strong> Check our newsletter for dates and times
+            <span className="font-semibold">Monthly meetings —</span>{' '}
+            Check our newsletter for current dates and times
           </li>
           <li>
-            <strong>Fly-outs:</strong> Regularly scheduled throughout the year
+            <span className="font-semibold">Young Eagles rallies —</span>{' '}
+            Free flights for ages 8–17, scheduled throughout the year
+          </li>
+          <li>
+            <span className="font-semibold">Fly-outs —</span>{' '}
+            Group flights to local destinations, announced in the newsletter
           </li>
         </ul>
       </div>

@@ -54,6 +54,30 @@ export async function getUpcomingEvents() {
       endTime,
       description,
       location,
+      eventType,
+      isRecurring,
+      recurringInfo,
+      image
+    }
+  `)
+}
+
+// Fetch all events (past + future) for the calendar widget
+export async function getAllEvents() {
+  const client = getSanityClient()
+  if (!client) return []
+  return client.fetch(`
+    *[_type == "event"] | order(date asc) {
+      _id,
+      title,
+      date,
+      startTime,
+      endTime,
+      description,
+      location,
+      eventType,
+      isRecurring,
+      recurringInfo,
       image
     }
   `)
