@@ -1,3 +1,5 @@
+import SummerCampForm from '@/components/forms/SummerCampForm'
+
 export default function SummerCampPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -8,18 +10,10 @@ export default function SummerCampPage() {
 
       <div className="bg-eaa-yellow text-eaa-blue p-6 rounded-lg mb-8">
         <h2 className="text-xl font-bold mb-2">2026 Camp Update</h2>
-        <p className="mb-3">
-          As of February 18, 2026, seats and waitlists are filled for our 2026 Aviation Summer Camp Alpha and Bravo
-          Groups. Students ages 16&ndash;18 may join the waitlist for Charlie Group.
+        <p>
+          As of February 18, 2026, seats and waitlists are filled for our 2026 Alpha and Bravo Groups.
+          Students ages 16&ndash;18 may join the waitlist for Charlie Group using the form below.
         </p>
-        <a
-          href="https://forms.gle/ZkthngGxEveyuAhcA"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block bg-eaa-blue text-white px-6 py-3 rounded-md font-semibold hover:opacity-90 transition-colors"
-        >
-          Join the Charlie Group Waitlist
-        </a>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -71,6 +65,15 @@ export default function SummerCampPage() {
         </p>
       </div>
 
+      {/* Waitlist Form */}
+      <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+        <h2 className="text-2xl font-bold text-eaa-blue mb-2">Join the Waitlist</h2>
+        <p className="text-gray-600 text-sm mb-6">
+          Fill out the form below and we&apos;ll contact you as spots open up. Chapter members receive priority consideration.
+        </p>
+        <SummerCampForm />
+      </div>
+
       <div className="bg-eaa-blue text-white p-6 rounded-lg">
         <h2 className="text-xl font-bold mb-3">Stay Informed for 2027</h2>
         <p className="mb-3">
@@ -78,7 +81,7 @@ export default function SummerCampPage() {
           Summer Camp.
         </p>
         <a
-          href="/store"
+          href="/join"
           className="inline-block bg-eaa-yellow text-eaa-blue px-6 py-3 rounded-md font-semibold hover:bg-yellow-400 transition-colors"
         >
           Join / Renew Membership

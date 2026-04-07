@@ -1,3 +1,5 @@
+import VmcImcForm from '@/components/forms/VmcImcForm'
+
 export default function VmcImcClubPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -27,7 +29,8 @@ export default function VmcImcClubPage() {
           <h2 className="text-2xl font-bold mb-4">Meeting Details</h2>
           <ul className="space-y-3">
             <li><span className="font-semibold">When:</span> Monthly — every 3rd Thursday, 7:00&ndash;9:00 PM</li>
-            <li><span className="font-semibold">Where:</span> EAA 690 Chapter Hangar<br />
+            <li>
+              <span className="font-semibold">Where:</span> EAA 690 Chapter Hangar<br />
               <span className="ml-[5.25rem]">690 Airport Road, Hangar #1</span><br />
               <span className="ml-[5.25rem]">Lawrenceville, GA 30046</span>
             </li>
@@ -49,6 +52,15 @@ export default function VmcImcClubPage() {
             You don&apos;t need to be an instrument-rated pilot to participate. The club is open to all EAA 690
             members and pilots who want to improve their situational awareness and decision-making skills.
           </p>
+        </div>
+
+        {/* Interest Form */}
+        <div className="bg-white rounded-lg shadow-md p-8">
+          <h2 className="text-2xl font-bold text-eaa-blue mb-2">Get Notified About Upcoming Meetings</h2>
+          <p className="text-gray-600 text-sm mb-6">
+            Submit your information and Chris Serra will be in touch before the next meeting.
+          </p>
+          <VmcImcForm />
         </div>
       </div>
     </div>

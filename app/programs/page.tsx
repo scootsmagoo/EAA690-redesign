@@ -3,11 +3,6 @@ import Link from 'next/link'
 export default function ProgramsPage() {
   const programs = [
     {
-      name: 'AOPA Teen Membership',
-      href: '/programs/aopa-teen-membership',
-      description: 'Supporting teen aviation enthusiasts through AOPA membership programs',
-    },
-    {
       name: 'Eagle Flights',
       href: '/programs/eagle-flights',
       description: 'Experience the joy of flight with our Eagle Flights program',

@@ -1,3 +1,5 @@
+import YouthAviationForm from '@/components/forms/YouthAviationForm'
+
 export default function YouthAviationPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -6,9 +8,18 @@ export default function YouthAviationPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {[
-          { title: 'Dream it', body: "The build program currently meets on the 2nd, 3rd & 4th Saturday each month from 9:00 AM to 1:00 PM. Our mentors guide youth through the process of building real airplanes. Current projects include a Zenith 601XLB, a Thorpe T-18, a full motion simulator, and various radio-controlled models." },
-          { title: 'Build it', body: 'The program is available for youth age 14 and up. Participants earn credits for the time they work, which can be applied toward flight training in the future. The program has a maximum capacity of twelve participants.' },
-          { title: 'The Details', body: 'As with anything, there is paperwork involved. See the documents below for program information, the student pledge, photo/tool permission, and medical guidelines.' },
+          {
+            title: 'Dream it',
+            body: "The build program currently meets on the 2nd, 3rd & 4th Saturday each month from 9:00 AM to 1:00 PM. Our mentors guide youth through the process of building real airplanes. Current projects include a Zenith 601XLB, a Thorpe T-18, a full motion simulator, and various radio-controlled models.",
+          },
+          {
+            title: 'Build it',
+            body: 'The program is available for youth age 14 and up. Participants earn credits for the time they work, which can be applied toward flight training in the future. The program has a maximum capacity of twelve participants.',
+          },
+          {
+            title: 'The Details',
+            body: 'As with anything, there is paperwork involved. See the documents below for program information, the student pledge, photo/tool permission, and medical guidelines.',
+          },
         ].map((item) => (
           <div key={item.title} className="bg-eaa-blue text-white p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-3">{item.title}</h2>
@@ -19,6 +30,9 @@ export default function YouthAviationPage() {
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <h2 className="text-2xl font-bold text-eaa-blue mb-4">Program Documents</h2>
+        <p className="text-gray-600 text-sm mb-4">
+          Once accepted into the program, participants will need to complete the following paperwork:
+        </p>
         <ul className="space-y-3">
           {[
             { label: 'Youth Aviation Program Overview', url: 'https://drive.google.com/file/d/1lwDiW5br67uh6k5EHPL2QDkIBrDCVpkw/view?usp=sharing' },
@@ -43,18 +57,15 @@ export default function YouthAviationPage() {
         </ul>
       </div>
 
-      <div className="bg-eaa-yellow text-eaa-blue p-6 rounded-lg">
-        <h2 className="text-2xl font-bold mb-3">Interested in Joining or Mentoring?</h2>
-        <p className="mb-4">
-          If you have a youth with a keen interest in aviation, or if you&apos;re interested in becoming a mentor,
-          please reach out to our youth program leadership.
+      {/* Interest Form */}
+      <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+        <h2 className="text-2xl font-bold text-eaa-blue mb-2">Express Interest / Apply</h2>
+        <p className="text-gray-600 text-sm mb-6">
+          Interested in joining the Youth Aviation Program, or becoming a mentor? Fill out the form below
+          and our program leadership will be in touch. The program has limited capacity (12 participants)
+          so spots may not always be available.
         </p>
-        <a
-          href="mailto:youth@eaa690.org?subject=Youth Aviation Program Inquiry"
-          className="inline-block bg-eaa-blue text-white px-6 py-3 rounded-md font-semibold hover:bg-eaa-light-blue transition-colors"
-        >
-          Email Youth Program Leadership
-        </a>
+        <YouthAviationForm />
       </div>
     </div>
   )
