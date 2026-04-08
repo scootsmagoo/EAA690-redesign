@@ -62,6 +62,8 @@ export const fallbackStoreProducts: StoreProduct[] = [
     shortDescription: 'Family membership — join or renew (recurring billing on the legacy store until a Stripe Price is configured here).',
     categories: cats('memberships'),
     externalPurchaseUrl: 'https://www.eaa690.org/store/p/family-membership-dMl4c',
+    /** Used by /join when STRIPE_PRICE_FAMILY_MEMBERSHIP and catalog Price ID are unset. */
+    unitAmountCents: 4500,
     sortOrder: 30,
     isActive: true,
   },
@@ -73,6 +75,7 @@ export const fallbackStoreProducts: StoreProduct[] = [
     shortDescription: 'Individual membership — join or renew (recurring billing on the legacy store until a Stripe Price is configured here).',
     categories: cats('memberships'),
     externalPurchaseUrl: 'https://www.eaa690.org/store/p/individual-membership-j9am4-vXxPq',
+    unitAmountCents: 3500,
     sortOrder: 40,
     isActive: true,
   },

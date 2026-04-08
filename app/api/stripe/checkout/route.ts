@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
 import { getSiteBaseURL } from '@/lib/site-url'
+import { resolveMembershipLineItems, type MembershipTier } from '@/lib/membership-checkout'
 import { loadStoreCatalog } from '@/lib/store'
 import { STORE_PRODUCT_ID_RE } from '@/lib/store-ids'
 
@@ -38,17 +39,8 @@ const STRIPE_PRICE_ID_RE = /^price_[A-Za-z0-9]{8,}$/
 const UNIT_AMOUNT_MIN_CENTS = 50
 const UNIT_AMOUNT_MAX_CENTS = 500_000
 
-const MEMBERSHIP_PRICES: Record<string, string | undefined> = {
-  student: process.env.STRIPE_PRICE_STUDENT_MEMBERSHIP,
-  individual: process.env.STRIPE_PRICE_INDIVIDUAL_MEMBERSHIP,
-  family: process.env.STRIPE_PRICE_FAMILY_MEMBERSHIP,
-}
-
-const MEMBERSHIP_MODE: Record<string, 'payment' | 'subscription'> = {
-  student: 'payment',
-  individual: 'subscription',
-  family: 'subscription',
-}
+/** OWASP: limit JSON body size before parse (DoS / resource exhaustion). */
+const MAX_BODY_BYTES = 65_536
 
 // ─── Simple in-memory rate limiter ────────────────────────────────────────────
 // Limits checkout session creation to 10 requests per IP per minute.
@@ -87,9 +79,25 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  const contentLength = request.headers.get('content-length')
+  if (contentLength && parseInt(contentLength, 10) > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: 'Payload too large' }, { status: 413 })
+  }
+
+  let raw: string
+  try {
+    raw = await request.text()
+  } catch {
+    return NextResponse.json({ error: 'Could not read request body' }, { status: 400 })
+  }
+
+  if (raw.length > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: 'Payload too large' }, { status: 413 })
+  }
+
   let body: CheckoutBody
   try {
-    body = await request.json()
+    body = raw ? (JSON.parse(raw) as CheckoutBody) : ({} as CheckoutBody)
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
@@ -149,24 +157,21 @@ export async function POST(request: NextRequest) {
     if (type === 'membership') {
       const tier = body.membershipTier
 
-      // Validate tier against known set before touching MEMBERSHIP_PRICES
       if (!tier || !VALID_MEMBERSHIP_TIERS.has(tier)) {
         return NextResponse.json({ error: 'Invalid membership tier.' }, { status: 400 })
       }
 
-      const priceId = MEMBERSHIP_PRICES[tier]
-      if (!priceId) {
+      const resolved = await resolveMembershipLineItems(tier as MembershipTier)
+      if (!resolved.ok) {
         return NextResponse.json(
           { error: 'Membership pricing is not configured yet. Please contact us.' },
           { status: 503 }
         )
       }
 
-      const mode = MEMBERSHIP_MODE[tier]
-
       const session = await stripe.checkout.sessions.create({
-        mode,
-        line_items: [{ price: priceId, quantity: 1 }],
+        mode: resolved.mode,
+        line_items: resolved.line_items,
         allow_promotion_codes: true,
         success_url: `${base}/join/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${base}/join`,
@@ -311,7 +316,7 @@ export async function POST(request: NextRequest) {
     const msg = error instanceof Error ? error.message : ''
     if (msg.includes('STRIPE_SECRET_KEY')) {
       return NextResponse.json(
-        { error: 'Payment system is not configured. Add STRIPE_SECRET_KEY to your environment.' },
+        { error: 'Payment system is not configured. Please try again later.' },
         { status: 503 }
       )
     }

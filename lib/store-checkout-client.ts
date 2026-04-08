@@ -1,5 +1,7 @@
 'use client'
 
+import { isStripeHostedCheckoutUrl } from '@/lib/stripe-checkout-url'
+
 export type StoreCartCheckoutItem = { productId: string; quantity: number }
 
 const MAX_ERROR_CHARS = 280
@@ -30,6 +32,9 @@ export async function startStoreCartCheckout(items: StoreCartCheckoutItem[]): Pr
   if (!res.ok || !data.url) {
     const raw = data.error ?? `Checkout failed (${res.status})`
     throw new Error(clipPublicError(raw))
+  }
+  if (!isStripeHostedCheckoutUrl(data.url)) {
+    throw new Error('Invalid checkout link. Please refresh and try again.')
   }
   window.location.href = data.url
 }
