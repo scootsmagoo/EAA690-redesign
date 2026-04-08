@@ -110,6 +110,8 @@ export interface StoreProduct {
   categories: StoreCategory[]
   externalPurchaseUrl?: string
   stripePriceId?: string
+  /** Whole USD cents for one-time Stripe Checkout when no Stripe Price ID (server-validated). */
+  unitAmountCents?: number
   sortOrder?: number
   isActive?: boolean
 }

@@ -59,7 +59,7 @@ async function handleEvent(event: Stripe.Event) {
         // TODO: Send thank-you email or log to analytics
       }
 
-      if (meta.type === 'store_product') {
+      if (meta.type === 'store_product' || meta.type === 'store_cart') {
         // TODO: Trigger fulfillment / notify admin
       }
       break

@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={ptSerif.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={ptSerif.className} suppressHydrationWarning>
         <SiteChrome>{children}</SiteChrome>
       </body>
     </html>

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true next dev -p 3000",
+    "dev": "cross-env CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true next dev -p 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -35,6 +35,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.16",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.2.3",
     "eslint": "^10.2.0",
     "eslint-config-next": "^16.2.2",

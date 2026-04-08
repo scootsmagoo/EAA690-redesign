@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import { StoreCartProvider } from '@/components/StoreCartProvider'
 
 /**
  * Renders global nav + footer for the public site only. `/studio` embeds Sanity
@@ -22,7 +23,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <>
+    <StoreCartProvider>
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-eaa-blue focus:text-white focus:rounded-md focus:font-semibold focus:shadow-lg"
@@ -34,6 +35,6 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
         {children}
       </main>
       <Footer />
-    </>
+    </StoreCartProvider>
   )
 }

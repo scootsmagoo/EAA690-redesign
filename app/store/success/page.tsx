@@ -1,8 +1,13 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
+import ClearCartOnSuccess from './ClearCartOnSuccess'
 
 export default function StoreSuccessPage() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4">
+      <Suspense fallback={null}>
+        <ClearCartOnSuccess />
+      </Suspense>
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg border border-gray-100 p-10 text-center">
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true" focusable="false">

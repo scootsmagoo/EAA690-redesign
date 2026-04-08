@@ -317,6 +317,7 @@ export async function getStoreProducts() {
       image,
       externalPurchaseUrl,
       stripePriceId,
+      unitAmountCents,
       sortOrder,
       isActive,
       categories[]->{

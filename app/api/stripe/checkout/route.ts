@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
 import { getSiteBaseURL } from '@/lib/site-url'
+import { loadStoreCatalog } from '@/lib/store'
+import { STORE_PRODUCT_ID_RE } from '@/lib/store-ids'
 
-export type CheckoutType = 'donation' | 'membership' | 'store_product'
+export type CheckoutType = 'donation' | 'membership' | 'store_product' | 'store_cart'
 
 interface CheckoutBody {
   type: CheckoutType
@@ -13,11 +15,19 @@ interface CheckoutBody {
   // Store product — Price ID from Sanity stripePriceId field
   stripePriceId?: string
   quantity?: number
+  /** Store cart — product IDs resolved against the published catalog (amounts cannot be tampered with). */
+  items?: { productId: string; quantity: number }[]
 }
 
 // ─── Validation constants ──────────────────────────────────────────────────────
 
-const VALID_CHECKOUT_TYPES = new Set<CheckoutType>(['donation', 'membership', 'store_product'])
+const VALID_CHECKOUT_TYPES = new Set<CheckoutType>([
+  'donation',
+  'membership',
+  'store_product',
+  'store_cart',
+])
+const STORE_CART_MAX_LINES = 30
 const VALID_MEMBERSHIP_TIERS = new Set(['student', 'individual', 'family'])
 const DONATION_MIN_USD = 1
 const DONATION_MAX_USD = 10_000
@@ -25,6 +35,8 @@ const QUANTITY_MIN = 1
 const QUANTITY_MAX = 10
 // Stripe Price IDs are always "price_" followed by alphanumeric characters
 const STRIPE_PRICE_ID_RE = /^price_[A-Za-z0-9]{8,}$/
+const UNIT_AMOUNT_MIN_CENTS = 50
+const UNIT_AMOUNT_MAX_CENTS = 500_000
 
 const MEMBERSHIP_PRICES: Record<string, string | undefined> = {
   student: process.env.STRIPE_PRICE_STUDENT_MEMBERSHIP,
@@ -89,10 +101,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid checkout type' }, { status: 400 })
   }
 
-  const base = getSiteBaseURL()
-  const stripe = getStripe()
-
   try {
+    const base = getSiteBaseURL()
+    const stripe = getStripe()
     // ── Donation ────────────────────────────────────────────────────────────
     if (type === 'donation') {
       const dollars = body.amount
@@ -196,8 +207,114 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({ url: session.url })
     }
+
+    // ── Store cart (catalog-resolved Stripe Prices and/or ad-hoc line amounts) ─
+    if (type === 'store_cart') {
+      const rawItems = body.items
+      if (!Array.isArray(rawItems) || rawItems.length === 0) {
+        return NextResponse.json({ error: 'Cart is empty or invalid.' }, { status: 400 })
+      }
+      if (rawItems.length > STORE_CART_MAX_LINES) {
+        return NextResponse.json({ error: 'Too many distinct items in cart.' }, { status: 400 })
+      }
+
+      const qtyMerged = new Map<string, number>()
+      for (const row of rawItems) {
+        if (!row || typeof row !== 'object') {
+          return NextResponse.json({ error: 'Invalid cart line.' }, { status: 400 })
+        }
+        const productId = (row as { productId?: string }).productId
+        const rawQty = (row as { quantity?: unknown }).quantity
+        if (!productId || typeof productId !== 'string' || !STORE_PRODUCT_ID_RE.test(productId)) {
+          return NextResponse.json({ error: 'Invalid product reference in cart.' }, { status: 400 })
+        }
+        const q =
+          typeof rawQty === 'number' && Number.isInteger(rawQty) && rawQty >= QUANTITY_MIN && rawQty <= QUANTITY_MAX
+            ? rawQty
+            : null
+        if (q === null) {
+          return NextResponse.json(
+            { error: `Each line quantity must be between ${QUANTITY_MIN} and ${QUANTITY_MAX}.` },
+            { status: 400 }
+          )
+        }
+        qtyMerged.set(productId, Math.min(QUANTITY_MAX, (qtyMerged.get(productId) ?? 0) + q))
+      }
+
+      const { products } = await loadStoreCatalog()
+      const byId = new Map(products.map((p) => [p._id, p]))
+
+      const line_items: Array<
+        | { price: string; quantity: number }
+        | {
+            quantity: number
+            price_data: {
+              currency: 'usd'
+              unit_amount: number
+              product_data: { name: string }
+            }
+          }
+      > = []
+      for (const [productId, quantity] of Array.from(qtyMerged.entries())) {
+        const p = byId.get(productId)
+        if (!p) {
+          return NextResponse.json(
+            { error: 'One or more products are no longer available. Refresh the store and try again.' },
+            { status: 400 }
+          )
+        }
+
+        const priceId = p.stripePriceId?.trim()
+        if (priceId && STRIPE_PRICE_ID_RE.test(priceId)) {
+          line_items.push({ price: priceId, quantity })
+          continue
+        }
+
+        const cents = p.unitAmountCents
+        if (
+          typeof cents === 'number' &&
+          Number.isInteger(cents) &&
+          cents >= UNIT_AMOUNT_MIN_CENTS &&
+          cents <= UNIT_AMOUNT_MAX_CENTS
+        ) {
+          line_items.push({
+            quantity,
+            price_data: {
+              currency: 'usd',
+              unit_amount: cents,
+              product_data: {
+                name: p.title.slice(0, 250),
+              },
+            },
+          })
+          continue
+        }
+
+        return NextResponse.json(
+          { error: `${p.title} is not available for checkout on this site.` },
+          { status: 400 }
+        )
+      }
+
+      const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items,
+        success_url: `${base}/store/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${base}/store/cart`,
+        metadata: { type: 'store_cart', line_count: String(line_items.length) },
+      })
+
+      return NextResponse.json({ url: session.url })
+    }
   } catch (error) {
     console.error('Stripe checkout error:', error)
+    const msg = error instanceof Error ? error.message : ''
+    if (msg.includes('STRIPE_SECRET_KEY')) {
+      return NextResponse.json(
+        { error: 'Payment system is not configured. Add STRIPE_SECRET_KEY to your environment.' },
+        { status: 503 }
+      )
+    }
     return NextResponse.json({ error: 'Failed to create checkout session.' }, { status: 500 })
   }
 }
