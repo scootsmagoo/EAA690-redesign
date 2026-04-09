@@ -1,6 +1,7 @@
 'use client'
 
 import AdminGuard from '@/components/AdminGuard'
+import { orderedSubmissionEntries, submissionFieldLabel } from '@/lib/submission-field-order'
 import { useEffect, useState, useCallback } from 'react'
 
 type FormType = 'summer_camp' | 'scholarship' | 'vmc_imc' | 'youth_aviation'
@@ -219,10 +220,10 @@ export default function SubmissionsPage() {
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                           <tbody>
-                            {Object.entries(s.data).map(([k, v]) => (
+                            {orderedSubmissionEntries(s.form_type, s.data).map(([k, v]) => (
                               <tr key={k} className="border-b border-gray-100 last:border-0">
                                 <td className="py-2 pr-4 font-medium text-gray-500 whitespace-nowrap align-top w-48">
-                                  {k.replace(/_/g, ' ')}
+                                  {submissionFieldLabel(k)}
                                 </td>
                                 <td className="py-2 text-gray-800 break-words">
                                   {fmt(v)}

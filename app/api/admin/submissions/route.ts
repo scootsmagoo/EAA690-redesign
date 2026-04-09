@@ -6,6 +6,7 @@ import {
   FormType,
   SubmissionStatus,
 } from '@/lib/forms-db'
+import { orderedKeysForCsvExport } from '@/lib/submission-field-order'
 
 async function requireAdmin(request: NextRequest): Promise<true | NextResponse> {
   const session = await getAuth().api.getSession({ headers: request.headers })
@@ -40,13 +41,11 @@ export async function GET(request: NextRequest) {
         })
       }
 
-      // Collect all unique keys from the data payloads
-      const dataKeys = Array.from(
-        submissions.reduce((set, s) => {
-          Object.keys(s.data).forEach((k) => set.add(k))
-          return set
-        }, new Set<string>())
-      )
+      const allKeys = submissions.reduce((set, s) => {
+        Object.keys(s.data).forEach((k) => set.add(k))
+        return set
+      }, new Set<string>())
+      const dataKeys = orderedKeysForCsvExport(form_type, allKeys)
 
       // O3: Prefix values that start with formula-triggering characters to prevent
       // CSV injection (Excel/Sheets interpret leading =, +, -, @ as formulas).
