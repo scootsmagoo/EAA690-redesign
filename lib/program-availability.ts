@@ -28,6 +28,15 @@ type RawSlot = {
   closedMessage?: string
 }
 
+/** Limit CMS-sourced copy (defense in depth vs oversized payloads / UI overflow). */
+export const MAX_PROGRAM_CLOSED_MESSAGE_LENGTH = 2000
+
+function clampClosedMessage(s: string): string {
+  const t = s.trim()
+  if (t.length <= MAX_PROGRAM_CLOSED_MESSAGE_LENGTH) return t
+  return t.slice(0, MAX_PROGRAM_CLOSED_MESSAGE_LENGTH)
+}
+
 function normalizeSlot(
   raw: RawSlot | null | undefined,
   options?: { documentsAlwaysVisible?: boolean }
@@ -40,7 +49,8 @@ function normalizeSlot(
   return {
     registrationOpen: raw?.registrationOpen !== false,
     documentsVisible,
-    closedMessage: typeof raw?.closedMessage === 'string' ? raw.closedMessage.trim() : '',
+    closedMessage:
+      typeof raw?.closedMessage === 'string' ? clampClosedMessage(raw.closedMessage) : '',
   }
 }
 
