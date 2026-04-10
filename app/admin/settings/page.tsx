@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import AdminGuard from '@/components/AdminGuard'
+import { normalizeProgramForms, type ProgramFormSlot } from '@/lib/program-availability'
 
 type FormState = {
   siteName: string
@@ -30,7 +31,15 @@ type FormState = {
     endDate: string
   }
   storeSectionVisible: boolean
+  programForms: {
+    youthAviation: ProgramFormSlot
+    scholarship: ProgramFormSlot
+    summerCamp: ProgramFormSlot
+    vmcImc: ProgramFormSlot
+  }
 }
+
+const emptyProgramForms = normalizeProgramForms(undefined)
 
 const emptyForm: FormState = {
   siteName: '',
@@ -57,6 +66,7 @@ const emptyForm: FormState = {
     endDate: '',
   },
   storeSectionVisible: true,
+  programForms: emptyProgramForms,
 }
 
 function SiteSettingsForm() {
@@ -98,6 +108,7 @@ function SiteSettingsForm() {
                 : 'info',
           },
           storeSectionVisible: data.settings.storeSectionVisible !== false,
+          programForms: normalizeProgramForms(data.settings.programForms),
         })
         setLogoPreviewUrl(data.settings.logoPreviewUrl ?? null)
       } else {
@@ -456,6 +467,102 @@ function SiteSettingsForm() {
                   />
                 </div>
               </div>
+            </div>
+          </section>
+
+          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-lg font-bold text-eaa-blue mb-1">Program forms & PDFs</h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Control online forms and chapter PDF links on <code className="text-xs bg-gray-100 px-1 rounded">/programs</code>{' '}
+              pages (same fields exist in Sanity Studio under Site Settings → Program registration & documents).
+            </p>
+            <div className="space-y-8">
+              {(
+                [
+                  {
+                    key: 'youthAviation' as const,
+                    title: 'Youth Aviation Program',
+                    showDocs: true,
+                  },
+                  {
+                    key: 'scholarship' as const,
+                    title: 'Scholarships',
+                    showDocs: true,
+                  },
+                  {
+                    key: 'summerCamp' as const,
+                    title: 'Summer Camp (waitlist)',
+                    showDocs: false,
+                  },
+                  {
+                    key: 'vmcImc' as const,
+                    title: 'VMC/IMC Club',
+                    showDocs: false,
+                  },
+                ] as const
+              ).map(({ key, title, showDocs }) => (
+                <div key={key} className="border border-gray-100 rounded-md p-4 bg-gray-50/80">
+                  <h3 className="text-sm font-bold text-eaa-blue mb-3">{title}</h3>
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                        checked={form.programForms[key].registrationOpen}
+                        onChange={(e) =>
+                          setForm((f) => ({
+                            ...f,
+                            programForms: {
+                              ...f.programForms,
+                              [key]: { ...f.programForms[key], registrationOpen: e.target.checked },
+                            },
+                          }))
+                        }
+                      />
+                      <span className="text-sm font-medium text-gray-700">Accept online signups / applications</span>
+                    </label>
+                    {showDocs ? (
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                          checked={form.programForms[key].documentsVisible}
+                          onChange={(e) =>
+                            setForm((f) => ({
+                              ...f,
+                              programForms: {
+                                ...f.programForms,
+                                [key]: { ...f.programForms[key], documentsVisible: e.target.checked },
+                              },
+                            }))
+                          }
+                        />
+                        <span className="text-sm font-medium text-gray-700">Show chapter PDF links on the page</span>
+                      </label>
+                    ) : null}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Message when signups are closed <span className="text-gray-400 font-normal">(optional)</span>
+                      </label>
+                      <textarea
+                        rows={2}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                        placeholder="Shown instead of the form when signups are off."
+                        value={form.programForms[key].closedMessage}
+                        onChange={(e) =>
+                          setForm((f) => ({
+                            ...f,
+                            programForms: {
+                              ...f.programForms,
+                              [key]: { ...f.programForms[key], closedMessage: e.target.value },
+                            },
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
 

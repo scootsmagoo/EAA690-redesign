@@ -3,6 +3,7 @@ import { createClient } from '@sanity/client'
 import { getAuth } from '@/lib/better-auth'
 import { urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url'
+import { normalizeProgramForms, type ProgramFormSlot, type ProgramFormSlotKey } from '@/lib/program-availability'
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID?.trim() || 'itqpjbjj'
 const DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET?.trim() || 'production'
@@ -66,6 +67,30 @@ type SiteSettingsPayload = {
     endDate?: string
   }
   storeSectionVisible?: boolean
+  programForms?: unknown
+}
+
+function buildProgramFormsForSanity(slots: Record<ProgramFormSlotKey, ProgramFormSlot>) {
+  return {
+    youthAviation: {
+      registrationOpen: slots.youthAviation.registrationOpen,
+      documentsVisible: slots.youthAviation.documentsVisible,
+      closedMessage: slots.youthAviation.closedMessage,
+    },
+    scholarship: {
+      registrationOpen: slots.scholarship.registrationOpen,
+      documentsVisible: slots.scholarship.documentsVisible,
+      closedMessage: slots.scholarship.closedMessage,
+    },
+    summerCamp: {
+      registrationOpen: slots.summerCamp.registrationOpen,
+      closedMessage: slots.summerCamp.closedMessage,
+    },
+    vmcImc: {
+      registrationOpen: slots.vmcImc.registrationOpen,
+      closedMessage: slots.vmcImc.closedMessage,
+    },
+  }
 }
 
 function trimStr(s: unknown): string {
@@ -122,7 +147,8 @@ export async function GET(request: NextRequest) {
         breakfastTime,
         newsletterUrl,
         siteAnnouncement,
-        storeSectionVisible
+        storeSectionVisible,
+        programForms
       }`,
       { id: SITE_SETTINGS_ID }
     )
@@ -137,6 +163,7 @@ export async function GET(request: NextRequest) {
     }
 
     const ann = doc?.siteAnnouncement
+    const programForms = normalizeProgramForms(doc?.programForms)
 
     return NextResponse.json({
       settings: doc
@@ -167,6 +194,7 @@ export async function GET(request: NextRequest) {
               endDate: ann?.endDate ?? '',
             },
             storeSectionVisible: doc.storeSectionVisible !== false,
+            programForms,
             logoPreviewUrl,
           }
         : null,
@@ -213,6 +241,9 @@ export async function PATCH(request: NextRequest) {
   const siteAnnouncement = buildSiteAnnouncementForPatch(b.siteAnnouncement)
   const sa = b.siteAnnouncement as Record<string, unknown> | undefined
 
+  const programFormsNormalized = normalizeProgramForms(b.programForms)
+  const programForms = buildProgramFormsForSanity(programFormsNormalized)
+
   const setFields: Record<string, unknown> = {
     siteName: trimStr(b.siteName),
     tagline: trimStr(b.tagline),
@@ -224,6 +255,7 @@ export async function PATCH(request: NextRequest) {
     socialLinks,
     siteAnnouncement,
     storeSectionVisible: b.storeSectionVisible !== false,
+    programForms,
   }
   if (newsletterUrl) {
     setFields.newsletterUrl = newsletterUrl

@@ -134,6 +134,111 @@ export default {
       description:
         'Turn off to remove Store and cart from the navigation and show a notice on /store.',
     },
+    {
+      name: 'programForms',
+      title: 'Program registration & documents',
+      type: 'object',
+      description:
+        'Control online forms and chapter PDF links on /programs pages. Editors can also change these in Site Settings in Studio.',
+      options: {
+        collapsible: true,
+        collapsed: true,
+      },
+      fields: [
+        {
+          name: 'youthAviation',
+          title: 'Youth Aviation Program',
+          type: 'object',
+          fields: [
+            {
+              name: 'registrationOpen',
+              title: 'Accept online applications / interest form',
+              type: 'boolean',
+              initialValue: true,
+            },
+            {
+              name: 'documentsVisible',
+              title: 'Show program PDFs (Google Drive links)',
+              type: 'boolean',
+              initialValue: true,
+            },
+            {
+              name: 'closedMessage',
+              title: 'Message when registration is closed',
+              type: 'text',
+              rows: 2,
+              description: 'Optional. Shown instead of the form when applications are closed.',
+            },
+          ],
+        },
+        {
+          name: 'scholarship',
+          title: 'Scholarships',
+          type: 'object',
+          fields: [
+            {
+              name: 'registrationOpen',
+              title: 'Accept online scholarship applications',
+              type: 'boolean',
+              initialValue: true,
+            },
+            {
+              name: 'documentsVisible',
+              title: 'Show chapter scholarship PDF links',
+              type: 'boolean',
+              initialValue: true,
+            },
+            {
+              name: 'closedMessage',
+              title: 'Message when online applications are closed',
+              type: 'text',
+              rows: 2,
+              description: 'Optional. Shown instead of the online form when closed.',
+            },
+          ],
+        },
+        {
+          name: 'summerCamp',
+          title: 'Summer Camp (waitlist)',
+          type: 'object',
+          fields: [
+            {
+              name: 'registrationOpen',
+              title: 'Accept waitlist signups',
+              type: 'boolean',
+              initialValue: true,
+            },
+            {
+              name: 'closedMessage',
+              title: 'Message when waitlist is closed',
+              type: 'text',
+              rows: 2,
+              description: 'Optional. Shown instead of the waitlist form when closed.',
+            },
+          ],
+        },
+        {
+          name: 'vmcImc',
+          title: 'VMC/IMC Club',
+          type: 'object',
+          fields: [
+            {
+              name: 'registrationOpen',
+              title: 'Accept meeting notifications signup',
+              type: 'boolean',
+              initialValue: true,
+            },
+            {
+              name: 'closedMessage',
+              title: 'Message when signup is closed',
+              type: 'text',
+              rows: 2,
+              description: 'Optional. Shown instead of the signup form when closed.',
+            },
+          ],
+        },
+      ],
+    },
   ],
   preview: {
     prepare() {

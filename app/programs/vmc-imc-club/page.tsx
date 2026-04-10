@@ -1,6 +1,13 @@
 import VmcImcForm from '@/components/forms/VmcImcForm'
+import ProgramRegistrationClosed from '@/components/program/ProgramRegistrationClosed'
+import { getProgramFormsSettings } from '@/lib/program-forms-sanity'
 
-export default function VmcImcClubPage() {
+export const dynamic = 'force-dynamic'
+
+export default async function VmcImcClubPage() {
+  const pf = await getProgramFormsSettings()
+  const vmc = pf.vmcImc
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold text-eaa-blue mb-8">VMC/IMC Club</h1>
@@ -54,13 +61,18 @@ export default function VmcImcClubPage() {
           </p>
         </div>
 
-        {/* Interest Form */}
         <div className="bg-white rounded-lg shadow-md p-8">
           <h2 className="text-2xl font-bold text-eaa-blue mb-2">Get Notified About Upcoming Meetings</h2>
-          <p className="text-gray-600 text-sm mb-6">
-            Submit your information and Chris Serra will be in touch before the next meeting.
-          </p>
-          <VmcImcForm />
+          {vmc.registrationOpen ? (
+            <>
+              <p className="text-gray-600 text-sm mb-6">
+                Submit your information and Chris Serra will be in touch before the next meeting.
+              </p>
+              <VmcImcForm />
+            </>
+          ) : (
+            <ProgramRegistrationClosed title="Meeting notifications signup unavailable" message={vmc.closedMessage} />
+          )}
         </div>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { insertSubmission, FormType } from '@/lib/forms-db'
 import { normalizeUsPhoneForStorage, PROGRAM_FORM_PHONE_FIELDS } from '@/lib/us-phone'
+import { getProgramSlotForFormType, type ProgramFormTypeKey } from '@/lib/program-availability'
+import { getProgramFormsSettings } from '@/lib/program-forms-sanity'
 
 const VALID_FORM_TYPES: FormType[] = ['summer_camp', 'scholarship', 'vmc_imc', 'youth_aviation']
 
@@ -15,6 +17,15 @@ export async function POST(
 
   if (!VALID_FORM_TYPES.includes(type as FormType)) {
     return NextResponse.json({ error: 'Invalid form type' }, { status: 400 })
+  }
+
+  const formType = type as FormType
+  const programSlots = await getProgramFormsSettings()
+  if (!getProgramSlotForFormType(formType as ProgramFormTypeKey, programSlots).registrationOpen) {
+    return NextResponse.json(
+      { error: 'This program is not accepting submissions right now.' },
+      { status: 403 }
+    )
   }
 
   // O1: Enforce payload size limit before parsing
@@ -63,7 +74,7 @@ export async function POST(
   }
 
   try {
-    const id = await insertSubmission(type as FormType, payload)
+    const id = await insertSubmission(formType, payload)
     return NextResponse.json({ success: true, id }, { status: 201 })
   } catch (error) {
     console.error('Failed to save form submission:', error)

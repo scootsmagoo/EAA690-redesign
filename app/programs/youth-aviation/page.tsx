@@ -1,6 +1,14 @@
 import YouthAviationForm from '@/components/forms/YouthAviationForm'
+import ProgramRegistrationClosed from '@/components/program/ProgramRegistrationClosed'
+import { getProgramFormsSettings } from '@/lib/program-forms-sanity'
 
-export default function YouthAviationPage() {
+/** Sanity-driven toggles must not be frozen at build time. */
+export const dynamic = 'force-dynamic'
+
+export default async function YouthAviationPage() {
+  const pf = await getProgramFormsSettings()
+  const ya = pf.youthAviation
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold text-eaa-blue mb-4">Youth Aviation Program</h1>
@@ -28,44 +36,64 @@ export default function YouthAviationPage() {
         ))}
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 className="text-2xl font-bold text-eaa-blue mb-4">Program Documents</h2>
-        <p className="text-gray-600 text-sm mb-4">
-          Once accepted into the program, participants will need to complete the following paperwork:
-        </p>
-        <ul className="space-y-3">
-          {[
-            { label: 'Youth Aviation Program Overview', url: 'https://drive.google.com/file/d/1lwDiW5br67uh6k5EHPL2QDkIBrDCVpkw/view?usp=sharing' },
-            { label: 'Student Pledge of Participation', url: 'https://drive.google.com/file/d/1rKzGUB_J_3Xx-Vj68qaIizG_Y1eVhtTv/view?usp=sharing' },
-            { label: 'Photo and Tool Permission Form', url: 'https://drive.google.com/file/d/16mKQYIqzUePRp9UNdF81DDtUHdN108Bq/view?usp=sharing' },
-            { label: 'Medical Guidelines', url: 'https://drive.google.com/file/d/1RtRbCIyPlbqc7n-7SpJIPpzi941WlPhn/view?usp=sharing' },
-          ].map((doc) => (
-            <li key={doc.label}>
-              <a
-                href={doc.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-eaa-light-blue hover:underline flex items-center gap-2"
-              >
-                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                {doc.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {ya.documentsVisible ? (
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-2xl font-bold text-eaa-blue mb-4">Program Documents</h2>
+          <p className="text-gray-600 text-sm mb-4">
+            Once accepted into the program, participants will need to complete the following paperwork:
+          </p>
+          <ul className="space-y-3">
+            {[
+              { label: 'Youth Aviation Program Overview', url: 'https://drive.google.com/file/d/1lwDiW5br67uh6k5EHPL2QDkIBrDCVpkw/view?usp=sharing' },
+              { label: 'Student Pledge of Participation', url: 'https://drive.google.com/file/d/1rKzGUB_J_3Xx-Vj68qaIizG_Y1eVhtTv/view?usp=sharing' },
+              { label: 'Photo and Tool Permission Form', url: 'https://drive.google.com/file/d/16mKQYIqzUePRp9UNdF81DDtUHdN108Bq/view?usp=sharing' },
+              { label: 'Medical Guidelines', url: 'https://drive.google.com/file/d/1RtRbCIyPlbqc7n-7SpJIPpzi941WlPhn/view?usp=sharing' },
+            ].map((doc) => (
+              <li key={doc.label}>
+                <a
+                  href={doc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-eaa-light-blue hover:underline flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  {doc.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-bold text-eaa-blue mb-2">Program documents</h2>
+          <p className="text-gray-700 text-sm">
+            Chapter program PDFs are not available for download here right now. If you need paperwork, please{' '}
+            <a href="/contact" className="text-eaa-light-blue font-semibold hover:underline">
+              contact the chapter
+            </a>
+            .
+          </p>
+        </div>
+      )}
 
-      {/* Interest Form */}
       <div className="bg-white rounded-lg shadow-md p-8 mb-8">
         <h2 className="text-2xl font-bold text-eaa-blue mb-2">Express Interest / Apply</h2>
-        <p className="text-gray-600 text-sm mb-6">
-          Interested in joining the Youth Aviation Program, or becoming a mentor? Fill out the form below
-          and our program leadership will be in touch. The program has limited capacity (12 participants)
-          so spots may not always be available.
-        </p>
-        <YouthAviationForm />
+        {ya.registrationOpen ? (
+          <>
+            <p className="text-gray-600 text-sm mb-6">
+              Interested in joining the Youth Aviation Program, or becoming a mentor? Fill out the form below
+              and our program leadership will be in touch. The program has limited capacity (12 participants)
+              so spots may not always be available.
+            </p>
+            <YouthAviationForm />
+          </>
+        ) : (
+          <div className="mt-4">
+            <ProgramRegistrationClosed title="Applications / interest form unavailable" message={ya.closedMessage} />
+          </div>
+        )}
       </div>
     </div>
   )

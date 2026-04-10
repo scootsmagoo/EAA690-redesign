@@ -221,7 +221,8 @@ export async function getSiteSettings() {
       breakfastTime,
       newsletterUrl,
       siteAnnouncement,
-      storeSectionVisible
+      storeSectionVisible,
+      programForms
     }
   `)
 }

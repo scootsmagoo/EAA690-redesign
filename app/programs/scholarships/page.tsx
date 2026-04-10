@@ -1,6 +1,13 @@
 import ScholarshipForm from '@/components/forms/ScholarshipForm'
+import ProgramRegistrationClosed from '@/components/program/ProgramRegistrationClosed'
+import { getProgramFormsSettings } from '@/lib/program-forms-sanity'
 
-export default function ScholarshipsPage() {
+export const dynamic = 'force-dynamic'
+
+export default async function ScholarshipsPage() {
+  const pf = await getProgramFormsSettings()
+  const sc = pf.scholarship
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold text-eaa-blue mb-4">Scholarship Programs</h1>
@@ -22,17 +29,30 @@ export default function ScholarshipsPage() {
             The chapter will not award a flight instruction scholarship until a candidate has reached the milestone
             of soloing.
           </p>
-          <p className="text-gray-700 mb-4">
-            You can apply using the online form below, or download and submit a PDF application if you prefer.
-          </p>
-          <a
-            href="https://drive.google.com/file/d/1uhbK2Q8RKnO_kWB5lTDNr4AANKZ1uEJb/view?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-gray-100 text-eaa-blue border border-gray-300 px-5 py-2 rounded-md text-sm font-semibold hover:bg-gray-200 transition-colors"
-          >
-            ↓ Download PDF Application (alternative)
-          </a>
+          {sc.documentsVisible ? (
+            <>
+              <p className="text-gray-700 mb-4">
+                You can apply using the online form below, or download and submit a PDF application if you prefer.
+              </p>
+              <a
+                href="https://drive.google.com/file/d/1uhbK2Q8RKnO_kWB5lTDNr4AANKZ1uEJb/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-gray-100 text-eaa-blue border border-gray-300 px-5 py-2 rounded-md text-sm font-semibold hover:bg-gray-200 transition-colors"
+              >
+                ↓ Download PDF Application (alternative)
+              </a>
+            </>
+          ) : (
+            <p className="text-gray-700 mb-0">
+              You can apply using the online form below when applications are open. Chapter PDF applications are not
+              linked here right now — use the form or{' '}
+              <a href="/contact" className="text-eaa-light-blue font-semibold hover:underline">
+                contact the chapter
+              </a>{' '}
+              if you need help.
+            </p>
+          )}
         </div>
 
         <div className="bg-eaa-yellow text-eaa-blue p-6 rounded-lg">
@@ -46,24 +66,31 @@ export default function ScholarshipsPage() {
             Each year, our chapter supports one scholar between the ages of 16 and 19 with funding and mentorship to
             help earn their private pilot certificate. The Ray Scholarship is applied for in January of every year.
           </p>
-          <a
-            href="https://drive.google.com/file/d/12dww6BVkD-kC04q2H6J8OKme6lJGU6Bt/view?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-eaa-blue text-white px-5 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition-colors"
-          >
-            ↓ Ray Scholarship PDF Application
-          </a>
+          {sc.documentsVisible ? (
+            <a
+              href="https://drive.google.com/file/d/12dww6BVkD-kC04q2H6J8OKme6lJGU6Bt/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-eaa-blue text-white px-5 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition-colors"
+            >
+              ↓ Ray Scholarship PDF Application
+            </a>
+          ) : null}
         </div>
 
-        {/* Online Application Form */}
         <div className="bg-white rounded-lg shadow-md p-8">
           <h2 className="text-2xl font-bold text-eaa-blue mb-2">Apply Online</h2>
-          <p className="text-gray-600 text-sm mb-6">
-            Prefer to apply online? Fill out the form below — your application will be received by the scholarship
-            committee directly.
-          </p>
-          <ScholarshipForm />
+          {sc.registrationOpen ? (
+            <>
+              <p className="text-gray-600 text-sm mb-6">
+                Prefer to apply online? Fill out the form below — your application will be received by the scholarship
+                committee directly.
+              </p>
+              <ScholarshipForm />
+            </>
+          ) : (
+            <ProgramRegistrationClosed title="Online scholarship applications unavailable" message={sc.closedMessage} />
+          )}
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
