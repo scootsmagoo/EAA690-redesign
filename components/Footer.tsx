@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import FooterSignup from '@/components/newsletter/FooterSignup'
 
 export default function Footer() {
   return (
     <footer className="bg-eaa-blue text-white mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <FooterSignup />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <Image
