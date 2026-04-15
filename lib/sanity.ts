@@ -151,6 +151,17 @@ export async function getNewsArticleBySlug(slug: string) {
   )
 }
 
+/** Slugs for news article static generation. */
+export async function getNewsArticleSlugs() {
+  const client = getSanityClient()
+  if (!client) return []
+  return client.fetch<Array<{ slug: string }>>(`
+    *[_type == "newsArticle" && defined(slug.current)] {
+      "slug": slug.current
+    }
+  `)
+}
+
 // Fetch presentations/speakers
 export async function getPresentations(limit?: number) {
   const client = getSanityClient()
