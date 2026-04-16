@@ -70,12 +70,13 @@ export default async function NewsPage() {
 
   return (
     <div>
-      <div className="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden">
+      <div className="w-full">
         <Image
           src={heroImageSrc}
           alt={heroImageAlt}
-          fill
-          className="object-cover object-center"
+          width={2000}
+          height={1094}
+          className="w-full h-auto block"
           priority
           sizes="100vw"
         />
