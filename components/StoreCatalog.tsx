@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { StoreCategory, StoreProduct } from '@/lib/sanity-types'
 import { urlFor } from '@/lib/sanity'
 import { useStoreCart } from '@/components/StoreCartProvider'
@@ -59,6 +59,21 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
   const [activeSlug, setActiveSlug] = useState<string | 'all'>('all')
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  // WCAG 4.1.3: polite live region announces cart additions to screen readers
+  const [cartAnnouncement, setCartAnnouncement] = useState('')
+  // WCAG 2.4.3: move focus to error when Buy now fails
+  const errorRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (checkoutError && errorRef.current) {
+      errorRef.current.focus()
+    }
+  }, [checkoutError])
+
+  const handleAddToCart = (item: StoreProduct) => {
+    addProduct(item, 1)
+    setCartAnnouncement(`${item.title} added to cart`)
+  }
 
   const handleBuyNow = async (item: StoreProduct) => {
     if (!productCanCheckoutOnSite(item)) return
@@ -81,6 +96,11 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
 
   return (
     <>
+      {/* WCAG 4.1.3: status region — announces cart changes to screen readers without stealing focus */}
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {cartAnnouncement}
+      </div>
+
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <p className="text-lg text-gray-700 max-w-3xl">
           Show your support for EAA 690 — memberships, chapter merch, event meals, prints, and more.
@@ -138,14 +158,16 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
       </section>
 
       {checkoutError && (
-        <div
-          role="alert"
-          aria-live="assertive"
-          className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-700 text-sm"
-        >
-          {checkoutError}
-        </div>
-      )}
+          <div
+            ref={errorRef}
+            role="alert"
+            aria-live="assertive"
+            tabIndex={-1}
+            className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-700 text-sm outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
+          >
+            {checkoutError}
+          </div>
+        )}
 
       {filtered.length === 0 ? (
         <p className="text-gray-600 py-8">No products match this filter.</p>
@@ -155,6 +177,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
           {filtered.map((item) => (
             <article
               key={item._id}
+              aria-labelledby={`product-name-${item._id}`}
               className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
             >
               <div className="h-52 bg-gray-100 relative flex items-center justify-center overflow-hidden">
@@ -181,7 +204,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
                     </span>
                   ))}
                 </div>
-                <h2 className="text-xl font-bold text-eaa-blue mb-2">{item.title}</h2>
+                <h2 id={`product-name-${item._id}`} className="text-xl font-bold text-eaa-blue mb-2">{item.title}</h2>
                 {item.shortDescription && (
                   <p className="text-gray-600 mb-4 text-sm flex-1">{item.shortDescription}</p>
                 )}
@@ -191,7 +214,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
                     <div className="flex flex-col gap-2">
                       <button
                         type="button"
-                        onClick={() => addProduct(item, 1)}
+                        onClick={() => handleAddToCart(item)}
                         className="bg-eaa-yellow text-eaa-blue px-4 py-2 rounded-md font-semibold hover:bg-yellow-400 transition-colors text-center text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
                         aria-label={`Add ${item.title} to cart`}
                       >

@@ -20,7 +20,7 @@ export default {
       name: 'priceDisplay',
       title: 'Price (display)',
       type: 'string',
-      description: 'Exact text shown to visitors, e.g. "$15.00" or "$35.00 every 12 months"',
+      description: 'Text shown to visitors on the product card, e.g. "$150.00" or "$35.00 every 12 months". Must match the Price (USD) field exactly — the displayed price and the charged amount are separate fields. For recurring Stripe prices write the full label here (e.g. "$35.00/year").',
       validation: (Rule: any) => Rule.required(),
     },
     {
