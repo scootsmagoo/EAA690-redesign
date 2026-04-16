@@ -9,7 +9,7 @@ import { getHomePage, getLatestNewsletterIssue, getSiteSettings, urlFor } from '
 import { isSafeSiteHref, safePortableTextLinkHref } from '@/lib/search-safety'
 import type { HomePageContent, HomeProgramCard } from '@/lib/sanity-types'
 
-export const revalidate = 120
+export const revalidate = 30
 
 const DEFAULT_META_TITLE = 'EAA 690 - Experimental Aircraft Association Chapter 690'
 const DEFAULT_META_DESCRIPTION =

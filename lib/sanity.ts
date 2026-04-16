@@ -229,11 +229,18 @@ export async function getPageBySlug(slug: string) {
   )
 }
 
-/** Singleton home page content (Studio → Home Page). */
+/** Singleton home page content (Studio → Home Page).
+ * Uses useCdn:false so published changes appear immediately without
+ * waiting for Sanity's edge CDN to propagate.
+ */
 export async function getHomePage() {
-  const client = getSanityClient()
-  if (!client) return null
-  return client.fetch(`
+  const freshClient = createClient({
+    projectId: SANITY_PROJECT_ID,
+    dataset: SANITY_DATASET,
+    apiVersion: '2024-01-01',
+    useCdn: false,
+  })
+  return freshClient.fetch(`
     *[_type == "homePage" && _id == "homePage"][0] {
       _id,
       heroHeadline,
