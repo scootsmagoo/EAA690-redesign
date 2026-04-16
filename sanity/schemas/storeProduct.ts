@@ -25,9 +25,55 @@ export default {
     },
     {
       name: 'shortDescription',
-      title: 'Short description',
+      title: 'Short description (plain text)',
       type: 'text',
       rows: 3,
+      description: 'Simple one-liner shown as plain text. Use "Description (rich)" below if you need links or formatting.',
+    },
+    {
+      name: 'descriptionRich',
+      title: 'Description (rich)',
+      type: 'array',
+      description: 'Replaces the plain short description when present. Supports links, bold, italic, and multiple paragraphs.',
+      of: [
+        {
+          type: 'block',
+          styles: [{ title: 'Normal', value: 'normal' }],
+          lists: [],
+          marks: {
+            decorators: [
+              { title: 'Bold', value: 'strong' },
+              { title: 'Italic', value: 'em' },
+            ],
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Link',
+                fields: [
+                  {
+                    name: 'href',
+                    type: 'string',
+                    title: 'URL or path',
+                    description: 'https://… for external links, or /programs/young-eagles for internal paths.',
+                    validation: (Rule: any) =>
+                      Rule.required().custom((value: string | undefined) => {
+                        if (!value) return 'Required'
+                        if (
+                          value.startsWith('https://') ||
+                          value.startsWith('http://') ||
+                          value.startsWith('/')
+                        )
+                          return true
+                        return 'Must start with https://, http://, or /'
+                      }),
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ],
     },
     {
       name: 'image',

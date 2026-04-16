@@ -148,6 +148,7 @@ export interface StoreProduct {
   slug: { current: string }
   priceDisplay: string
   shortDescription?: string
+  descriptionRich?: any[]
   image?: SanityImage
   categories: StoreCategory[]
   externalPurchaseUrl?: string

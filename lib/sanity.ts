@@ -491,6 +491,7 @@ export async function getStoreProducts() {
       slug,
       priceDisplay,
       shortDescription,
+      descriptionRich,
       image,
       externalPurchaseUrl,
       stripePriceId,

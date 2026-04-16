@@ -3,11 +3,49 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { PortableText } from '@portabletext/react'
 import type { StoreCategory, StoreProduct } from '@/lib/sanity-types'
 import { urlFor } from '@/lib/sanity'
 import { useStoreCart } from '@/components/StoreCartProvider'
 import { productCanCheckoutOnSite } from '@/lib/store-product'
 import { startStoreCartCheckout } from '@/lib/store-checkout-client'
+
+const productDescriptionComponents = {
+  block: {
+    normal: ({ children }: { children?: React.ReactNode }) => (
+      <p className="text-gray-600 text-sm mb-1 last:mb-0">{children}</p>
+    ),
+  },
+  marks: {
+    strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-semibold">{children}</strong>,
+    em: ({ children }: { children?: React.ReactNode }) => <em>{children}</em>,
+    link: ({ children, value }: { children?: React.ReactNode; value?: { href?: string } }) => {
+      const href = value?.href?.trim() ?? ''
+      if (!href) return <span>{children}</span>
+      const isExternal = href.startsWith('http://') || href.startsWith('https://')
+      if (isExternal) {
+        return (
+          <a
+            href={href}
+            className="underline text-eaa-blue hover:text-blue-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-eaa-blue rounded-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {children}
+          </a>
+        )
+      }
+      return (
+        <Link
+          href={href}
+          className="underline text-eaa-blue hover:text-blue-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-eaa-blue rounded-sm"
+        >
+          {children}
+        </Link>
+      )
+    },
+  },
+}
 
 const LIVE_STORE = 'https://www.eaa690.org/store'
 
@@ -205,9 +243,13 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
                   ))}
                 </div>
                 <h2 id={`product-name-${item._id}`} className="text-xl font-bold text-eaa-blue mb-2">{item.title}</h2>
-                {item.shortDescription && (
+                {item.descriptionRich?.length ? (
+                  <div className="mb-4 text-sm flex-1">
+                    <PortableText value={item.descriptionRich} components={productDescriptionComponents} />
+                  </div>
+                ) : item.shortDescription ? (
                   <p className="text-gray-600 mb-4 text-sm flex-1">{item.shortDescription}</p>
-                )}
+                ) : null}
                 <div className="flex flex-col gap-3 mt-auto pt-2">
                   <span className="text-xl font-bold text-eaa-blue">{item.priceDisplay}</span>
                   {productCanCheckoutOnSite(item) ? (
