@@ -289,6 +289,64 @@ export const programSectionForm = {
   },
 }
 
+export const programSectionVideoEmbed = {
+  name: 'programSectionVideoEmbed',
+  title: 'Video embed (YouTube / Vimeo)',
+  type: 'object',
+  fields: [
+    {
+      name: 'heading',
+      title: 'Heading (optional)',
+      type: 'string',
+      description: 'Shown above the video. Leave empty to render just the video and caption.',
+    },
+    {
+      name: 'videoUrl',
+      title: 'Video URL',
+      type: 'url',
+      validation: (Rule: any) =>
+        Rule.required()
+          .uri({ scheme: ['http', 'https'] })
+          .custom((url: string | undefined) => {
+            if (!url) return 'Required'
+            try {
+              const u = new URL(url)
+              const host = u.hostname.toLowerCase()
+              const ok =
+                host === 'www.youtube.com' ||
+                host === 'youtube.com' ||
+                host === 'youtu.be' ||
+                host === 'vimeo.com' ||
+                host === 'player.vimeo.com'
+              return ok
+                ? true
+                : 'Only YouTube (youtube.com / youtu.be) and Vimeo (vimeo.com) URLs are supported.'
+            } catch {
+              return 'Enter a valid URL'
+            }
+          }),
+      description:
+        'Paste the regular share URL (e.g. https://youtu.be/xetdW5lEKbM or https://www.youtube.com/watch?v=xetdW5lEKbM). The site converts it to a privacy-friendly youtube-nocookie.com embed automatically.',
+    },
+    {
+      name: 'caption',
+      title: 'Caption (optional)',
+      type: 'string',
+      description: 'Short line shown under the heading, above the video.',
+      validation: (Rule: any) => Rule.max(280),
+    },
+  ],
+  preview: {
+    select: { heading: 'heading', videoUrl: 'videoUrl' },
+    prepare({ heading, videoUrl }: { heading?: string; videoUrl?: string }) {
+      return {
+        title: heading?.trim() || 'Video embed',
+        subtitle: videoUrl || 'YouTube / Vimeo',
+      }
+    },
+  },
+}
+
 const ctaButtonItem = {
   type: 'object',
   fields: [
@@ -377,6 +435,7 @@ export const programSectionTypes = [
   programSectionPdfLinks,
   programSectionPricing,
   programSectionForm,
+  programSectionVideoEmbed,
   programSectionCta,
 ]
 

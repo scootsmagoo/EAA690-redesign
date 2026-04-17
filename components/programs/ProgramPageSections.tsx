@@ -6,6 +6,7 @@ import { getProgramFormsSettings } from '@/lib/program-forms-sanity'
 import type { ProgramFormSlotKey } from '@/lib/program-availability'
 import ProgramPortableText from '@/components/programs/ProgramPortableText'
 import ProgramFormBlock from '@/components/programs/ProgramFormBlock'
+import MediaVideoEmbed from '@/components/MediaVideoEmbed'
 
 export type ProgramSectionUnknown = {
   _type?: string
@@ -231,6 +232,22 @@ export default async function ProgramPageSections({ sections }: { sections: unkn
             intro={s.intro as PortableTextBlock[] | undefined}
             formKey={typeof s.formKey === 'string' ? s.formKey : undefined}
           />
+        )
+        break
+      }
+      case 'programSectionVideoEmbed': {
+        const videoUrl = typeof s.videoUrl === 'string' ? s.videoUrl.trim() : ''
+        if (!videoUrl) break
+        const heading = typeof s.heading === 'string' ? s.heading.trim() : ''
+        const caption = typeof s.caption === 'string' ? s.caption.trim() : ''
+        nodes.push(
+          <div key={k} className="bg-white rounded-lg shadow-md p-6 mb-8">
+            <MediaVideoEmbed
+              videoUrl={videoUrl}
+              videoTitle={heading || undefined}
+              videoSubtitle={caption || undefined}
+            />
+          </div>
         )
         break
       }
