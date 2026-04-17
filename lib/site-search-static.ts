@@ -16,6 +16,11 @@ export const STATIC_SITE_SEARCH_INDEX: StaticSearchEntry[] = [
   { title: 'Home', href: '/', snippet: 'EAA 690 at Briscoe Field (KLZU), Gold Chapter, Young Eagles, pancake breakfast.' },
   { title: 'Calendar', href: '/calendar', snippet: 'Chapter events, pancake breakfasts, fly-outs, and subscribe to ICS feeds.' },
   { title: 'Contact', href: '/contact', snippet: 'Reach the chapter by email, phone, or visit Hangar 1 at Briscoe Field.' },
+  {
+    title: 'Privacy & data use',
+    href: '/privacy',
+    snippet: 'How the chapter handles information collected through the website and program forms.',
+  },
   { title: 'Donate', href: '/donate', snippet: 'Support EAA 690 as a 501(c)(3) — tax-deductible donations via Stripe.' },
   { title: 'Join / Renew', href: '/join', snippet: 'Chapter membership tiers, Young Eagles, and recurring support options.' },
   { title: 'Store', href: '/store', snippet: 'Memberships, pancake breakfast tickets, plaques, prints, and chapter merchandise.' },

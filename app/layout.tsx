@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { PT_Serif } from 'next/font/google'
 import './globals.css'
 import SiteChrome from '@/components/SiteChrome'
-import { getSiteSettings } from '@/lib/sanity'
+import { getSiteSettings, getProgramNavItems } from '@/lib/sanity'
 import { getAnnouncementBar } from '@/lib/site-settings-display'
+import { PROGRAM_NAV_FALLBACK } from '@/lib/program-nav-fallback'
 
 const ptSerif = PT_Serif({
   subsets: ['latin'],
@@ -30,10 +31,15 @@ export default async function RootLayout({
   const announcement = getAnnouncementBar(siteSettings?.siteAnnouncement)
   const showStore = siteSettings?.storeSectionVisible !== false
 
+  let programNavItems = await getProgramNavItems()
+  if (programNavItems.length === 0) {
+    programNavItems = PROGRAM_NAV_FALLBACK
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={ptSerif.className} suppressHydrationWarning>
-        <SiteChrome announcement={announcement} showStore={showStore}>
+        <SiteChrome announcement={announcement} showStore={showStore} programNavItems={programNavItems}>
           {children}
         </SiteChrome>
       </body>

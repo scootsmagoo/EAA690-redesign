@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { NextStudio } from 'next-sanity/studio'
 import { useSession } from '@/lib/better-auth-client'
 import { useCanAccessStudio } from '@/lib/auth-utils'
@@ -13,6 +14,13 @@ export default function StudioPage() {
   const canAccess = useCanAccessStudio()
   const router = useRouter()
 
+  useEffect(() => {
+    if (isPending) return
+    if (!session) {
+      router.replace('/sign-in?redirect=/studio')
+    }
+  }, [isPending, session, router])
+
   if (isPending) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
@@ -22,7 +30,6 @@ export default function StudioPage() {
   }
 
   if (!session) {
-    router.replace('/sign-in?redirect=/studio')
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <p className="text-white text-sm">Redirecting to login…</p>

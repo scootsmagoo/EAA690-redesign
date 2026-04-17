@@ -25,6 +25,9 @@ const TYPE_LABELS: Record<string, string> = {
   boardMember:  'Board Member',
   siteSettings: 'Site Settings',
   page:         'Page',
+  programPage: 'Program page',
+  programsPage: 'Programs index',
+  privacyPage: 'Privacy page',
 }
 
 async function requireAdminOrEditor(request: NextRequest): Promise<true | NextResponse> {

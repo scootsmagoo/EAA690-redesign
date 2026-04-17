@@ -8,6 +8,7 @@ import { useSession, signOut } from '@/lib/better-auth-client'
 import { useIsAdmin, useIsEditor } from '@/lib/auth-utils'
 import Image from 'next/image'
 import { useStoreCart } from '@/components/StoreCartProvider'
+import type { ProgramNavRow } from '@/lib/sanity'
 
 function CartIcon({ className }: { className?: string }) {
   return (
@@ -83,7 +84,24 @@ function ChevronDownIcon({ className }: { className?: string }) {
   )
 }
 
-export default function Navigation({ showStore = true }: { showStore?: boolean }) {
+const DEFAULT_PROGRAM_SUBMENU = [
+  { name: 'Eagle Flights', href: '/programs/eagle-flights' },
+  { name: 'Ground School', href: '/programs/ground-school' },
+  { name: 'Outreach', href: '/programs/outreach' },
+  { name: 'Scholarships', href: '/programs/scholarships' },
+  { name: 'Summer Camp', href: '/programs/summer-camp' },
+  { name: 'VMC/IMC Club', href: '/programs/vmc-imc-club' },
+  { name: 'Youth Aviation Program', href: '/programs/youth-aviation' },
+  { name: 'Young Eagles', href: '/programs/young-eagles' },
+] as const
+
+export default function Navigation({
+  showStore = true,
+  programNavItems,
+}: {
+  showStore?: boolean
+  programNavItems?: ProgramNavRow[]
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   /** Which parent nav group is expanded in the mobile drawer (Chapter, Programs, …). */
   const [openMobileSection, setOpenMobileSection] = useState<string | null>(null)
@@ -124,6 +142,9 @@ export default function Navigation({ showStore = true }: { showStore?: boolean }
       })()
     : null
 
+  const programsSubmenu =
+    programNavItems && programNavItems.length > 0 ? programNavItems : [...DEFAULT_PROGRAM_SUBMENU]
+
   const navigation = [
     {
       name: 'Chapter',
@@ -147,16 +168,7 @@ export default function Navigation({ showStore = true }: { showStore?: boolean }
     {
       name: 'Programs',
       href: '/programs',
-      submenu: [
-        { name: 'Eagle Flights', href: '/programs/eagle-flights' },
-        { name: 'Ground School', href: '/programs/ground-school' },
-        { name: 'Outreach', href: '/programs/outreach' },
-        { name: 'Scholarships', href: '/programs/scholarships' },
-        { name: 'Summer Camp', href: '/programs/summer-camp' },
-        { name: 'VMC/IMC Club', href: '/programs/vmc-imc-club' },
-        { name: 'Youth Aviation Program', href: '/programs/youth-aviation' },
-        { name: 'Young Eagles', href: '/programs/young-eagles' },
-      ],
+      submenu: programsSubmenu,
     },
     ...(showSessionNavItems ? [{ name: 'Members', href: '/members' }] : []),
     ...(showStore ? [{ name: 'Store', href: '/store' }] : []),

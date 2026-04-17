@@ -6,6 +6,7 @@ import Footer from '@/components/Footer'
 import { StoreCartProvider } from '@/components/StoreCartProvider'
 import SiteAnnouncementBar from '@/components/SiteAnnouncementBar'
 import type { AnnouncementBarProps } from '@/lib/site-settings-display'
+import type { ProgramNavRow } from '@/lib/sanity'
 
 /**
  * Renders global nav + footer for the public site only. `/studio` embeds Sanity
@@ -16,10 +17,13 @@ export default function SiteChrome({
   children,
   announcement = null,
   showStore = true,
+  programNavItems,
 }: {
   children: React.ReactNode
   announcement?: AnnouncementBarProps | null
   showStore?: boolean
+  /** When set, drives the Programs dropdown (from CMS + layout fallback). */
+  programNavItems?: ProgramNavRow[]
 }) {
   const pathname = usePathname()
   const isStudio = pathname?.startsWith('/studio') ?? false
@@ -40,7 +44,7 @@ export default function SiteChrome({
       >
         Skip to main content
       </a>
-      <Navigation showStore={showStore} />
+      <Navigation showStore={showStore} programNavItems={programNavItems} />
       {announcement ? <SiteAnnouncementBar {...announcement} /> : null}
       <main id="main-content" className="min-h-screen">
         {children}

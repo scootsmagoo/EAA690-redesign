@@ -45,6 +45,14 @@ export default defineConfig({
               .title('Media Page')
               .id('mediaPage')
               .child(S.document().schemaType('mediaPage').documentId('mediaPage')),
+            S.listItem()
+              .title('Programs index')
+              .id('programsPage')
+              .child(S.document().schemaType('programsPage').documentId('programsPage')),
+            S.listItem()
+              .title('Privacy page')
+              .id('privacyPage')
+              .child(S.document().schemaType('privacyPage').documentId('privacyPage')),
             S.divider(),
             // Regular document types
             S.documentTypeListItem('event').title('Events'),
@@ -60,6 +68,7 @@ export default defineConfig({
             S.divider(),
             S.documentTypeListItem('storeCategory').title('Store Categories'),
             S.documentTypeListItem('storeProduct').title('Store Products'),
+            S.documentTypeListItem('programPage').title('Program pages'),
           ]),
     }),
     visionTool(),

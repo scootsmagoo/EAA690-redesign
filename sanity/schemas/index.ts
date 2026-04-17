@@ -13,8 +13,13 @@ import mediaGallery from './mediaGallery'
 import page from './page'
 import storeCategory from './storeCategory'
 import storeProduct from './storeProduct'
+import programPage, { programSectionTypes } from './programPage'
+import programsPage from './programsPage'
+import privacyPage from './privacyPage'
 
 export const schemaTypes = [
+  // Objects (program section blocks — must be registered)
+  ...programSectionTypes,
   // Documents
   event,
   newsArticle,
@@ -26,10 +31,13 @@ export const schemaTypes = [
   page,
   storeCategory,
   storeProduct,
+  programPage,
 
   // Singletons
   homePage,
   newsPage,
   mediaPage,
+  programsPage,
+  privacyPage,
   siteSettings,
 ]

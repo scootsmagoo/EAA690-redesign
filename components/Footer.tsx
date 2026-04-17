@@ -44,6 +44,11 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link href="/privacy" className="hover:text-eaa-yellow transition-colors">
+                  Privacy &amp; data use
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

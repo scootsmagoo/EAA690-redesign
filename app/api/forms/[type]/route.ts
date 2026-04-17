@@ -3,17 +3,30 @@ import { insertSubmission, FormType } from '@/lib/forms-db'
 import { normalizeUsPhoneForStorage, PROGRAM_FORM_PHONE_FIELDS } from '@/lib/us-phone'
 import { getProgramSlotForFormType, type ProgramFormTypeKey } from '@/lib/program-availability'
 import { getProgramFormsSettings } from '@/lib/program-forms-sanity'
+import { allowFormSubmission } from '@/lib/form-rate-limit'
+import { validateProgramFormPayload } from '@/lib/program-form-validate'
+import { sendProgramFormNotificationEmail } from '@/lib/program-form-email'
 
 const VALID_FORM_TYPES: FormType[] = ['summer_camp', 'scholarship', 'vmc_imc', 'youth_aviation']
 
 // O1: Reject requests whose body exceeds this limit (prevents large-payload DoS)
 const MAX_BODY_BYTES = 32_768 // 32 KB — ample for any legitimate form submission
 
+function clientIp(request: NextRequest): string {
+  const xf = request.headers.get('x-forwarded-for')
+  if (xf) return xf.split(',')[0]?.trim().slice(0, 128) || 'unknown'
+  return request.headers.get('x-real-ip')?.trim().slice(0, 128) || 'unknown'
+}
+
 export async function POST(
   request: NextRequest,
   context: { params: Promise<{ type: string }> }
 ) {
   const { type } = await context.params
+
+  if (!allowFormSubmission(`form:${clientIp(request)}`)) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+  }
 
   if (!VALID_FORM_TYPES.includes(type as FormType)) {
     return NextResponse.json({ error: 'Invalid form type' }, { status: 400 })
@@ -73,8 +86,22 @@ export async function POST(
     }
   }
 
+  const invalid = validateProgramFormPayload(formType, payload)
+  if (invalid) {
+    return NextResponse.json({ error: 'Invalid submission' }, { status: 400 })
+  }
+
   try {
     const id = await insertSubmission(formType, payload)
+
+    if (process.env.RESEND_API_KEY?.trim() && process.env.CONTACT_EMAIL_FROM?.trim()) {
+      try {
+        await sendProgramFormNotificationEmail(formType, payload)
+      } catch (emailErr) {
+        console.error('Program form notification email failed:', emailErr)
+      }
+    }
+
     return NextResponse.json({ success: true, id }, { status: 201 })
   } catch (error) {
     console.error('Failed to save form submission:', error)
