@@ -430,6 +430,28 @@ export async function getBoardMembers() {
   `)
 }
 
+/** Singleton: /kudos page settings (hero image, title, tagline, intro). */
+export async function getKudosPage() {
+  const freshClient = createClient({
+    projectId: SANITY_PROJECT_ID,
+    dataset: SANITY_DATASET,
+    apiVersion: '2024-01-01',
+    useCdn: false,
+  })
+  return freshClient.fetch(`
+    *[_type == "kudosPage" && _id == "kudosPage"][0] {
+      _id,
+      heroImage,
+      heroImageAlt,
+      pageTitle,
+      tagline,
+      intro,
+      seoTitle,
+      seoDescription
+    }
+  `)
+}
+
 // Fetch all kudos entries (sorted by manual order, then date desc)
 export async function getKudos() {
   const client = getSanityClient()
@@ -445,6 +467,21 @@ export async function getKudos() {
       featuredImage,
       "hasGallery": count(gallery) > 0,
       "galleryCount": count(gallery)
+    }
+  `)
+}
+
+/** Slugs for generateStaticParams on /kudos/[slug]. */
+export async function getKudosSlugs() {
+  const freshClient = createClient({
+    projectId: SANITY_PROJECT_ID,
+    dataset: SANITY_DATASET,
+    apiVersion: '2024-01-01',
+    useCdn: false,
+  })
+  return freshClient.fetch<Array<{ slug: string }>>(`
+    *[_type == "kudos" && defined(slug.current)] {
+      "slug": slug.current
     }
   `)
 }

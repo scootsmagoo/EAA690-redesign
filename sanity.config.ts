@@ -46,6 +46,10 @@ export default defineConfig({
               .id('mediaPage')
               .child(S.document().schemaType('mediaPage').documentId('mediaPage')),
             S.listItem()
+              .title('Kudos Page')
+              .id('kudosPage')
+              .child(S.document().schemaType('kudosPage').documentId('kudosPage')),
+            S.listItem()
               .title('Programs index')
               .id('programsPage')
               .child(S.document().schemaType('programsPage').documentId('programsPage')),

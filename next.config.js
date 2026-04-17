@@ -34,8 +34,17 @@ const nextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           // Clickjacking protection (belt + suspenders with CSP frame-ancestors)
           { key: 'X-Frame-Options', value: 'DENY' },
+          // Force HTTPS for 2 years (preload-eligible). Vercel sets this on its
+          // domains automatically, but declaring it explicitly avoids drift on
+          // future custom-domain configurations.
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
           // Limit referrer info sent to third parties
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          // Cross-origin isolation (mitigates Spectre-style cross-origin reads).
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           // Disable unused browser features; allow payment= for Stripe Payment Request API
           {
             key: 'Permissions-Policy',
@@ -60,6 +69,10 @@ const nextConfig = {
               "base-uri 'self'",
               // checkout.stripe.com redirect is a GET, not a form POST — 'self' is sufficient
               "form-action 'self'",
+              // Block <object>/<embed>/<applet> outright (no legitimate use here).
+              "object-src 'none'",
+              // Auto-upgrade any stray http:// subresources to https:// (defense-in-depth with HSTS).
+              'upgrade-insecure-requests',
             ].join('; '),
           },
         ],

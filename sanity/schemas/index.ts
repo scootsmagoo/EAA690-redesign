@@ -16,6 +16,7 @@ import storeProduct from './storeProduct'
 import programPage, { programSectionTypes } from './programPage'
 import programsPage from './programsPage'
 import privacyPage from './privacyPage'
+import kudosPage from './kudosPage'
 
 export const schemaTypes = [
   // Objects (program section blocks — must be registered)
@@ -39,5 +40,6 @@ export const schemaTypes = [
   mediaPage,
   programsPage,
   privacyPage,
+  kudosPage,
   siteSettings,
 ]
