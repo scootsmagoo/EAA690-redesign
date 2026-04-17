@@ -37,6 +37,93 @@ const programBlock = {
   },
 }
 
+/**
+ * Inline image embedded inside a Content card body. Editors can place an image
+ * with text wrapping around it (float left/right), centered, or full-width —
+ * matching the legacy site behavior on pages like /vmc-imc-club.
+ */
+const programInlineImage = {
+  type: 'image',
+  options: { hotspot: true },
+  fields: [
+    {
+      name: 'isDecorative',
+      title: 'This image is purely decorative',
+      type: 'boolean',
+      initialValue: false,
+      description:
+        'Tick when the image carries no information (e.g. a divider or ornamental photo). Decorative images are hidden from screen readers (WCAG 1.1.1) and do not require alt text.',
+    },
+    {
+      name: 'alt',
+      title: 'Alt text',
+      type: 'string',
+      description:
+        'Describe the image for screen readers. Required unless the image is marked as decorative.',
+      validation: (Rule: any) =>
+        Rule.max(220).custom(
+          (value: string | undefined, context: { parent?: { isDecorative?: boolean } }) => {
+            if (context.parent?.isDecorative) return true
+            if (!value || !value.trim()) {
+              return 'Alt text is required (or mark the image as decorative).'
+            }
+            return true
+          }
+        ),
+    },
+    {
+      name: 'caption',
+      title: 'Caption (optional)',
+      type: 'string',
+      description:
+        'Short caption shown beneath the image. Hidden when the image is decorative.',
+      validation: (Rule: any) => Rule.max(300),
+    },
+    {
+      name: 'align',
+      title: 'Alignment',
+      type: 'string',
+      initialValue: 'right',
+      options: {
+        list: [
+          { title: 'Float right (text wraps on the left)', value: 'right' },
+          { title: 'Float left (text wraps on the right)', value: 'left' },
+          { title: 'Centered (no text wrap)', value: 'center' },
+          { title: 'Full width (no text wrap)', value: 'full' },
+        ],
+        layout: 'radio',
+      },
+      description:
+        'On phones the image always stacks above the next paragraph regardless of this setting.',
+    },
+    {
+      name: 'size',
+      title: 'Size (desktop)',
+      type: 'string',
+      initialValue: 'md',
+      options: {
+        list: [
+          { title: 'Small (~25% width)', value: 'sm' },
+          { title: 'Medium (~33% width)', value: 'md' },
+          { title: 'Large (~50% width)', value: 'lg' },
+        ],
+        layout: 'radio',
+      },
+      description: 'Ignored when alignment is set to Full width.',
+    },
+  ],
+  preview: {
+    select: { media: 'asset', alt: 'alt', align: 'align' },
+    prepare({ media, alt, align }: any) {
+      return {
+        title: (typeof alt === 'string' && alt.trim()) || 'Inline image',
+        subtitle: align ? `align: ${align}` : 'inline image',
+        media,
+      }
+    },
+  },
+}
+
 export const programSectionAlert = {
   name: 'programSectionAlert',
   title: 'Alert (highlight box)',
@@ -74,14 +161,100 @@ export const programSectionRich = {
       name: 'body',
       title: 'Body',
       type: 'array',
-      of: [programBlock],
+      of: [programBlock, programInlineImage],
       validation: (Rule: any) => Rule.required(),
+      description:
+        'Use the “Insert” menu to add images that float beside the text (or sit centered/full-width). For dedicated side-by-side layouts, use the separate “Image + text” section instead.',
     },
   ],
   preview: {
     select: { heading: 'heading' },
     prepare({ heading }: { heading?: string }) {
       return { title: heading?.trim() || 'Content card', subtitle: 'White card' }
+    },
+  },
+}
+
+/**
+ * Side-by-side image + text card. Distinct from inline images inside a Content
+ * card: this enforces a clean two-column desktop layout with no float quirks.
+ */
+export const programSectionImageText = {
+  name: 'programSectionImageText',
+  title: 'Image + text (side by side)',
+  type: 'object',
+  fields: [
+    {
+      name: 'heading',
+      title: 'Heading (optional)',
+      type: 'string',
+      description: 'Shown above the two-column layout.',
+    },
+    {
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: { hotspot: true },
+      validation: (Rule: any) => Rule.required(),
+      fields: [
+        {
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+          validation: (Rule: any) =>
+            Rule.required().min(1).max(220).error('Alt text is required.'),
+        },
+        {
+          name: 'caption',
+          title: 'Caption (optional)',
+          type: 'string',
+          validation: (Rule: any) => Rule.max(300),
+        },
+      ],
+    },
+    {
+      name: 'imagePosition',
+      title: 'Image position (desktop)',
+      type: 'string',
+      initialValue: 'right',
+      options: {
+        list: [
+          { title: 'Right of text', value: 'right' },
+          { title: 'Left of text', value: 'left' },
+        ],
+        layout: 'radio',
+      },
+      description: 'Mobile always stacks the image above the text.',
+    },
+    {
+      name: 'imageWidth',
+      title: 'Image column width (desktop)',
+      type: 'string',
+      initialValue: 'third',
+      options: {
+        list: [
+          { title: 'One third', value: 'third' },
+          { title: 'Half', value: 'half' },
+        ],
+        layout: 'radio',
+      },
+    },
+    {
+      name: 'body',
+      title: 'Body',
+      type: 'array',
+      of: [programBlock],
+      validation: (Rule: any) => Rule.required(),
+    },
+  ],
+  preview: {
+    select: { heading: 'heading', media: 'image', position: 'imagePosition' },
+    prepare({ heading, media, position }: any) {
+      return {
+        title: (typeof heading === 'string' && heading.trim()) || 'Image + text',
+        subtitle: `Image ${position === 'left' ? 'left' : 'right'} of text`,
+        media,
+      }
     },
   },
 }
@@ -431,6 +604,7 @@ export const programSectionCta = {
 export const programSectionTypes = [
   programSectionAlert,
   programSectionRich,
+  programSectionImageText,
   programSectionFeatureColumns,
   programSectionPdfLinks,
   programSectionPricing,

@@ -7,11 +7,29 @@ import type { ProgramFormSlotKey } from '@/lib/program-availability'
 import ProgramPortableText from '@/components/programs/ProgramPortableText'
 import ProgramFormBlock from '@/components/programs/ProgramFormBlock'
 import MediaVideoEmbed from '@/components/MediaVideoEmbed'
+import { urlFor } from '@/lib/sanity'
 
 export type ProgramSectionUnknown = {
   _type?: string
   _key?: string
   [key: string]: unknown
+}
+
+/**
+ * Sanity asset refs encode source dimensions as `image-{id}-{W}x{H}-{ext}`.
+ * Passing intrinsic width/height to <img> reserves layout space and avoids
+ * cumulative layout shift (supports WCAG 2.4.4 Reflow).
+ */
+function parseAssetRefDimensions(
+  ref: string | undefined
+): { width: number; height: number } | null {
+  if (!ref) return null
+  const m = /^image-[a-zA-Z0-9]+-(\d+)x(\d+)-[a-zA-Z0-9]+$/.exec(ref)
+  if (!m) return null
+  const w = Number.parseInt(m[1], 10)
+  const h = Number.parseInt(m[2], 10)
+  if (!Number.isFinite(w) || !Number.isFinite(h) || w <= 0 || h <= 0) return null
+  return { width: w, height: h }
 }
 
 /** Yellow banner: blue filled buttons (white text). Blue banner: yellow filled buttons for contrast. */
@@ -99,8 +117,74 @@ export default async function ProgramPageSections({ sections }: { sections: unkn
         nodes.push(
           <div key={k} className="bg-white rounded-lg shadow-md p-6 mb-8">
             {heading ? <h2 className="text-2xl font-bold text-eaa-blue mb-4">{heading}</h2> : null}
-            <div className="prose max-w-none">
+            {/* flow-root contains floats from inline images so they don't bleed past the card */}
+            <div className="prose max-w-none [display:flow-root]">
               <ProgramPortableText value={body} />
+            </div>
+          </div>
+        )
+        break
+      }
+      case 'programSectionImageText': {
+        const heading = typeof s.heading === 'string' ? s.heading.trim() : ''
+        const body = s.body as PortableTextBlock[] | undefined
+        const img = s.image as
+          | { asset?: { _ref?: string }; alt?: string; caption?: string }
+          | undefined
+        if (!img?.asset?._ref) break
+        const position: 'left' | 'right' = s.imagePosition === 'left' ? 'left' : 'right'
+        const width: 'third' | 'half' = s.imageWidth === 'half' ? 'half' : 'third'
+        let src: string
+        try {
+          src = urlFor(img).width(1400).fit('max').auto('format').url()
+        } catch {
+          break
+        }
+        const imgCol = width === 'half' ? 'md:col-span-6' : 'md:col-span-4'
+        const txtCol = width === 'half' ? 'md:col-span-6' : 'md:col-span-8'
+        const caption = typeof img.caption === 'string' ? img.caption.trim() : ''
+        const dims = parseAssetRefDimensions(img.asset?._ref)
+        const figureEl = (
+          <figure className={imgCol}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={src}
+              alt={typeof img.alt === 'string' ? img.alt : ''}
+              className="rounded-md w-full h-auto"
+              loading="lazy"
+              decoding="async"
+              {...(dims ? { width: dims.width, height: dims.height } : {})}
+            />
+            {caption ? (
+              <figcaption className="text-sm text-gray-500 mt-2">{caption}</figcaption>
+            ) : null}
+          </figure>
+        )
+        const textEl = (
+          <div className={`${txtCol} prose max-w-none`}>
+            <ProgramPortableText value={body} />
+          </div>
+        )
+        // WCAG 1.3.2 Meaningful Sequence: DOM order matches desktop visual order
+        // (and mobile stack order). When the editor puts the image on the right,
+        // text reads/stacks first; image-left means image is the lead.
+        nodes.push(
+          <div key={k} className="bg-white rounded-lg shadow-md p-6 mb-8">
+            {heading ? (
+              <h2 className="text-2xl font-bold text-eaa-blue mb-4">{heading}</h2>
+            ) : null}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+              {position === 'left' ? (
+                <>
+                  {figureEl}
+                  {textEl}
+                </>
+              ) : (
+                <>
+                  {textEl}
+                  {figureEl}
+                </>
+              )}
             </div>
           </div>
         )
