@@ -77,7 +77,8 @@ export function validateProgramFormPayload(
       const attendance = data.expected_attendance
       if (typeof attendance !== 'string' && typeof attendance !== 'number') return 'Invalid submission'
       const attStr = String(attendance).trim()
-      if (!attStr || attStr.length > 10 || !/^\d+$/.test(attStr)) return 'Invalid submission'
+      // Positive whole number, ≤ 7 digits (matches the form's max=9_999_999)
+      if (!/^[1-9]\d{0,6}$/.test(attStr)) return 'Invalid submission'
       const message = data.message
       if (message != null && message !== '' && (typeof message !== 'string' || message.length > 8000)) return 'Invalid submission'
       return null

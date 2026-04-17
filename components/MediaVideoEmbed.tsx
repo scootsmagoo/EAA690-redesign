@@ -92,6 +92,10 @@ export default function MediaVideoEmbed({ videoUrl, videoTitle, videoSubtitle }:
           }
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
+          // O4: Explicit referrer policy — never leak the full referring URL to the
+          // video provider (matches the live site's setting and is best practice for
+          // third-party embeds even when the browser default is the same).
+          referrerPolicy="strict-origin-when-cross-origin"
           sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
           className="absolute inset-0 w-full h-full border-0"
         />

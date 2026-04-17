@@ -89,33 +89,37 @@ export default function OutreachForm() {
         />
       </div>
 
+      {/* W7: Visible per-input labels (not placeholders) so labels remain after typing — WCAG 3.3.2.
+         Fieldset+legend groups them under the live site's "Contact Person's Name" heading. */}
       <fieldset className="mb-5 border-0 m-0 p-0">
         <legend className={LABEL}>
           Contact Person&apos;s Name <span aria-hidden="true">*</span><span className="sr-only">(required)</span>
         </legend>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-1">
           <div>
-            <label htmlFor="outreach_first_name" className="sr-only">First Name</label>
+            <label htmlFor="outreach_first_name" className="block text-xs font-medium text-gray-600 mb-1">
+              First Name
+            </label>
             <input
               id="outreach_first_name"
               name="contact_first_name"
               type="text"
               required
               autoComplete="given-name"
-              placeholder="First Name"
               maxLength={120}
               className={INPUT}
             />
           </div>
           <div>
-            <label htmlFor="outreach_last_name" className="sr-only">Last Name</label>
+            <label htmlFor="outreach_last_name" className="block text-xs font-medium text-gray-600 mb-1">
+              Last Name
+            </label>
             <input
               id="outreach_last_name"
               name="contact_last_name"
               type="text"
               required
               autoComplete="family-name"
-              placeholder="Last Name"
               maxLength={120}
               className={INPUT}
             />
@@ -194,6 +198,7 @@ export default function OutreachForm() {
         <label htmlFor="outreach_attendance" className={LABEL}>
           Anticipated Number of Participants <span aria-hidden="true">*</span><span className="sr-only">(required)</span>
         </label>
+        {/* W8: step={1} blocks decimals/scientific notation in browser before server rejects them */}
         <input
           id="outreach_attendance"
           name="expected_attendance"
@@ -201,7 +206,9 @@ export default function OutreachForm() {
           inputMode="numeric"
           min={1}
           max={9999999}
+          step={1}
           required
+          title="Whole number, 1 or more"
           className={INPUT}
         />
       </div>
