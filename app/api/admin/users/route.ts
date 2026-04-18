@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Pool } from 'pg'
 import { getAuth } from '@/lib/better-auth'
+import { notifyAdminUserPromoted } from '@/lib/form-notifications'
 
 const VALID_ROLES = ['admin', 'editor', 'user'] as const
 type Role = (typeof VALID_ROLES)[number]
@@ -85,6 +86,20 @@ export async function PATCH(request: NextRequest) {
 
   const pool = getPool()
   try {
+    /**
+     * Capture the prior role so we can detect a *new* admin promotion
+     * (vs. re-applying admin to someone who already had it). Only the
+     * promotion transition triggers a security alert.
+     */
+    const priorResult = await pool.query<{ role: string | null }>(
+      `SELECT role FROM "user" WHERE id = $1`,
+      [userId]
+    )
+    if (priorResult.rowCount === 0) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+    const priorRole = priorResult.rows[0]?.role ?? 'user'
+
     const result = await pool.query(
       `UPDATE "user" SET role = $1 WHERE id = $2 RETURNING id, name, email, role`,
       [role, userId]
@@ -92,6 +107,32 @@ export async function PATCH(request: NextRequest) {
     if (result.rowCount === 0) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
+
+    if (role === 'admin' && priorRole !== 'admin') {
+      const promotedUser = result.rows[0] as {
+        id: string
+        name: string | null
+        email: string
+      }
+      const actor = session?.user as
+        | { id?: string; name?: string | null; email?: string }
+        | undefined
+      void notifyAdminUserPromoted({
+        promotedUser: {
+          id: promotedUser.id,
+          email: promotedUser.email,
+          name: promotedUser.name,
+        },
+        promotedBy: {
+          id: actor?.id ?? 'unknown',
+          email: actor?.email ?? 'unknown',
+          name: actor?.name ?? null,
+        },
+      }).catch((err) => {
+        console.error('notifyAdminUserPromoted failed:', err)
+      })
+    }
+
     return NextResponse.json({ success: true, user: result.rows[0] })
   } catch (error) {
     console.error('Failed to update role:', error)

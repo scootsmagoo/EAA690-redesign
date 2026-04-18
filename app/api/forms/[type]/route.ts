@@ -5,7 +5,7 @@ import { getProgramSlotForFormType, type ProgramFormTypeKey } from '@/lib/progra
 import { getProgramFormsSettings } from '@/lib/program-forms-sanity'
 import { allowFormSubmission } from '@/lib/form-rate-limit'
 import { validateProgramFormPayload } from '@/lib/program-form-validate'
-import { sendProgramFormNotificationEmail } from '@/lib/program-form-email'
+import { notifyProgramFormSubmission } from '@/lib/form-notifications'
 
 const VALID_FORM_TYPES: FormType[] = ['summer_camp', 'scholarship', 'vmc_imc', 'youth_aviation', 'outreach']
 
@@ -94,13 +94,15 @@ export async function POST(
   try {
     const id = await insertSubmission(formType, payload)
 
-    if (process.env.RESEND_API_KEY?.trim() && process.env.CONTACT_EMAIL_FROM?.trim()) {
-      try {
-        await sendProgramFormNotificationEmail(formType, payload)
-      } catch (emailErr) {
-        console.error('Program form notification email failed:', emailErr)
-      }
-    }
+    /**
+     * Best-effort notifications: email + SMS. The orchestrator handles its own
+     * try/catch internally so we don't need a second one here, but we still
+     * decline to await for correctness — the user already gets their 201
+     * even if the alert layer is slow or the upstream provider is down.
+     */
+    void notifyProgramFormSubmission(formType, payload).catch((notifyErr) => {
+      console.error('Program form notification orchestrator failed:', notifyErr)
+    })
 
     return NextResponse.json({ success: true, id }, { status: 201 })
   } catch (error) {

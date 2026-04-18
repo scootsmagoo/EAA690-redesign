@@ -4,6 +4,10 @@ import { getAuth } from '@/lib/better-auth'
 import { urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url'
 import { normalizeProgramForms, type ProgramFormSlot, type ProgramFormSlotKey } from '@/lib/program-availability'
+import {
+  normalizeFormNotificationsConfig,
+  type FormNotificationsConfig,
+} from '@/lib/form-notifications'
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID?.trim() || 'itqpjbjj'
 const DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET?.trim() || 'production'
@@ -69,6 +73,38 @@ type SiteSettingsPayload = {
   }
   storeSectionVisible?: boolean
   programForms?: unknown
+  formNotifications?: unknown
+}
+
+/**
+ * Convert the normalized `FormNotificationsConfig` (which uses snake_case
+ * FormType keys internally) back to the camelCase shape Sanity expects.
+ * Empty per-form lists are omitted so Sanity stores `undefined` (cleaner doc).
+ */
+function buildFormNotificationsForSanity(config: FormNotificationsConfig) {
+  const per: Record<string, string[]> = {}
+  if (config.perFormEmailRecipients.youth_aviation.length) {
+    per.youthAviation = config.perFormEmailRecipients.youth_aviation
+  }
+  if (config.perFormEmailRecipients.scholarship.length) {
+    per.scholarship = config.perFormEmailRecipients.scholarship
+  }
+  if (config.perFormEmailRecipients.summer_camp.length) {
+    per.summerCamp = config.perFormEmailRecipients.summer_camp
+  }
+  if (config.perFormEmailRecipients.vmc_imc.length) {
+    per.vmcImc = config.perFormEmailRecipients.vmc_imc
+  }
+  if (config.perFormEmailRecipients.outreach.length) {
+    per.outreach = config.perFormEmailRecipients.outreach
+  }
+  return {
+    enabled: config.enabled,
+    defaultEmailRecipients: config.defaultEmailRecipients,
+    perFormEmailRecipients: per,
+    smsRecipients: config.smsRecipients,
+    adminUserCreatedAlerts: config.adminUserCreatedAlerts,
+  }
 }
 
 function buildProgramFormsForSanity(slots: Record<ProgramFormSlotKey, ProgramFormSlot>) {
@@ -156,7 +192,8 @@ export async function GET(request: NextRequest) {
         newsletterArchiveFolderUrl,
         siteAnnouncement,
         storeSectionVisible,
-        programForms
+        programForms,
+        formNotifications
       }`,
       { id: SITE_SETTINGS_ID }
     )
@@ -172,6 +209,7 @@ export async function GET(request: NextRequest) {
 
     const ann = doc?.siteAnnouncement
     const programForms = normalizeProgramForms(doc?.programForms)
+    const formNotifications = normalizeFormNotificationsConfig(doc?.formNotifications)
 
     return NextResponse.json({
       settings: doc
@@ -204,6 +242,7 @@ export async function GET(request: NextRequest) {
             },
             storeSectionVisible: doc.storeSectionVisible !== false,
             programForms,
+            formNotifications,
             logoPreviewUrl,
           }
         : null,
@@ -254,6 +293,9 @@ export async function PATCH(request: NextRequest) {
   const programFormsNormalized = normalizeProgramForms(b.programForms)
   const programForms = buildProgramFormsForSanity(programFormsNormalized)
 
+  const formNotificationsNormalized = normalizeFormNotificationsConfig(b.formNotifications)
+  const formNotifications = buildFormNotificationsForSanity(formNotificationsNormalized)
+
   const setFields: Record<string, unknown> = {
     siteName: trimStr(b.siteName),
     tagline: trimStr(b.tagline),
@@ -266,6 +308,7 @@ export async function PATCH(request: NextRequest) {
     siteAnnouncement,
     storeSectionVisible: b.storeSectionVisible !== false,
     programForms,
+    formNotifications,
   }
   if (newsletterUrl) {
     setFields.newsletterUrl = newsletterUrl

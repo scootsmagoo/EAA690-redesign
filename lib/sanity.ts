@@ -336,7 +336,8 @@ export async function getSiteSettings() {
       newsletterArchiveFolderUrl,
       siteAnnouncement,
       storeSectionVisible,
-      programForms
+      programForms,
+      formNotifications
     }
   `)
 }

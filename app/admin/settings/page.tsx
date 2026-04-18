@@ -6,6 +6,25 @@ import Image from 'next/image'
 import AdminGuard from '@/components/AdminGuard'
 import { normalizeProgramForms, type ProgramFormSlot } from '@/lib/program-availability'
 
+/**
+ * Form-notifications state. Recipients are edited as multi-line text in the UI
+ * (one address/phone per line) and converted to arrays only on save.
+ * Per-form override keys mirror the camelCase Sanity schema.
+ */
+type FormNotificationsState = {
+  enabled: boolean
+  defaultEmailRecipients: string
+  perFormEmailRecipients: {
+    youthAviation: string
+    scholarship: string
+    summerCamp: string
+    vmcImc: string
+    outreach: string
+  }
+  smsRecipients: string
+  adminUserCreatedAlerts: boolean
+}
+
 type FormState = {
   siteName: string
   tagline: string
@@ -39,6 +58,20 @@ type FormState = {
     vmcImc: ProgramFormSlot
     outreach: ProgramFormSlot
   }
+  formNotifications: FormNotificationsState
+}
+
+function joinLines(list: unknown): string {
+  return Array.isArray(list)
+    ? list.filter((s): s is string => typeof s === 'string').join('\n')
+    : ''
+}
+
+function splitLines(value: string): string[] {
+  return value
+    .split(/[\n,]/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0)
 }
 
 const emptyProgramForms = normalizeProgramForms(undefined)
@@ -70,6 +103,19 @@ const emptyForm: FormState = {
   },
   storeSectionVisible: true,
   programForms: emptyProgramForms,
+  formNotifications: {
+    enabled: true,
+    defaultEmailRecipients: '',
+    perFormEmailRecipients: {
+      youthAviation: '',
+      scholarship: '',
+      summerCamp: '',
+      vmcImc: '',
+      outreach: '',
+    },
+    smsRecipients: '',
+    adminUserCreatedAlerts: true,
+  },
 }
 
 function SiteSettingsForm() {
@@ -114,6 +160,32 @@ function SiteSettingsForm() {
           },
           storeSectionVisible: data.settings.storeSectionVisible !== false,
           programForms: normalizeProgramForms(data.settings.programForms),
+          formNotifications: {
+            enabled: data.settings.formNotifications?.enabled !== false,
+            defaultEmailRecipients: joinLines(
+              data.settings.formNotifications?.defaultEmailRecipients
+            ),
+            perFormEmailRecipients: {
+              youthAviation: joinLines(
+                data.settings.formNotifications?.perFormEmailRecipients?.youth_aviation
+              ),
+              scholarship: joinLines(
+                data.settings.formNotifications?.perFormEmailRecipients?.scholarship
+              ),
+              summerCamp: joinLines(
+                data.settings.formNotifications?.perFormEmailRecipients?.summer_camp
+              ),
+              vmcImc: joinLines(
+                data.settings.formNotifications?.perFormEmailRecipients?.vmc_imc
+              ),
+              outreach: joinLines(
+                data.settings.formNotifications?.perFormEmailRecipients?.outreach
+              ),
+            },
+            smsRecipients: joinLines(data.settings.formNotifications?.smsRecipients),
+            adminUserCreatedAlerts:
+              data.settings.formNotifications?.adminUserCreatedAlerts !== false,
+          },
         })
         setLogoPreviewUrl(data.settings.logoPreviewUrl ?? null)
       } else {
@@ -140,10 +212,26 @@ function SiteSettingsForm() {
     setError('')
     setToast('')
     try {
+      const payload = {
+        ...form,
+        formNotifications: {
+          enabled: form.formNotifications.enabled,
+          defaultEmailRecipients: splitLines(form.formNotifications.defaultEmailRecipients),
+          perFormEmailRecipients: {
+            youthAviation: splitLines(form.formNotifications.perFormEmailRecipients.youthAviation),
+            scholarship: splitLines(form.formNotifications.perFormEmailRecipients.scholarship),
+            summerCamp: splitLines(form.formNotifications.perFormEmailRecipients.summerCamp),
+            vmcImc: splitLines(form.formNotifications.perFormEmailRecipients.vmcImc),
+            outreach: splitLines(form.formNotifications.perFormEmailRecipients.outreach),
+          },
+          smsRecipients: splitLines(form.formNotifications.smsRecipients),
+          adminUserCreatedAlerts: form.formNotifications.adminUserCreatedAlerts,
+        },
+      }
       const res = await fetch('/api/admin/site-settings', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -609,6 +697,158 @@ function SiteSettingsForm() {
                   </div>
                 </div>
               ))}
+            </div>
+          </section>
+
+          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-lg font-bold text-eaa-blue mb-1">Form notifications (alerts)</h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Who gets an email when a website form submission reaches the database. Per-form lists, when set,
+              replace the defaults for that form. SMS scaffolding is in place but does nothing until Twilio
+              env vars (<code className="text-xs bg-gray-100 px-1 rounded">TWILIO_ACCOUNT_SID</code>,{' '}
+              <code className="text-xs bg-gray-100 px-1 rounded">TWILIO_AUTH_TOKEN</code>,{' '}
+              <code className="text-xs bg-gray-100 px-1 rounded">TWILIO_FROM_NUMBER</code>) are configured.
+            </p>
+
+            <label className="flex items-center gap-2 cursor-pointer mb-4">
+              <input
+                type="checkbox"
+                className="rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                checked={form.formNotifications.enabled}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    formNotifications: { ...f.formNotifications, enabled: e.target.checked },
+                  }))
+                }
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Send notifications when forms are submitted
+              </span>
+            </label>
+
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="defaultEmailRecipients"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Default email recipients
+                </label>
+                <textarea
+                  id="defaultEmailRecipients"
+                  rows={3}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm font-mono"
+                  placeholder="one address per line — e.g. board@eaa690.org"
+                  value={form.formNotifications.defaultEmailRecipients}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      formNotifications: {
+                        ...f.formNotifications,
+                        defaultEmailRecipients: e.target.value,
+                      },
+                    }))
+                  }
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Used for any program form unless a per-form list below is set. Leave empty to fall back to
+                  the <code className="text-xs bg-gray-100 px-1 rounded">CONTACT_EMAIL_TO</code> environment
+                  variable.
+                </p>
+              </div>
+
+              <details className="border border-gray-100 rounded-md bg-gray-50/80">
+                <summary className="cursor-pointer text-sm font-bold text-eaa-blue px-4 py-3 select-none">
+                  Per-form recipient overrides (optional)
+                </summary>
+                <div className="px-4 pb-4 pt-1 space-y-4">
+                  {(
+                    [
+                      { key: 'youthAviation' as const, title: 'Youth Aviation Program' },
+                      { key: 'scholarship' as const, title: 'Scholarships' },
+                      { key: 'summerCamp' as const, title: 'Summer Camp waitlist' },
+                      { key: 'vmcImc' as const, title: 'VMC/IMC Club' },
+                      { key: 'outreach' as const, title: 'Outreach / event requests (Heidi)' },
+                    ] as const
+                  ).map(({ key, title }) => (
+                    <div key={key}>
+                      <label
+                        htmlFor={`perForm-${key}`}
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        {title}
+                      </label>
+                      <textarea
+                        id={`perForm-${key}`}
+                        rows={2}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm font-mono"
+                        placeholder="one address per line — leave empty to use defaults"
+                        value={form.formNotifications.perFormEmailRecipients[key]}
+                        onChange={(e) =>
+                          setForm((f) => ({
+                            ...f,
+                            formNotifications: {
+                              ...f.formNotifications,
+                              perFormEmailRecipients: {
+                                ...f.formNotifications.perFormEmailRecipients,
+                                [key]: e.target.value,
+                              },
+                            },
+                          }))
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              </details>
+
+              <div>
+                <label htmlFor="smsRecipients" className="block text-sm font-medium text-gray-700 mb-1">
+                  SMS phone numbers (E.164 format)
+                </label>
+                <textarea
+                  id="smsRecipients"
+                  rows={2}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm font-mono"
+                  placeholder="one number per line — e.g. +14045551234"
+                  value={form.formNotifications.smsRecipients}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      formNotifications: { ...f.formNotifications, smsRecipients: e.target.value },
+                    }))
+                  }
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Use E.164 format with country code (e.g. <code className="text-xs bg-gray-100 px-1 rounded">+14045551234</code>).
+                  Numbers are saved now but no SMS will be sent until Twilio env vars are configured on the server.
+                </p>
+              </div>
+
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                  checked={form.formNotifications.adminUserCreatedAlerts}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      formNotifications: {
+                        ...f.formNotifications,
+                        adminUserCreatedAlerts: e.target.checked,
+                      },
+                    }))
+                  }
+                />
+                <span className="text-sm font-medium text-gray-700">
+                  Alert recipients when a user is promoted to admin
+                  <span className="block text-xs font-normal text-gray-500 mt-0.5">
+                    Security event: emails the default recipients when an existing admin grants admin
+                    access via /admin/users.
+                  </span>
+                </span>
+              </label>
             </div>
           </section>
 

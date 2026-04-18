@@ -81,6 +81,25 @@ export interface SiteSettings {
     instagram?: string
     youtube?: string
   }
+  /**
+   * Recipient configuration for form-submission alerts. See
+   * `lib/form-notifications.ts` for resolution precedence
+   * (per-form override → default → CONTACT_EMAIL_TO env var).
+   */
+  formNotifications?: {
+    enabled?: boolean
+    defaultEmailRecipients?: string[]
+    perFormEmailRecipients?: {
+      youthAviation?: string[]
+      scholarship?: string[]
+      summerCamp?: string[]
+      vmcImc?: string[]
+      outreach?: string[]
+    }
+    /** E.164 phone numbers (Twilio). No-op until TWILIO_* env vars are set. */
+    smsRecipients?: string[]
+    adminUserCreatedAlerts?: boolean
+  }
 }
 
 export interface Page {

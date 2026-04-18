@@ -18,24 +18,39 @@ const FORM_LABELS: Record<FormType, string> = {
   outreach: 'Outreach / event request (Heidi)',
 }
 
-/** Notify chapter inbox after a successful DB insert (best-effort). */
+/**
+ * Notify configured recipients after a successful DB insert (best-effort).
+ *
+ * `recipients` is the resolved list returned by `resolveEmailRecipientsForForm()`
+ * — the caller (form-notifications.ts) handles per-form Sanity overrides and the
+ * env-var fallback so this transport stays focused on rendering + sending.
+ *
+ * For backwards compatibility, if `recipients` is omitted we still derive the
+ * list from the CONTACT_EMAIL_TO env var the same way the old implementation did.
+ */
 export async function sendProgramFormNotificationEmail(
   formType: FormType,
-  payload: Record<string, unknown>
+  payload: Record<string, unknown>,
+  recipients?: string[]
 ): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY
   const from = process.env.CONTACT_EMAIL_FROM?.trim()
-  const toRaw = process.env.CONTACT_EMAIL_TO?.trim() || 'info@eaa690.org'
 
   if (!apiKey || !from) {
     throw new Error('Email not configured')
   }
 
-  const to = toRaw
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean)
-  if (to.length === 0) throw new Error('CONTACT_EMAIL_TO is empty')
+  let to: string[]
+  if (recipients && recipients.length > 0) {
+    to = recipients
+  } else {
+    const toRaw = process.env.CONTACT_EMAIL_TO?.trim() || 'info@eaa690.org'
+    to = toRaw
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  }
+  if (to.length === 0) throw new Error('No recipients configured for form notifications')
 
   const label = FORM_LABELS[formType]
   const subject = `[EAA 690 Website] ${label}`

@@ -267,6 +267,94 @@ export default {
         },
       ],
     },
+    {
+      name: 'formNotifications',
+      title: 'Form notifications (alerts)',
+      type: 'object',
+      description:
+        'Who gets notified when a website form submission reaches the database. Defaults fall back to the CONTACT_EMAIL_TO env var; per-form lists, when set, replace the default for that form. SMS recipients require Twilio (env vars TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER) — when unset, SMS is silently skipped.',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        {
+          name: 'enabled',
+          title: 'Send notifications when forms are submitted',
+          type: 'boolean',
+          initialValue: true,
+          description: 'Master switch. Off = no email/SMS alerts (submissions still save to the database).',
+        },
+        {
+          name: 'defaultEmailRecipients',
+          title: 'Default email recipients',
+          type: 'array',
+          of: [{ type: 'string' }],
+          description:
+            'Email addresses notified for any program form unless a more specific list is set below. Falls back to the CONTACT_EMAIL_TO env var when empty.',
+          options: { layout: 'tags' },
+        },
+        {
+          name: 'perFormEmailRecipients',
+          title: 'Per-form recipient overrides (optional)',
+          type: 'object',
+          description:
+            'Leave a list empty to use the default recipients above. Add addresses to send a specific form type to a different inbox.',
+          options: { collapsible: true, collapsed: true },
+          fields: [
+            {
+              name: 'youthAviation',
+              title: 'Youth Aviation Program recipients',
+              type: 'array',
+              of: [{ type: 'string' }],
+              options: { layout: 'tags' },
+            },
+            {
+              name: 'scholarship',
+              title: 'Scholarship recipients',
+              type: 'array',
+              of: [{ type: 'string' }],
+              options: { layout: 'tags' },
+            },
+            {
+              name: 'summerCamp',
+              title: 'Summer Camp waitlist recipients',
+              type: 'array',
+              of: [{ type: 'string' }],
+              options: { layout: 'tags' },
+            },
+            {
+              name: 'vmcImc',
+              title: 'VMC/IMC Club recipients',
+              type: 'array',
+              of: [{ type: 'string' }],
+              options: { layout: 'tags' },
+            },
+            {
+              name: 'outreach',
+              title: 'Outreach / event request recipients (Heidi)',
+              type: 'array',
+              of: [{ type: 'string' }],
+              options: { layout: 'tags' },
+            },
+          ],
+        },
+        {
+          name: 'smsRecipients',
+          title: 'SMS phone numbers (E.164 format, e.g. +14045551234)',
+          type: 'array',
+          of: [{ type: 'string' }],
+          description:
+            'Optional. Numbers texted on every program form submission once Twilio env vars are set. Until then, listed numbers receive nothing (no error).',
+          options: { layout: 'tags' },
+        },
+        {
+          name: 'adminUserCreatedAlerts',
+          title: 'Alert when a user is promoted to admin',
+          type: 'boolean',
+          initialValue: true,
+          description:
+            'Email the recipients above when an existing admin grants admin access to another user (security event).',
+        },
+      ],
+    },
   ],
   preview: {
     prepare() {
