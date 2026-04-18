@@ -205,6 +205,27 @@
 .dark body .bg-blue-50 {
   background-color: rgb(17 24 39);
 }
+/**
+ * Safety net for Tailwind gradient utilities on light-tinted backgrounds.
+ * `bg-gradient-to-* from-blue-50 to-white` and friends set --tw-gradient-from
+ * /--tw-gradient-to as raw CSS variables, so the .bg-blue-50 remap above
+ * doesn't reach them. Force the gradient stops to dark surface tokens whenever
+ * a known light stop is used in dark mode. Components that want a real
+ * gradient in dark mode should set explicit dark:from-/dark:to- classes,
+ * which win on source order.
+ */
+.dark body .from-blue-50 {
+  --tw-gradient-from: rgb(var(--eaa-bg)) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(var(--eaa-bg) / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+.dark body .to-white,
+.dark body .to-blue-50 {
+  --tw-gradient-to: rgb(var(--eaa-bg)) var(--tw-gradient-to-position);
+}
+.dark body .via-white {
+  --tw-gradient-via: rgb(var(--eaa-bg)) var(--tw-gradient-via-position);
+}
 .dark body .bg-yellow-50 {
   background-color: rgb(31 26 11);
 }

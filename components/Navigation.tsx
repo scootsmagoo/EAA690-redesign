@@ -66,27 +66,6 @@ function ShoppingCartNavLink({
   )
 }
 
-function SettingsGearIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      aria-hidden="true"
-      focusable="false"
-    >
-      <circle cx="12" cy="12" r="3" />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1.04 1.56V21a2 2 0 01-4 0v-.08A1.7 1.7 0 008.96 19.36a1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.7 1.7 0 00.34-1.87 1.7 1.7 0 00-1.56-1.04H3a2 2 0 010-4h.08A1.7 1.7 0 004.64 8.96a1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06a1.7 1.7 0 001.87.34H9a1.7 1.7 0 001.04-1.56V3a2 2 0 014 0v.08c0 .68.4 1.3 1.04 1.56a1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06a1.7 1.7 0 00-.34 1.87V9c.26.64.88 1.04 1.56 1.04H21a2 2 0 010 4h-.08a1.7 1.7 0 00-1.52 1.04z"
-      />
-    </svg>
-  )
-}
-
 function ChevronDownIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -252,16 +231,9 @@ export default function Navigation({
             ))}
           </div>
 
-          {/* Cart icon + settings + account (desktop) */}
+          {/* Cart + account (desktop) — settings link lives in the footer + /account
+              card + mobile drawer to keep this row uncluttered. */}
           <div className="hidden xl:flex shrink-0 items-center gap-3 2xl:gap-5">
-            <Link
-              href="/settings"
-              aria-label="Settings and accessibility preferences"
-              title="Settings"
-              className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
-            >
-              <SettingsGearIcon className="h-6 w-6" />
-            </Link>
             {showStore ? (
               <ShoppingCartNavLink
                 totalItems={totalItems}
@@ -315,16 +287,8 @@ export default function Navigation({
             )}
           </div>
 
-          {/* Tablet / narrow desktop: settings + cart + menu toggle */}
+          {/* Tablet / narrow desktop: cart + menu toggle (settings lives inside the drawer). */}
           <div className="flex items-center gap-0.5 xl:hidden ml-auto shrink-0">
-            <Link
-              href="/settings"
-              aria-label="Settings and accessibility preferences"
-              title="Settings"
-              className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
-            >
-              <SettingsGearIcon className="h-6 w-6" />
-            </Link>
             {showStore ? (
               <ShoppingCartNavLink
                 totalItems={totalItems}

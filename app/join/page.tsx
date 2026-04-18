@@ -298,7 +298,7 @@ export default function JoinPage() {
         </section>
 
         {/* Benefits section */}
-        <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-10 mb-12">
+        <div className="bg-gradient-to-br from-blue-50 to-white dark:from-eaa-surface-dark dark:to-eaa-bg-dark rounded-2xl p-10 mb-12">
           <h2 className="text-3xl font-bold text-eaa-blue mb-2 text-center">Why Join Chapter 690?</h2>
           <p className="text-center text-gray-500 mb-10">
             Awarded EAA&apos;s top-level <strong>Gold Chapter</strong> status — here&apos;s what you get as a member.
