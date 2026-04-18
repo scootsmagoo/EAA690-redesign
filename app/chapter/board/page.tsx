@@ -88,33 +88,32 @@ export default async function BoardPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold text-eaa-blue mb-10 text-center">Chapter Leaders</h1>
 
-      <div className="space-y-14 mb-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 mb-16 max-w-5xl mx-auto">
         {members.map((member, index) => (
           <article key={member.key} className="text-center">
             {member.imageSrc && (
-              <div className="rounded-xl overflow-hidden shadow-md mb-4">
+              <div className="relative rounded-xl overflow-hidden shadow-md mb-4 mx-auto w-full max-w-xs aspect-[3/4] bg-gray-100">
                 <Image
                   src={member.imageSrc}
                   alt={`Portrait of ${member.name}, ${member.title}`}
-                  width={600}
-                  height={800}
-                  sizes="(max-width: 672px) 100vw, 672px"
-                  style={{ width: '100%', height: 'auto' }}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
+                  className="object-contain"
                   {...(index === 0 ? { priority: true } : {})}
                 />
               </div>
             )}
-            <h2 className="text-2xl font-bold text-eaa-blue">{member.name}</h2>
+            <h2 className="text-xl font-bold text-eaa-blue">{member.name}</h2>
             <p className="text-eaa-light-blue font-semibold mb-3">{member.title}</p>
-            <p className="text-gray-700 leading-relaxed">{member.bio}</p>
+            <p className="text-gray-700 leading-relaxed text-sm">{member.bio}</p>
           </article>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <section aria-label="Board of Trustees" className="bg-gray-50 rounded-lg p-6">
           <h2 className="text-xl font-bold text-eaa-blue mb-4">Board of Trustees</h2>
           <ul className="space-y-2 text-gray-700">
