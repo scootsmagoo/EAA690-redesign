@@ -234,7 +234,7 @@ export default async function Home() {
     (spotlightSubtitle ? `Illustration: ${spotlightSubtitle}` : `Illustration: ${spotlightTitle}`)
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white">
+    <div className="bg-gradient-to-b from-blue-50 to-white dark:from-eaa-bg-dark dark:to-eaa-bg-dark">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div>
