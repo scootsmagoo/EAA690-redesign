@@ -40,7 +40,7 @@ export default function SiteChrome({
     <StoreCartProvider>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-eaa-blue focus:text-white focus:rounded-md focus:font-semibold focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-eaa-blue focus:text-white dark:focus:bg-eaa-yellow dark:focus:text-eaa-blue focus:rounded-md focus:font-semibold focus:shadow-lg"
       >
         Skip to main content
       </a>

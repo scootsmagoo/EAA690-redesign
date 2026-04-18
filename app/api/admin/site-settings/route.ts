@@ -91,6 +91,12 @@ function buildProgramFormsForSanity(slots: Record<ProgramFormSlotKey, ProgramFor
       registrationOpen: slots.vmcImc.registrationOpen,
       closedMessage: slots.vmcImc.closedMessage,
     },
+    // Outreach (Heidi / event requests) — schema field exists; previously
+    // editable only via Sanity Studio, now also from this admin form.
+    outreach: {
+      registrationOpen: slots.outreach.registrationOpen,
+      closedMessage: slots.outreach.closedMessage,
+    },
   }
 }
 

@@ -4,7 +4,7 @@ import FooterSignup from '@/components/newsletter/FooterSignup'
 
 export default function Footer() {
   return (
-    <footer className="bg-eaa-blue text-white mt-auto">
+    <footer className="bg-eaa-blue dark:bg-eaa-bg-dark text-white mt-auto border-t border-transparent dark:border-eaa-border-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <FooterSignup />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -47,6 +47,11 @@ export default function Footer() {
               <li>
                 <Link href="/privacy" className="hover:text-eaa-yellow transition-colors">
                   Privacy &amp; data use
+                </Link>
+              </li>
+              <li>
+                <Link href="/settings" className="hover:text-eaa-yellow transition-colors">
+                  Settings &amp; accessibility
                 </Link>
               </li>
             </ul>

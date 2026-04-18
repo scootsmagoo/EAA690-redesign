@@ -5,9 +5,11 @@ import type { AnnouncementBarProps } from '@/lib/site-settings-display'
 import { safePortableTextLinkHref } from '@/lib/search-safety'
 
 const variantClasses: Record<AnnouncementBarProps['variant'], string> = {
-  info: 'bg-sky-50 text-sky-950 border-b border-sky-200',
-  warning: 'bg-amber-50 text-amber-950 border-b border-amber-200',
-  neutral: 'bg-gray-100 text-gray-900 border-b border-gray-200',
+  info: 'bg-sky-50 text-sky-950 border-b border-sky-200 dark:bg-sky-950/40 dark:text-sky-100 dark:border-sky-900',
+  warning:
+    'bg-amber-50 text-amber-950 border-b border-amber-200 dark:bg-amber-950/40 dark:text-amber-100 dark:border-amber-900',
+  neutral:
+    'bg-gray-100 text-gray-900 border-b border-gray-200 dark:bg-eaa-surface-dark dark:text-gray-100 dark:border-eaa-border-dark',
 }
 
 export default function SiteAnnouncementBar({

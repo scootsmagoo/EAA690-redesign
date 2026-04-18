@@ -37,6 +37,7 @@ type FormState = {
     scholarship: ProgramFormSlot
     summerCamp: ProgramFormSlot
     vmcImc: ProgramFormSlot
+    outreach: ProgramFormSlot
   }
 }
 
@@ -78,6 +79,7 @@ function SiteSettingsForm() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -149,6 +151,7 @@ function SiteSettingsForm() {
         return
       }
       setToast('Settings saved.')
+      setLastSavedAt(new Date())
       await load()
     } catch {
       setError('Save failed')
@@ -174,16 +177,29 @@ function SiteSettingsForm() {
         </p>
       </div>
 
-      {toast ? (
-        <p className="mb-4 text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-3 py-2">
-          {toast}
-        </p>
-      ) : null}
-      {error ? (
-        <p className="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2">
-          {error}
-        </p>
-      ) : null}
+      <div className="mb-4 space-y-2" aria-live="polite" aria-atomic="true">
+        {toast ? (
+          <p
+            role="status"
+            className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-3 py-2"
+          >
+            {toast}
+            {lastSavedAt ? (
+              <span className="text-green-700/80 ml-1">
+                ({lastSavedAt.toLocaleTimeString()})
+              </span>
+            ) : null}
+          </p>
+        ) : null}
+        {error ? (
+          <p
+            role="alert"
+            className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2"
+          >
+            {error}
+          </p>
+        ) : null}
+      </div>
 
       {loading ? (
         <p className="text-gray-500">Loading…</p>
@@ -522,6 +538,11 @@ function SiteSettingsForm() {
                   {
                     key: 'vmcImc' as const,
                     title: 'VMC/IMC Club',
+                    showDocs: false,
+                  },
+                  {
+                    key: 'outreach' as const,
+                    title: 'Outreach (event / appearance requests)',
                     showDocs: false,
                   },
                 ] as const

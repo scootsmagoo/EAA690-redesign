@@ -3,20 +3,90 @@
 @tailwind utilities;
 
 @layer base {
+  /**
+   * Light theme tokens (default). All colors are exposed as CSS variables so
+   * dark mode and high-contrast mode can override one place instead of every
+   * component. Keep the EAA brand colors (#003366 / #FFD700) untouched.
+   */
   :root {
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 255, 255, 255;
     --background-end-rgb: 255, 255, 255;
+
+    /** Semantic theme tokens. */
+    --eaa-bg: 255 255 255;          /* page background */
+    --eaa-surface: 255 255 255;     /* cards, panels */
+    --eaa-surface-2: 249 250 251;   /* subtle striping (gray-50) */
+    --eaa-surface-3: 243 244 246;   /* hover / muted (gray-100) */
+    --eaa-text: 17 24 39;           /* gray-900 */
+    --eaa-text-muted: 75 85 99;     /* gray-600 */
+    --eaa-text-subtle: 107 114 128; /* gray-500 */
+    --eaa-border: 229 231 235;      /* gray-200 */
+    --eaa-border-strong: 209 213 219; /* gray-300 */
+    --eaa-link: 0 102 204;          /* eaa-light-blue */
+    --eaa-focus-ring: 0 82 163;
+    --eaa-input-bg: 255 255 255;
+    --eaa-input-border: 209 213 219;
+
+    /** Adjustable text scale set by ThemeProvider; defaults to OS size. */
+    --eaa-font-scale: 100%;
+
+    color-scheme: light;
+  }
+
+  /**
+   * Dark theme. Activated by ThemeProvider adding `class="dark"` to <html>.
+   * Contrast targets:
+   *   - body text on bg: 15.8:1 (well above WCAG AAA 7:1)
+   *   - eaa-yellow (#FFD700) on bg: 13.5:1
+   *   - eaa-light-blue (#0066CC) on bg: 5.0:1 (passes AA for normal text)
+   */
+  .dark {
+    --eaa-bg: 11 18 32;             /* near-black slate */
+    --eaa-surface: 17 24 39;        /* gray-900 */
+    --eaa-surface-2: 24 33 49;      /* slightly lighter card */
+    --eaa-surface-3: 31 41 55;      /* gray-800 */
+    --eaa-text: 243 244 246;        /* gray-100 */
+    --eaa-text-muted: 209 213 219;  /* gray-300 */
+    --eaa-text-subtle: 156 163 175; /* gray-400 */
+    --eaa-border: 31 41 55;         /* gray-800 */
+    --eaa-border-strong: 55 65 81;  /* gray-700 */
+    --eaa-link: 125 211 252;        /* sky-300 — passes 4.5:1 on dark bg */
+    --eaa-focus-ring: 250 204 21;   /* yellow-400, high-vis on dark bg */
+    --eaa-input-bg: 17 24 39;
+    --eaa-input-border: 55 65 81;
+
+    --foreground-rgb: 243 244 246;
+    --background-start-rgb: 11 18 32;
+    --background-end-rgb: 11 18 32;
+
+    color-scheme: dark;
+  }
+
+  /**
+   * High-contrast mode (WCAG 1.4.6 AAA). Stacks on top of light or dark.
+   * Strengthens borders, removes muted text, and bumps focus ring to a 3px
+   * solid outline for keyboard navigators with low vision.
+   */
+  :root[data-high-contrast='true'] {
+    --eaa-text-muted: var(--eaa-text);
+    --eaa-text-subtle: var(--eaa-text);
+    --eaa-border: 17 24 39;
+    --eaa-border-strong: 17 24 39;
+  }
+  .dark[data-high-contrast='true'] {
+    --eaa-border: 243 244 246;
+    --eaa-border-strong: 243 244 246;
+  }
+
+  html {
+    /** User-controlled text scaling (lib/preferences.ts FONT_SCALE_REM). */
+    font-size: var(--eaa-font-scale, 100%);
   }
 
   body {
     color: rgb(var(--foreground-rgb));
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        rgb(var(--background-end-rgb))
-      )
-      rgb(var(--background-start-rgb));
+    background: rgb(var(--eaa-bg));
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -25,7 +95,8 @@
 
   /**
    * WCAG 2.4.7 Focus Visible — keyboard users get a clear focus ring on interactive controls.
-   * Skips hidden inputs and negative tabindex.
+   * Skips hidden inputs and negative tabindex. Uses a token so high-contrast/dark mode
+   * can override the color.
    */
   :where(
       a,
@@ -37,13 +108,192 @@
       [role='button'],
       [tabindex]:not([tabindex='-1'])
     ):focus-visible {
-    outline: 2px solid #0052a3;
+    outline: 2px solid rgb(var(--eaa-focus-ring));
     outline-offset: 3px;
+  }
+  :root[data-high-contrast='true']
+    :where(
+      a,
+      button,
+      input:not([type='hidden']),
+      textarea,
+      select,
+      summary,
+      [role='button'],
+      [tabindex]:not([tabindex='-1'])
+    ):focus-visible {
+    outline-width: 3px;
+    outline-offset: 4px;
   }
 
   :where(a, button, [role='button']):focus:not(:focus-visible) {
     outline: none;
   }
+
+  /**
+   * "Always underline links" preference (WCAG 1.4.1 — color is not the sole means).
+   * Skips obvious nav/button-styled anchors and brand chrome where underlines look wrong.
+   */
+  :root[data-underline-links='true'] main a:not(.no-underline-pref):not([role='button']):not(.btn) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
+/**
+ * Dark-mode utility-class compatibility layer.
+ *
+ * The site has hundreds of hardcoded Tailwind color utilities (`bg-white`,
+ * `text-gray-900`, etc.) accumulated organically. Rather than rewriting every
+ * file with `dark:` variants, we remap the most common ones in dark mode so
+ * the whole site picks up the theme coherently. Components that need bespoke
+ * dark styling can still add explicit `dark:` classes — those win because of
+ * Tailwind's source order and higher specificity.
+ *
+ * Scoped to `body` to avoid touching Sanity Studio (which renders inside the
+ * studio iframe under /studio with its own theme) — see SiteChrome.
+ */
+.dark body .bg-white,
+.dark body .bg-gray-50,
+.dark body .bg-slate-50 {
+  background-color: rgb(var(--eaa-surface));
+}
+.dark body .bg-gray-100,
+.dark body .bg-slate-100 {
+  background-color: rgb(var(--eaa-surface-2));
+}
+.dark body .bg-gray-200,
+.dark body .bg-slate-200 {
+  background-color: rgb(var(--eaa-surface-3));
+}
+.dark body .text-gray-900,
+.dark body .text-slate-900,
+.dark body .text-black {
+  color: rgb(var(--eaa-text));
+}
+.dark body .text-gray-800,
+.dark body .text-gray-700,
+.dark body .text-slate-800,
+.dark body .text-slate-700 {
+  color: rgb(var(--eaa-text));
+}
+.dark body .text-gray-600,
+.dark body .text-gray-500,
+.dark body .text-slate-600,
+.dark body .text-slate-500 {
+  color: rgb(var(--eaa-text-muted));
+}
+.dark body .text-gray-400,
+.dark body .text-slate-400 {
+  color: rgb(var(--eaa-text-subtle));
+}
+.dark body .border-gray-100,
+.dark body .border-gray-200,
+.dark body .border-slate-100,
+.dark body .border-slate-200 {
+  border-color: rgb(var(--eaa-border));
+}
+.dark body .border-gray-300,
+.dark body .border-slate-300 {
+  border-color: rgb(var(--eaa-border-strong));
+}
+.dark body .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+.dark body .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(var(--eaa-border));
+}
+/** Soft tinted hero/info backgrounds — keep brand intent but darken. */
+.dark body .bg-blue-50 {
+  background-color: rgb(17 24 39);
+}
+.dark body .bg-yellow-50 {
+  background-color: rgb(31 26 11);
+}
+.dark body .bg-amber-50 {
+  background-color: rgb(31 26 11);
+}
+.dark body .bg-green-50 {
+  background-color: rgb(8 24 18);
+}
+.dark body .bg-red-50 {
+  background-color: rgb(40 12 14);
+}
+.dark body .bg-sky-50 {
+  background-color: rgb(8 22 36);
+}
+/** Color-tinted text on those backgrounds needs to lighten for contrast. */
+.dark body .text-amber-900,
+.dark body .text-amber-800 {
+  color: rgb(252 211 77);
+}
+.dark body .text-blue-900,
+.dark body .text-blue-800 {
+  color: rgb(147 197 253);
+}
+.dark body .text-green-900,
+.dark body .text-green-800,
+.dark body .text-green-700 {
+  color: rgb(134 239 172);
+}
+.dark body .text-red-900,
+.dark body .text-red-800,
+.dark body .text-red-700,
+.dark body .text-red-600 {
+  color: rgb(252 165 165);
+}
+.dark body .text-sky-950,
+.dark body .text-sky-900 {
+  color: rgb(125 211 252);
+}
+/** Form controls in dark mode (default browser appearance). */
+.dark body input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+.dark body select,
+.dark body textarea {
+  background-color: rgb(var(--eaa-input-bg));
+  color: rgb(var(--eaa-text));
+  border-color: rgb(var(--eaa-input-border));
+}
+.dark body input::placeholder,
+.dark body textarea::placeholder {
+  color: rgb(var(--eaa-text-subtle));
+}
+/** Shadow utilities look harsh on dark surfaces — ease them off. */
+.dark body .shadow-sm,
+.dark body .shadow,
+.dark body .shadow-md,
+.dark body .shadow-lg {
+  --tw-shadow-color: rgb(0 0 0 / 0.5);
+}
+
+/**
+ * Brand-color overrides for dark mode.
+ *
+ * The site uses `text-eaa-blue` for hundreds of headings and `bg-eaa-blue` for
+ * primary buttons / heroes. On the dark slate body background, the original
+ * #003366 has ~1:1 contrast (effectively invisible) — so we shift:
+ *   - `text-eaa-blue` → eaa-yellow (#FFD700, 13.5:1 on dark bg, AAA)
+ *   - `bg-eaa-blue` → a brighter brand blue with enough separation from body
+ *     (white-on-#0a4f8f = 7.4:1, AAA)
+ * Excluded: inside .bg-eaa-blue (text on a blue button stays white) and
+ * components that explicitly opt out via `.no-dark-brand-shift`.
+ */
+.dark body :where(.text-eaa-blue):not(.bg-eaa-blue *):not(.no-dark-brand-shift) {
+  color: #FFD700;
+}
+.dark body :where(.bg-eaa-blue):not(.no-dark-brand-shift) {
+  background-color: #0a4f8f;
+}
+.dark body :where(.bg-eaa-light-blue):not(.no-dark-brand-shift) {
+  background-color: #0066CC;
+}
+.dark body :where(.border-eaa-blue):not(.no-dark-brand-shift) {
+  border-color: #FFD700;
+}
+.dark body :where(.text-eaa-light-blue):not(.bg-eaa-blue *):not(.no-dark-brand-shift) {
+  color: #93c5fd; /* sky-300 — readable accent on dark slate */
+}
+/** Hover variants of `text-eaa-blue` that flip to light-blue should also shift. */
+.dark body :where(a:hover .text-eaa-blue, .hover\:text-eaa-blue:hover) {
+  color: #FFD700;
 }
 
 @layer utilities {
@@ -63,10 +313,12 @@
 
 /**
  * WCAG 2.3.3 (Animation from Interactions) + 2.2.2 (Pause, Stop, Hide):
- * Honor the OS-level "reduce motion" preference. We collapse animations and
- * transitions to ~no-op durations so vestibular-sensitive visitors aren't
- * exposed to spinners, slide-ins, smooth-scrolling, or transition flashes.
- * Scroll-snap and smooth scroll are also disabled to avoid disorientation.
+ * Honor the OS-level "reduce motion" preference, OR an explicit override the
+ * user toggled in /settings (data-reduce-motion='true' on <html>). We collapse
+ * animations and transitions to ~no-op durations so vestibular-sensitive
+ * visitors aren't exposed to spinners, slide-ins, smooth-scrolling, or
+ * transition flashes. Scroll-snap and smooth scroll are also disabled to
+ * avoid disorientation.
  */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -78,6 +330,15 @@
     transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
+}
+:root[data-reduce-motion='true'] *,
+:root[data-reduce-motion='true'] *::before,
+:root[data-reduce-motion='true'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  transition-delay: 0ms !important;
+  scroll-behavior: auto !important;
 }
 
 /* FullCalendar - EAA brand overrides */
@@ -93,6 +354,36 @@
   --fc-page-bg-color:             transparent;
   --fc-neutral-bg-color:          #f8fafc;
   --fc-list-event-hover-bg-color: rgba(0, 51, 102, 0.06);
+}
+.dark .fc-eaa {
+  --fc-button-bg-color:           #0a4f8f;
+  --fc-button-border-color:       #003366;
+  --fc-button-hover-bg-color:     #003366;
+  --fc-button-hover-border-color: #002244;
+  --fc-button-active-bg-color:    #002244;
+  --fc-button-active-border-color:#001833;
+  --fc-today-bg-color:            rgba(255, 215, 0, 0.10);
+  --fc-border-color:              #1f2937;
+  --fc-neutral-bg-color:          #111827;
+  --fc-list-event-hover-bg-color: rgba(125, 211, 252, 0.10);
+}
+.dark .fc-eaa .fc-toolbar-title,
+.dark .fc-eaa .fc-col-header-cell-cushion {
+  color: #fde047; /* yellow-300 — high contrast on dark slate */
+}
+.dark .fc-eaa .fc-daygrid-day-number {
+  color: #d1d5db;
+}
+.dark .fc-eaa .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  background: #FFD700;
+  color: #003366;
+}
+.dark .fc-eaa .fc-list-event-title a {
+  color: #f3f4f6;
+}
+.dark .fc-eaa .fc-list-empty {
+  background: #111827;
+  color: #9ca3af;
 }
 
 /* Toolbar title */

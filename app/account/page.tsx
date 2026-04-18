@@ -384,6 +384,20 @@ function AccountPageInner() {
           </p>
         </div>
 
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-2xl font-bold text-eaa-blue mb-1">Display &amp; accessibility</h2>
+          <p className="text-sm text-gray-500 mb-4">
+            Theme (light / dark / system), text size, reduced motion, high-contrast mode, and link
+            underlines. These settings sync across the devices you sign in on.
+          </p>
+          <Link
+            href="/settings"
+            className="inline-flex items-center gap-1.5 text-eaa-blue hover:text-eaa-light-blue font-medium"
+          >
+            Open preferences →
+          </Link>
+        </div>
+
         <div className="bg-blue-50 p-6 rounded-lg">
           <h3 className="text-xl font-bold text-eaa-blue mb-2">Need Help?</h3>
           <p className="text-gray-700 mb-4">

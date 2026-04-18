@@ -66,6 +66,27 @@ function ShoppingCartNavLink({
   )
 }
 
+function SettingsGearIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle cx="12" cy="12" r="3" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1.04 1.56V21a2 2 0 01-4 0v-.08A1.7 1.7 0 008.96 19.36a1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.7 1.7 0 00.34-1.87 1.7 1.7 0 00-1.56-1.04H3a2 2 0 010-4h.08A1.7 1.7 0 004.64 8.96a1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06a1.7 1.7 0 001.87.34H9a1.7 1.7 0 001.04-1.56V3a2 2 0 014 0v.08c0 .68.4 1.3 1.04 1.56a1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06a1.7 1.7 0 00-.34 1.87V9c.26.64.88 1.04 1.56 1.04H21a2 2 0 010 4h-.08a1.7 1.7 0 00-1.52 1.04z"
+      />
+    </svg>
+  )
+}
+
 function ChevronDownIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -176,7 +197,7 @@ export default function Navigation({
   ]
 
   return (
-    <nav className="bg-eaa-blue text-white">
+    <nav className="bg-eaa-blue dark:bg-eaa-bg-dark text-white border-b border-transparent dark:border-eaa-border-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Desktop: primary row — logo, links, account only (no search here) */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 h-20">
@@ -212,14 +233,14 @@ export default function Navigation({
                 </Link>
                 {item.submenu && (
                   <div
-                    className="absolute left-0 mt-2 w-56 bg-white text-eaa-blue rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 z-50"
+                    className="absolute left-0 mt-2 w-56 bg-white text-eaa-blue dark:bg-eaa-surface-dark dark:text-gray-100 rounded-md shadow-lg dark:border dark:border-eaa-border-dark opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 z-50"
                   >
                     <div className="py-1">
                       {item.submenu.map((subitem) => (
                         <Link
                           key={subitem.name}
                           href={subitem.href}
-                          className="block px-4 py-2 text-sm hover:bg-eaa-blue hover:text-white focus-visible:bg-eaa-blue focus-visible:text-white focus-visible:outline-none transition-colors"
+                          className="block px-4 py-2 text-sm hover:bg-eaa-blue hover:text-white dark:hover:bg-eaa-yellow dark:hover:text-eaa-blue focus-visible:bg-eaa-blue focus-visible:text-white dark:focus-visible:bg-eaa-yellow dark:focus-visible:text-eaa-blue focus-visible:outline-none transition-colors"
                         >
                           {subitem.name}
                         </Link>
@@ -231,12 +252,20 @@ export default function Navigation({
             ))}
           </div>
 
-          {/* Cart icon + account (desktop) */}
+          {/* Cart icon + settings + account (desktop) */}
           <div className="hidden xl:flex shrink-0 items-center gap-3 2xl:gap-5">
+            <Link
+              href="/settings"
+              aria-label="Settings and accessibility preferences"
+              title="Settings"
+              className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
+            >
+              <SettingsGearIcon className="h-6 w-6" />
+            </Link>
             {showStore ? (
               <ShoppingCartNavLink
                 totalItems={totalItems}
-                className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue"
+                className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
               />
             ) : null}
             {isPending ? (
@@ -286,18 +315,26 @@ export default function Navigation({
             )}
           </div>
 
-          {/* Tablet / narrow desktop: cart icon + menu toggle */}
+          {/* Tablet / narrow desktop: settings + cart + menu toggle */}
           <div className="flex items-center gap-0.5 xl:hidden ml-auto shrink-0">
+            <Link
+              href="/settings"
+              aria-label="Settings and accessibility preferences"
+              title="Settings"
+              className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
+            >
+              <SettingsGearIcon className="h-6 w-6" />
+            </Link>
             {showStore ? (
               <ShoppingCartNavLink
                 totalItems={totalItems}
-                className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue"
+                className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
               />
             ) : null}
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-md hover:bg-eaa-light-blue transition-colors"
+              className="p-2 rounded-md hover:bg-eaa-light-blue dark:hover:bg-white/10 transition-colors"
               aria-label="Toggle menu"
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
@@ -390,11 +427,18 @@ export default function Navigation({
                   </div>
                 )
               })}
+              <Link
+                href="/settings"
+                className="block px-3 py-2 text-base font-medium hover:bg-eaa-light-blue dark:hover:bg-white/10 rounded-md"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Settings &amp; accessibility
+              </Link>
               {isPending ? null : session ? (
                 <div>
                   <Link
                     href="/members"
-                    className="block px-3 py-2 text-sm text-gray-200 hover:bg-eaa-light-blue rounded-md"
+                    className="block px-3 py-2 text-sm text-gray-200 hover:bg-eaa-light-blue dark:hover:bg-white/10 rounded-md"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {session.user?.name || session.user?.email}

@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import { PT_Serif, Cormorant_Garamond } from 'next/font/google'
+import { cookies } from 'next/headers'
 import './globals.css'
 import SiteChrome from '@/components/SiteChrome'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeNoFlickerScript } from '@/components/ThemeNoFlickerScript'
 import { getSiteSettings, getProgramNavItems } from '@/lib/sanity'
 import { getAnnouncementBar } from '@/lib/site-settings-display'
 import { PROGRAM_NAV_FALLBACK } from '@/lib/program-nav-fallback'
+import { RESOLVED_THEME_COOKIE, THEME_COOKIE, type ResolvedTheme } from '@/lib/preferences'
 
 const ptSerif = PT_Serif({
   subsets: ['latin'],
@@ -48,12 +52,32 @@ export default async function RootLayout({
     programNavItems = PROGRAM_NAV_FALLBACK
   }
 
+  // Read the user's resolved theme from a cookie so first paint matches what
+  // the no-flicker script will set. Falls back to "light" for fresh visitors;
+  // the in-head script reconciles against prefers-color-scheme on hydration.
+  const cookieStore = await cookies()
+  const resolved = cookieStore.get(RESOLVED_THEME_COOKIE)?.value
+  const initialResolved: ResolvedTheme = resolved === 'dark' ? 'dark' : 'light'
+  const themePref = cookieStore.get(THEME_COOKIE)?.value ?? 'system'
+
   return (
-    <html lang="en" className={cormorant.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${initialResolved === 'dark' ? 'dark' : ''}`.trim()}
+      data-theme={themePref}
+      data-resolved-theme={initialResolved}
+      style={{ colorScheme: initialResolved }}
+      suppressHydrationWarning
+    >
+      <head>
+        <ThemeNoFlickerScript />
+      </head>
       <body className={ptSerif.className} suppressHydrationWarning>
-        <SiteChrome announcement={announcement} showStore={showStore} programNavItems={programNavItems}>
-          {children}
-        </SiteChrome>
+        <ThemeProvider initialResolvedTheme={initialResolved}>
+          <SiteChrome announcement={announcement} showStore={showStore} programNavItems={programNavItems}>
+            {children}
+          </SiteChrome>
+        </ThemeProvider>
       </body>
     </html>
   )
