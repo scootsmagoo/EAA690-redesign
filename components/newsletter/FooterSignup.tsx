@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -10,6 +10,25 @@ export default function FooterSignup() {
   const [status, setStatus] = useState<Status>('idle')
   const [message, setMessage] = useState('')
   const formRef = useRef<HTMLFormElement>(null)
+  const emailInputRef = useRef<HTMLInputElement>(null)
+
+  // When something on the page jumps the user here via #footer-newsletter-signup
+  // (e.g. the in-page Subscribe CTA), move focus into the email input so
+  // keyboard / screen-reader users land on the form, not the heading.
+  useEffect(() => {
+    function focusOnHash() {
+      if (typeof window === 'undefined') return
+      if (window.location.hash !== '#footer-newsletter-signup') return
+      // Defer until after the browser handles the scroll, so focus doesn't
+      // interrupt the anchor jump.
+      window.requestAnimationFrame(() => {
+        emailInputRef.current?.focus({ preventScroll: true })
+      })
+    }
+    focusOnHash()
+    window.addEventListener('hashchange', focusOnHash)
+    return () => window.removeEventListener('hashchange', focusOnHash)
+  }, [])
 
   // Basic client-side email check for fast feedback before the round-trip
   function isValidEmail(value: string): boolean {
@@ -66,7 +85,10 @@ export default function FooterSignup() {
   const isSubmitting = status === 'submitting'
 
   return (
-    <div className="pb-10 mb-10 border-b border-blue-800">
+    <div
+      id="footer-newsletter-signup"
+      className="pb-10 mb-10 border-b border-blue-800 scroll-mt-24"
+    >
       <div className="max-w-xl">
         <h3 className="text-lg font-bold text-white mb-1">Stay in the Loop</h3>
         <p className="text-sm text-gray-300 mb-4" id={`${inputId}-desc`}>
@@ -113,6 +135,7 @@ export default function FooterSignup() {
                 Email address
               </label>
               <input
+                ref={emailInputRef}
                 id={inputId}
                 type="email"
                 name="email"

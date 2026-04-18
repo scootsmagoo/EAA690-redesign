@@ -50,6 +50,12 @@ export default defineConfig({
               .id('kudosPage')
               .child(S.document().schemaType('kudosPage').documentId('kudosPage')),
             S.listItem()
+              .title('NAVCOM Page')
+              .id('newsletterPage')
+              .child(
+                S.document().schemaType('newsletterPage').documentId('newsletterPage')
+              ),
+            S.listItem()
               .title('Programs index')
               .id('programsPage')
               .child(S.document().schemaType('programsPage').documentId('programsPage')),
@@ -62,6 +68,7 @@ export default defineConfig({
             S.documentTypeListItem('event').title('Events'),
             S.documentTypeListItem('newsArticle').title('News Articles'),
             S.documentTypeListItem('newsletterIssue').title('NAVCOM Issues'),
+            S.documentTypeListItem('newsletterSection').title('NAVCOM Sections'),
             S.documentTypeListItem('presentation').title('Presentations'),
             S.documentTypeListItem('boardMember').title('Board Members'),
             S.documentTypeListItem('page').title('Pages'),

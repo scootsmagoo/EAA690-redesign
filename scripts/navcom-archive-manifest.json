@@ -1,0 +1,23 @@
+{
+  "_comment": "NAVCOM archive manifest — one entry per issue. Used by scripts/import-navcom-archive.ts to seed Sanity. Re-runs are idempotent (matched by slug or pdfUrl). The 'sections' array references newsletterSection slugs in Sanity; create those documents first (or omit the field).",
+  "_required": ["title", "issueDate", "pdfUrl"],
+  "_optional": ["slug", "volumeLabel", "excerpt", "pageCount", "featured", "sections"],
+  "_example": {
+    "title": "NAVCOM — June 2025",
+    "issueDate": "2025-06-01T12:00:00.000Z",
+    "pdfUrl": "https://drive.google.com/file/d/EXAMPLE/view",
+    "volumeLabel": "Vol. 45 No. 6",
+    "excerpt": "Pancake breakfast recap, Young Eagles rally photos, and June presenter spotlight.",
+    "pageCount": 16,
+    "featured": false,
+    "sections": ["presidents-column", "young-eagles", "classifieds"]
+  },
+  "issues": [
+    {
+      "title": "NAVCOM — Latest issue",
+      "issueDate": "2025-04-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1oRU-HD5w5tQOrBfrBBgzzt_hvzhz0oBb/view?usp=share_link",
+      "excerpt": "The most recent NAVCOM issue published on the chapter site. Update this entry once you import the full Drive archive."
+    }
+  ]
+}

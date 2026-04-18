@@ -320,10 +320,26 @@ const newsletterIssuePdfProjection = `
   pdf {
     asset->{
       url,
-      originalFilename
+      originalFilename,
+      size
     }
   },
   pdfUrl
+`
+
+const newsletterIssueListProjection = `
+  _id,
+  title,
+  slug,
+  issueDate,
+  volumeLabel,
+  pageCount,
+  featured,
+  excerpt,
+  coverImage,
+  coverImageAlt,
+  sections[]->{ _id, title, slug },
+  ${newsletterIssuePdfProjection}
 `
 
 /** All NAVCOM issues (newest first), for archive pages. */
@@ -336,14 +352,7 @@ export async function getNewsletterIssues() {
   })
   return freshClient.fetch(`
     *[_type == "newsletterIssue"] | order(issueDate desc) {
-      _id,
-      title,
-      slug,
-      issueDate,
-      volumeLabel,
-      excerpt,
-      coverImage,
-      ${newsletterIssuePdfProjection}
+      ${newsletterIssueListProjection}
     }
   `)
 }
@@ -359,17 +368,10 @@ export async function getLatestNewsletterIssue() {
   return freshClient.fetch(
     `
     *[_type == "newsletterIssue"] | order(issueDate desc) [0] {
-      _id,
-      title,
-      slug,
-      issueDate,
-      volumeLabel,
-      excerpt,
-      coverImage,
+      ${newsletterIssueListProjection},
       content,
       seoTitle,
-      seoDescription,
-      ${newsletterIssuePdfProjection}
+      seoDescription
     }
   `
   )
@@ -386,20 +388,59 @@ export async function getNewsletterIssueBySlug(slug: string) {
   return freshClient.fetch(
     `
     *[_type == "newsletterIssue" && slug.current == $slug][0] {
-      _id,
-      title,
-      slug,
-      issueDate,
-      volumeLabel,
-      excerpt,
-      coverImage,
+      ${newsletterIssueListProjection},
       content,
+      tableOfContents[] {
+        heading,
+        pageNumber,
+        summary,
+        externalUrl,
+        section->{ _id, title, slug }
+      },
       seoTitle,
-      seoDescription,
-      ${newsletterIssuePdfProjection}
+      seoDescription
     }
   `,
     { slug }
+  )
+}
+
+/**
+ * Adjacent issues (previous = older, next = newer) for the prev/next
+ * navigation on the issue detail page.
+ */
+export async function getAdjacentNewsletterIssues(issueDate: string, currentId: string) {
+  const freshClient = createClient({
+    projectId: SANITY_PROJECT_ID,
+    dataset: SANITY_DATASET,
+    apiVersion: '2024-01-01',
+    useCdn: false,
+  })
+  const params = { issueDate, currentId }
+  return freshClient.fetch(
+    `
+    {
+      "previous": *[
+        _type == "newsletterIssue" &&
+        _id != $currentId &&
+        defined(slug.current) &&
+        defined(issueDate) &&
+        issueDate < $issueDate
+      ] | order(issueDate desc)[0]{
+        _id, title, slug, issueDate, volumeLabel
+      },
+      "next": *[
+        _type == "newsletterIssue" &&
+        _id != $currentId &&
+        defined(slug.current) &&
+        defined(issueDate) &&
+        issueDate > $issueDate
+      ] | order(issueDate asc)[0]{
+        _id, title, slug, issueDate, volumeLabel
+      }
+    }
+  `,
+    params
   )
 }
 
@@ -410,6 +451,96 @@ export async function getNewsletterIssueSlugs() {
   return client.fetch<Array<{ slug: string }>>(`
     *[_type == "newsletterIssue" && defined(slug.current)] {
       "slug": slug.current
+    }
+  `)
+}
+
+/** All NAVCOM section taxonomy terms (for filters and section archive routes). */
+export async function getNewsletterSections() {
+  const freshClient = createClient({
+    projectId: SANITY_PROJECT_ID,
+    dataset: SANITY_DATASET,
+    apiVersion: '2024-01-01',
+    useCdn: false,
+  })
+  return freshClient.fetch(`
+    *[_type == "newsletterSection" && defined(slug.current)] | order(coalesce(order, 999) asc, title asc) {
+      _id,
+      title,
+      slug,
+      description
+    }
+  `)
+}
+
+/** Section slugs for generateStaticParams on /newsletter/sections/[slug]. */
+export async function getNewsletterSectionSlugs() {
+  const freshClient = createClient({
+    projectId: SANITY_PROJECT_ID,
+    dataset: SANITY_DATASET,
+    apiVersion: '2024-01-01',
+    useCdn: false,
+  })
+  return freshClient.fetch<Array<{ slug: string }>>(`
+    *[_type == "newsletterSection" && defined(slug.current)] {
+      "slug": slug.current
+    }
+  `)
+}
+
+/** Section + the issues that include it (used by the section detail page). */
+export async function getNewsletterSectionBySlug(slug: string) {
+  const freshClient = createClient({
+    projectId: SANITY_PROJECT_ID,
+    dataset: SANITY_DATASET,
+    apiVersion: '2024-01-01',
+    useCdn: false,
+  })
+  return freshClient.fetch(
+    `
+    *[_type == "newsletterSection" && slug.current == $slug][0]{
+      _id,
+      title,
+      slug,
+      description,
+      "issues": *[
+        _type == "newsletterIssue" &&
+        defined(slug.current) &&
+        references(^._id)
+      ] | order(issueDate desc) {
+        ${newsletterIssueListProjection}
+      }
+    }
+  `,
+    { slug }
+  )
+}
+
+/** Singleton: /newsletter page settings (hero image, title, tagline, intro). */
+export async function getNewsletterPage() {
+  const freshClient = createClient({
+    projectId: SANITY_PROJECT_ID,
+    dataset: SANITY_DATASET,
+    apiVersion: '2024-01-01',
+    useCdn: false,
+  })
+  return freshClient.fetch(`
+    *[_type == "newsletterPage" && _id == "newsletterPage"][0] {
+      _id,
+      heroImage {
+        ...,
+        asset->{
+          _id,
+          metadata { dimensions { width, height, aspectRatio } }
+        }
+      },
+      heroImageAlt,
+      pageTitle,
+      tagline,
+      intro,
+      subscribeBlurb,
+      seoTitle,
+      seoDescription
     }
   `)
 }

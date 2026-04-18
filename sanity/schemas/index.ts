@@ -2,6 +2,7 @@
 import event from './event'
 import newsArticle from './newsArticle'
 import newsletterIssue from './newsletterIssue'
+import newsletterSection from './newsletterSection'
 import presentation from './presentation'
 import boardMember from './boardMember'
 import kudos from './kudos'
@@ -17,6 +18,7 @@ import programPage, { programSectionTypes } from './programPage'
 import programsPage from './programsPage'
 import privacyPage from './privacyPage'
 import kudosPage from './kudosPage'
+import newsletterPage from './newsletterPage'
 
 export const schemaTypes = [
   // Objects (program section blocks — must be registered)
@@ -25,6 +27,7 @@ export const schemaTypes = [
   event,
   newsArticle,
   newsletterIssue,
+  newsletterSection,
   presentation,
   boardMember,
   kudos,
@@ -41,5 +44,6 @@ export const schemaTypes = [
   programsPage,
   privacyPage,
   kudosPage,
+  newsletterPage,
   siteSettings,
 ]

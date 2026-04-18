@@ -261,3 +261,65 @@
     min-width: 5.5rem;
   }
 }
+
+/**
+ * Print stylesheet — primarily for /newsletter/[slug]. Keeps the issue title,
+ * date, excerpt, ToC, cover, and body content; hides chrome (nav, footer,
+ * share toolbar, prev/next, breadcrumb, the in-page PDF panel since the
+ * reader is already printing the web view).
+ */
+@media print {
+  :root {
+    --background-start-rgb: 255, 255, 255;
+    --background-end-rgb: 255, 255, 255;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Drop our top nav, sticky bars, and the site footer. */
+  body > nav,
+  body > header,
+  nav[aria-label='Breadcrumb'],
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Make article content full width and pleasant for paper. */
+  article {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  a[href]::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.75em;
+    color: #555;
+    word-break: break-all;
+  }
+  /* Don't print URLs for in-page links / anchors / mailto. */
+  a[href^='#']::after,
+  a[href^='mailto:']::after {
+    content: '' !important;
+  }
+
+  img,
+  figure {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  @page {
+    margin: 0.6in;
+  }
+}
