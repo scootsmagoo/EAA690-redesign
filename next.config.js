@@ -77,6 +77,18 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // Override Referrer-Policy for the password reset page only. The token lives in the
+        // query string, and `no-referrer` is the only setting that guarantees that URL never
+        // leaves the browser in any outbound Referer header (the default
+        // `strict-origin-when-cross-origin` still sends the full URL on same-origin requests).
+        // Next.js applies the LAST matching `headers` entry per header key, so this must come
+        // after the catch-all block above to actually win the precedence battle.
+        source: '/reset-password',
+        headers: [
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      },
     ]
   },
 }

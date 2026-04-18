@@ -4,6 +4,7 @@ import { Pool } from "pg"
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from "./db-resolver"
 import { getSiteBaseURL } from "./site-url"
 import { relaxTwoFactorPlugin } from "./better-auth-plugins/relax-two-factor"
+import { sendPasswordResetEmail } from "./password-reset-email"
 
 // Lazy initialization — Postgres
 let _pool: Pool | null = null
@@ -150,6 +151,47 @@ export function getAuth(): NonNullable<typeof _auth> {
       emailAndPassword: {
         enabled: true,
         requireEmailVerification: false,
+        /**
+         * Triggered by `authClient.requestPasswordReset({ email, redirectTo })`. Better Auth has
+         * already generated the one-time token and built `url` to point at our `/reset-password`
+         * page; we just hand it to Resend. We log+swallow delivery errors so we never leak whether
+         * the email exists in our DB (Better Auth itself always returns success to the client for
+         * the same enumeration-resistance reason — see request-password-reset.mjs).
+         */
+        sendResetPassword: async ({ user, url }) => {
+          try {
+            await sendPasswordResetEmail({
+              to: user.email,
+              name: (user as { name?: string | null }).name ?? null,
+              resetUrl: url,
+            })
+          } catch (err) {
+            console.error("sendResetPassword failed:", {
+              email: user.email,
+              error: err instanceof Error ? err.message : String(err),
+            })
+          }
+        },
+        resetPasswordTokenExpiresIn: 60 * 60,
+        /**
+         * OWASP A07 (Auth Failures): kill every active session for the user the moment their
+         * password is reset. Without this, a stolen session cookie survives a "reset my password"
+         * action — defeating the whole point of the reset for the lost-device / phished scenario.
+         */
+        revokeSessionsOnPasswordReset: true,
+      },
+      /**
+       * Per-route rate limiting. Defaults are 100 req / 10s per IP per path which is far too lax
+       * for the password-reset request endpoint — an attacker could email-bomb arbitrary inboxes
+       * or our own SMTP quota. 5 requests / 60s is the OWASP cheat-sheet recommendation for this
+       * kind of unauthenticated trigger-an-email endpoint. Rate limiting is auto-enabled in
+       * production and disabled in development.
+       */
+      rateLimit: {
+        customRules: {
+          "/request-password-reset": { window: 60, max: 5 },
+          "/reset-password": { window: 60, max: 10 },
+        },
       },
       /**
        * Order matters: `relaxTwoFactorPlugin` must run before `twoFactor` so allowlisted dev emails
