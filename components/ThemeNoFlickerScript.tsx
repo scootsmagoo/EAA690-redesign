@@ -44,7 +44,9 @@ export function ThemeNoFlickerScript() {
     var theme = prefs.theme;
     if (theme !== 'light' && theme !== 'dark' && theme !== 'system') {
       var ck = readCookie(THEME_COOKIE);
-      theme = (ck === 'light' || ck === 'dark' || ck === 'system') ? ck : 'system';
+      // Default to 'light' for fresh visitors — keep DEFAULT_PREFERENCES.theme
+      // in lib/preferences.ts in sync with this fallback.
+      theme = (ck === 'light' || ck === 'dark' || ck === 'system') ? ck : 'light';
     }
 
     var systemDark = false;

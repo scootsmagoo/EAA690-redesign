@@ -242,8 +242,10 @@
   background-color: rgb(8 22 36);
 }
 /** Color-tinted text on those backgrounds needs to lighten for contrast. */
+.dark body .text-amber-950,
 .dark body .text-amber-900,
-.dark body .text-amber-800 {
+.dark body .text-amber-800,
+.dark body .text-amber-700 {
   color: rgb(252 211 77);
 }
 .dark body .text-blue-900,

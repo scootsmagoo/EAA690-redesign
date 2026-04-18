@@ -46,9 +46,15 @@ export interface UserPreferences {
   underlineLinks: boolean
 }
 
+/**
+ * Default theme is 'light' rather than 'system' while dark mode is still being
+ * polished — most first-time visitors should land on the canonical, fully
+ * QA'd appearance. The Settings page still exposes 'System', 'Light', and
+ * 'Dark', so anyone who wants OS-following theme can opt in explicitly.
+ */
 export const DEFAULT_PREFERENCES: UserPreferences = Object.freeze({
   version: PREFERENCES_VERSION,
-  theme: 'system',
+  theme: 'light',
   reduceMotion: false,
   highContrast: false,
   fontScale: 'normal',

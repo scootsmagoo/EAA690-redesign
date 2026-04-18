@@ -53,12 +53,15 @@ export default async function RootLayout({
   }
 
   // Read the user's resolved theme from a cookie so first paint matches what
-  // the no-flicker script will set. Falls back to "light" for fresh visitors;
-  // the in-head script reconciles against prefers-color-scheme on hydration.
+  // the no-flicker script will set. Falls back to "light" for fresh visitors
+  // — site-wide default is light while dark mode is being polished, see
+  // DEFAULT_PREFERENCES in lib/preferences.ts. The in-head script still
+  // reconciles against prefers-color-scheme when the user has opted into
+  // 'system' theme.
   const cookieStore = await cookies()
   const resolved = cookieStore.get(RESOLVED_THEME_COOKIE)?.value
   const initialResolved: ResolvedTheme = resolved === 'dark' ? 'dark' : 'light'
-  const themePref = cookieStore.get(THEME_COOKIE)?.value ?? 'system'
+  const themePref = cookieStore.get(THEME_COOKIE)?.value ?? 'light'
 
   return (
     <html
