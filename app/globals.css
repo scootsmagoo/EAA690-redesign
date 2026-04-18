@@ -298,14 +298,16 @@
  * components that explicitly opt out via `.no-dark-brand-shift`.
  */
 /**
- * Exclude descendants of yellow-tinted surfaces too: navy-on-yellow is the
- * canonical EAA pairing (gold badge, primary CTAs like DONATE / Join), so
- * `text-eaa-blue` inside a `.bg-eaa-yellow` / `.bg-yellow-*` ancestor must
- * stay #003366. Without these guards we'd flip it to #FFD700 → yellow-on-
- * yellow → invisible (WCAG 1.4.3 fail).
+ * Skip yellow-tinted surfaces in two ways:
+ *   1. The element itself carrying both `bg-eaa-yellow` + `text-eaa-blue`
+ *      (the DONATE / Join CTAs are a single <a> with both classes).
+ *   2. Any descendant of a yellow-tinted ancestor (the gold badge wraps
+ *      navy-text divs inside a yellow circle).
+ * Navy-on-yellow is the canonical EAA pairing, so `text-eaa-blue` must
+ * stay #003366 in either case. Otherwise we flip it to #FFD700 → yellow-
+ * on-yellow → invisible (WCAG 1.4.3 fail).
  */
-.dark body
-  :where(.text-eaa-blue):not(.bg-eaa-blue *):not(.bg-eaa-yellow *):not(.bg-yellow-50 *):not(.bg-yellow-100 *):not(.bg-yellow-200 *):not(.bg-yellow-300 *):not(.bg-yellow-400 *):not(.bg-yellow-500 *):not(.no-dark-brand-shift) {
+.dark body :where(.text-eaa-blue):not(:is(.bg-eaa-blue, .bg-eaa-yellow, .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500)):not(:is(.bg-eaa-blue, .bg-eaa-yellow, .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500) *):not(.no-dark-brand-shift) {
   color: #FFD700;
 }
 .dark body :where(.bg-eaa-blue):not(.no-dark-brand-shift) {
