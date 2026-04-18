@@ -1,3 +1,9 @@
+const HANGAR_ADDRESS = '690 Airport Road, Hangar 1, Lawrenceville, GA 30046'
+const HANGAR_LAT = 33.9793958
+const HANGAR_LNG = -83.9709033
+const MAP_EMBED_SRC = `https://www.google.com/maps?q=${encodeURIComponent(HANGAR_ADDRESS)}&ll=${HANGAR_LAT},${HANGAR_LNG}&z=16&output=embed`
+const MAP_DIRECTIONS_HREF = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(HANGAR_ADDRESS)}`
+
 export default function VisitUsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -39,6 +45,33 @@ export default function VisitUsPage() {
           </ul>
         </div>
       </div>
+
+      <section aria-labelledby="visit-map-heading" className="mb-8">
+        <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+          <h2 id="visit-map-heading" className="text-2xl font-bold text-eaa-blue">Find Us on the Map</h2>
+          <a
+            href={MAP_DIRECTIONS_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-eaa-light-blue hover:underline text-sm font-semibold"
+          >
+            Get directions &rarr;
+          </a>
+        </div>
+        <div className="relative w-full overflow-hidden rounded-lg shadow-md border border-gray-200 bg-gray-100" style={{ aspectRatio: '16 / 9' }}>
+          <iframe
+            title="Map showing EAA Chapter 690 at Hangar 1, Briscoe Field, Lawrenceville, GA"
+            src={MAP_EMBED_SRC}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+            className="absolute inset-0 w-full h-full border-0"
+          />
+        </div>
+        <p className="text-sm text-gray-600 mt-2">
+          Map data &copy; Google. Use &ldquo;Get directions&rdquo; to open turn-by-turn navigation in your preferred app.
+        </p>
+      </section>
 
       <div className="bg-eaa-blue text-white p-6 rounded-lg mb-8">
         <h2 className="text-xl font-bold mb-3">We Welcome Visitors!</h2>

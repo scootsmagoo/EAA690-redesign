@@ -64,7 +64,7 @@ const nextConfig = {
               // Stripe Checkout redirect is same-tab navigation (no fetch needed), but
               // Stripe.js (if added later) needs connect-src; include now for forward compat.
               "connect-src 'self' *.sanity.io api.sanity.io *.supabase.co api.stripe.com",
-              "frame-src 'self' *.sanity.io js.stripe.com hooks.stripe.com www.youtube-nocookie.com player.vimeo.com",
+              "frame-src 'self' *.sanity.io js.stripe.com hooks.stripe.com www.youtube-nocookie.com player.vimeo.com www.google.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               // checkout.stripe.com redirect is a GET, not a form POST — 'self' is sufficient
