@@ -86,7 +86,15 @@ export function parseContactPayload(
   }
 }
 
-export async function sendContactEmail(payload: ContactPayload): Promise<void> {
+export type ContactEmailSendOptions = {
+  /** When set, sends to these addresses instead of splitting `CONTACT_EMAIL_TO`. */
+  to?: string[]
+}
+
+export async function sendContactEmail(
+  payload: ContactPayload,
+  options?: ContactEmailSendOptions
+): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY
   const from = process.env.CONTACT_EMAIL_FROM?.trim()
   const toRaw = process.env.CONTACT_EMAIL_TO?.trim() || 'info@eaa690.org'
@@ -98,10 +106,13 @@ export async function sendContactEmail(payload: ContactPayload): Promise<void> {
     throw new Error('CONTACT_EMAIL_FROM is not configured')
   }
 
-  const to = toRaw
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean)
+  const to =
+    options?.to && options.to.length > 0
+      ? options.to
+      : toRaw
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
   if (to.length === 0) {
     throw new Error('CONTACT_EMAIL_TO is empty')
   }

@@ -13,12 +13,17 @@
  *   4. fallback: 'info@eaa690.org'                                          (last resort)
  *
  * The master `formNotifications.enabled` toggle short-circuits everything.
+ *
+ * The public contact page uses the same master toggle, then: defaultEmailRecipients, then
+ * the same `CONTACT_EMAIL_TO` + fallback chain as in `lib/contact-email.ts` (no per-type
+ * slot; contact is not a program `FormType`).
  */
 
 import { getSiteSettings } from '@/lib/sanity'
 import type { FormType } from '@/lib/forms-db'
 import { sendProgramFormNotificationEmail } from '@/lib/program-form-email'
 import { sendProgramFormNotificationSms } from '@/lib/program-form-sms'
+import { sendContactEmail, type ContactPayload } from '@/lib/contact-email'
 
 export type FormNotificationsConfig = {
   enabled: boolean
@@ -194,6 +199,44 @@ export async function notifyProgramFormSubmission(
         })
       : Promise.resolve(),
   ])
+}
+
+/**
+ * Outbound Resend for `/api/contact` — same master `enabled` gate and default
+ * recipient precedence as the rest of the alert layer. Does not await from HTTP
+ * handlers; the submission is always persisted first.
+ */
+export async function notifyContactFormSubmission(payload: ContactPayload): Promise<void> {
+  const config = await loadFormNotificationsConfig()
+  if (!config.enabled) return
+
+  const emailRecipients = resolveEmailRecipientsForContact(config)
+  if (emailRecipients.length === 0) {
+    console.warn('notifyContactFormSubmission: no email recipients; skipping send')
+    return
+  }
+
+  const apiKey = process.env.RESEND_API_KEY?.trim()
+  const from = process.env.CONTACT_EMAIL_FROM?.trim()
+  if (!apiKey || !from) {
+    console.warn('notifyContactFormSubmission: RESEND not configured; email not sent (message still in DB)', {
+      recipientCount: emailRecipients.length,
+    })
+    return
+  }
+
+  try {
+    await sendContactEmail(payload, { to: emailRecipients })
+  } catch (err) {
+    console.error('notifyContactFormSubmission: Resend error', err)
+  }
+}
+
+function resolveEmailRecipientsForContact(config: FormNotificationsConfig): string[] {
+  if (config.defaultEmailRecipients.length > 0) {
+    return config.defaultEmailRecipients
+  }
+  return envEmailRecipients()
 }
 
 /**

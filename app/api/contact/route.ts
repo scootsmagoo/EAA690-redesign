@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { parseContactPayload, sendContactEmail } from '@/lib/contact-email'
+import { parseContactPayload } from '@/lib/contact-email'
+import { notifyContactFormSubmission } from '@/lib/form-notifications'
 import { allowFormSubmission } from '@/lib/form-rate-limit'
 import { insertContactSubmission } from '@/lib/forms-db'
 
@@ -69,16 +70,9 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const canEmail = !!(process.env.RESEND_API_KEY && process.env.CONTACT_EMAIL_FROM?.trim())
-  if (canEmail) {
-    try {
-      await sendContactEmail(parsed.payload)
-    } catch (err) {
-      console.error('Contact email send failed (message stored as id=%s):', savedId, err)
-    }
-  } else {
-    console.warn('Contact form: Resend not configured; message stored only (id=%s).', savedId)
-  }
+  void notifyContactFormSubmission(parsed.payload).catch((err) => {
+    console.error('Contact form: notification failed (message stored as id=%s):', savedId, err)
+  })
 
   return NextResponse.json({ success: true, id: savedId }, { status: 200 })
 }
