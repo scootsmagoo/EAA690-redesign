@@ -1,24 +1,12 @@
 import { Resend } from 'resend'
+import {
+  CONTACT_SUBJECT_KEYS,
+  getContactSubjectLabel,
+  type ContactSubjectKey,
+} from './contact-categories'
 
-const SUBJECT_KEYS = [
-  'general',
-  'membership',
-  'programs',
-  'events',
-  'donation',
-  'other',
-] as const
-
-export type ContactSubjectKey = (typeof SUBJECT_KEYS)[number]
-
-const SUBJECT_LABELS: Record<ContactSubjectKey, string> = {
-  general: 'General Inquiry',
-  membership: 'Membership',
-  programs: 'Programs',
-  events: 'Events',
-  donation: 'Donation',
-  other: 'Other',
-}
+export type { ContactSubjectKey } from './contact-categories'
+export { getContactSubjectLabel } from './contact-categories'
 
 export type ContactPayload = {
   name: string
@@ -79,7 +67,7 @@ export function parseContactPayload(
   if (phone.length > MAX_PHONE) {
     return { ok: false, error: 'Invalid phone' }
   }
-  if (!SUBJECT_KEYS.includes(subject as ContactSubjectKey)) {
+  if (!CONTACT_SUBJECT_KEYS.includes(subject as ContactSubjectKey)) {
     return { ok: false, error: 'Invalid subject' }
   }
   if (!isNonEmptyString(message) || message.length > MAX_MESSAGE) {
@@ -96,10 +84,6 @@ export function parseContactPayload(
       message,
     },
   }
-}
-
-export function getContactSubjectLabel(key: ContactSubjectKey): string {
-  return SUBJECT_LABELS[key]
 }
 
 export async function sendContactEmail(payload: ContactPayload): Promise<void> {
@@ -122,7 +106,7 @@ export async function sendContactEmail(payload: ContactPayload): Promise<void> {
     throw new Error('CONTACT_EMAIL_TO is empty')
   }
 
-  const label = SUBJECT_LABELS[payload.subject]
+  const label = getContactSubjectLabel(payload.subject)
   // Header-injection hardening: name is interpolated into the Subject header.
   // We also normalize the email used as Reply-To so an attacker can't smuggle
   // newlines through it even if a malformed value somehow bypassed validation.

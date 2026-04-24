@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parseContactPayload, sendContactEmail } from '@/lib/contact-email'
 import { allowFormSubmission } from '@/lib/form-rate-limit'
+import { insertContactSubmission } from '@/lib/forms-db'
 
 const MAX_BODY_BYTES = 32_768
 
@@ -56,22 +57,28 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: parsed.error }, { status: 400 })
   }
 
-  if (!process.env.RESEND_API_KEY || !process.env.CONTACT_EMAIL_FROM?.trim()) {
-    console.error('Contact form: missing RESEND_API_KEY or CONTACT_EMAIL_FROM')
-    return NextResponse.json(
-      { error: 'Contact form is not configured. Please email info@eaa690.org directly.' },
-      { status: 503 }
-    )
-  }
-
+  const asRecord = { ...parsed.payload } as unknown as Record<string, unknown>
+  let savedId: string
   try {
-    await sendContactEmail(parsed.payload)
-    return NextResponse.json({ success: true }, { status: 200 })
+    savedId = await insertContactSubmission(asRecord)
   } catch (err) {
-    console.error('Contact email send failed:', err)
+    console.error('Contact form: failed to save message:', err)
     return NextResponse.json(
-      { error: 'Could not send your message. Please try again or email info@eaa690.org.' },
+      { error: 'Could not save your message. Please try again or email info@eaa690.org directly.' },
       { status: 500 }
     )
   }
+
+  const canEmail = !!(process.env.RESEND_API_KEY && process.env.CONTACT_EMAIL_FROM?.trim())
+  if (canEmail) {
+    try {
+      await sendContactEmail(parsed.payload)
+    } catch (err) {
+      console.error('Contact email send failed (message stored as id=%s):', savedId, err)
+    }
+  } else {
+    console.warn('Contact form: Resend not configured; message stored only (id=%s).', savedId)
+  }
+
+  return NextResponse.json({ success: true, id: savedId }, { status: 200 })
 }

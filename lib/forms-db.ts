@@ -3,11 +3,22 @@ import { Pool } from 'pg'
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from './db-resolver'
 
 export type FormType = 'summer_camp' | 'scholarship' | 'vmc_imc' | 'youth_aviation' | 'outreach'
+export type ProgramFormType = FormType
+/** All rows in `form_submissions`, including the public /contact form. */
+export type SubmissionFormType = FormType | 'contact'
 export type SubmissionStatus = 'pending' | 'reviewed' | 'accepted' | 'declined'
+
+const PROGRAM_FORM_TYPES: FormType[] = [
+  'summer_camp',
+  'scholarship',
+  'vmc_imc',
+  'youth_aviation',
+  'outreach',
+]
 
 export interface FormSubmission {
   id: string
-  form_type: FormType
+  form_type: SubmissionFormType
   submitted_at: string
   data: Record<string, unknown>
   status: SubmissionStatus
@@ -68,8 +79,21 @@ async function ensureTable(): Promise<void> {
   }
 }
 
+export async function insertContactSubmission(
+  data: Record<string, unknown>
+): Promise<string> {
+  return insertSubmissionRow('contact', data)
+}
+
 export async function insertSubmission(
   form_type: FormType,
+  data: Record<string, unknown>
+): Promise<string> {
+  return insertSubmissionRow(form_type, data)
+}
+
+async function insertSubmissionRow(
+  form_type: SubmissionFormType,
   data: Record<string, unknown>
 ): Promise<string> {
   await ensureTable()
@@ -116,11 +140,13 @@ export async function getSubmissions(form_type?: FormType): Promise<FormSubmissi
         : await pool.query(
             `SELECT id, form_type, submitted_at, data, status
              FROM form_submissions
-             ORDER BY submitted_at DESC`
+             WHERE form_type IN ($1, $2, $3, $4, $5)
+             ORDER BY submitted_at DESC`,
+            [...PROGRAM_FORM_TYPES]
           )
       return result.rows.map((r) => ({
         id: r.id,
-        form_type: r.form_type as FormType,
+        form_type: r.form_type as SubmissionFormType,
         submitted_at:
           r.submitted_at instanceof Date
             ? r.submitted_at.toISOString()
@@ -147,9 +173,16 @@ export async function getSubmissions(form_type?: FormType): Promise<FormSubmissi
             .prepare(
               `SELECT id, form_type, submitted_at, data, status
                FROM form_submissions
+               WHERE form_type IN (?, ?, ?, ?, ?)
                ORDER BY submitted_at DESC`
             )
-            .all()
+            .all(
+              PROGRAM_FORM_TYPES[0],
+              PROGRAM_FORM_TYPES[1],
+              PROGRAM_FORM_TYPES[2],
+              PROGRAM_FORM_TYPES[3],
+              PROGRAM_FORM_TYPES[4]
+            )
     ) as Array<{
       id: string
       form_type: string
@@ -160,7 +193,83 @@ export async function getSubmissions(form_type?: FormType): Promise<FormSubmissi
     db.close()
     return rows.map((r) => ({
       id: r.id,
-      form_type: r.form_type as FormType,
+      form_type: r.form_type as SubmissionFormType,
+      submitted_at: r.submitted_at,
+      data: JSON.parse(r.data),
+      status: r.status as SubmissionStatus,
+    }))
+  }
+}
+
+export async function isContactSubmissionId(id: string): Promise<boolean> {
+  await ensureTable()
+  if (usingPostgres()) {
+    const pool = makePool()
+    try {
+      const r = await pool.query(
+        `SELECT 1 FROM form_submissions WHERE id = $1 AND form_type = 'contact' LIMIT 1`,
+        [id]
+      )
+      return r.rowCount! > 0
+    } finally {
+      await pool.end().catch(() => {})
+    }
+  } else {
+    const db = openSqlite()
+    const row = db
+      .prepare(
+        `SELECT 1 AS ok FROM form_submissions WHERE id = ? AND form_type = 'contact' LIMIT 1`
+      )
+      .get(id) as { ok: number } | undefined
+    db.close()
+    return !!row
+  }
+}
+
+export async function getContactSubmissions(): Promise<FormSubmission[]> {
+  await ensureTable()
+  if (usingPostgres()) {
+    const pool = makePool()
+    try {
+      const result = await pool.query(
+        `SELECT id, form_type, submitted_at, data, status
+         FROM form_submissions
+         WHERE form_type = 'contact'
+         ORDER BY submitted_at DESC`
+      )
+      return result.rows.map((r) => ({
+        id: r.id,
+        form_type: r.form_type as SubmissionFormType,
+        submitted_at:
+          r.submitted_at instanceof Date
+            ? r.submitted_at.toISOString()
+            : String(r.submitted_at),
+        data: typeof r.data === 'string' ? JSON.parse(r.data) : r.data,
+        status: r.status as SubmissionStatus,
+      }))
+    } finally {
+      await pool.end().catch(() => {})
+    }
+  } else {
+    const db = openSqlite()
+    const rows = db
+      .prepare(
+        `SELECT id, form_type, submitted_at, data, status
+         FROM form_submissions
+         WHERE form_type = 'contact'
+         ORDER BY submitted_at DESC`
+      )
+      .all() as Array<{
+      id: string
+      form_type: string
+      submitted_at: string
+      data: string
+      status: string
+    }>
+    db.close()
+    return rows.map((r) => ({
+      id: r.id,
+      form_type: r.form_type as SubmissionFormType,
       submitted_at: r.submitted_at,
       data: JSON.parse(r.data),
       status: r.status as SubmissionStatus,

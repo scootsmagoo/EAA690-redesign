@@ -2,6 +2,7 @@
 
 import AdminGuard from '@/components/AdminGuard'
 import { orderedSubmissionEntries, submissionFieldLabel } from '@/lib/submission-field-order'
+import Link from 'next/link'
 import { useEffect, useState, useCallback } from 'react'
 
 type FormType = 'summer_camp' | 'scholarship' | 'vmc_imc' | 'youth_aviation' | 'outreach'
@@ -110,7 +111,11 @@ export default function SubmissionsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-eaa-blue">Program Submissions</h1>
-            <p className="text-gray-500 mt-1">Form submissions from program pages</p>
+            <p className="text-gray-500 mt-1">
+              Form submissions from program pages. For the general{' '}
+              <Link href="/admin/contact" className="text-eaa-light-blue hover:underline">contact form</Link>, use
+              Contact messages.
+            </p>
           </div>
           <button
             onClick={downloadCsv}
