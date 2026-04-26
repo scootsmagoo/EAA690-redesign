@@ -123,7 +123,7 @@ let _auth: ReturnType<typeof betterAuth> | null = null
 const PRODUCTION_TRUSTED_ORIGINS = [
   "https://eaa690.org",
   "https://www.eaa690.org",
-  "https://eaa-960-redesign.vercel.app",
+  "https://eaa-690-redesign.vercel.app",
 ] as const
 
 function isLanHttpOrigin(origin: string): boolean {

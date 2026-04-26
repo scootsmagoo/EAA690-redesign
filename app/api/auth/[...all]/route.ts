@@ -17,7 +17,7 @@ const ALLOWED_ORIGINS = new Set(
     process.env.BETTER_AUTH_URL,
     process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
     'https://eaa690.org',
-    'https://eaa-960-redesign.vercel.app',
+    'https://eaa-690-redesign.vercel.app',
     'http://localhost:3000',
     'http://localhost:3333',
   ].filter(Boolean) as string[]
