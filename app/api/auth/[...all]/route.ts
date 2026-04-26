@@ -60,32 +60,45 @@ function validateSecret() {
 }
 
 async function handleWithError(
-  handler: (request: NextRequest) => Promise<Response>,
-  request: NextRequest
+  request: NextRequest,
+  method: 'GET' | 'POST'
 ) {
+  const url = new URL(request.url)
   try {
     validateSecret()
+
+    // Initialise Better Auth handler inside the try block so any synchronous
+    // throw from betterAuth() / toNextJsHandler() is caught and logged.
+    const handlers = getAuthHandlers()
+    const handler = handlers[method]
+
     await ensureBetterAuthSchema()
 
     const response = await handler(request)
 
     if (response.status >= 400) {
-      const url = new URL(request.url)
       console.error(`Auth ${response.status}:`, {
         path: url.pathname,
-        method: request.method,
+        method,
       })
     }
 
     return response
   } catch (error) {
-    const url = new URL(request.url)
     // Log full details server-side only — never send stack/internals to the client.
     console.error('Better Auth error:', {
       path: url.pathname,
-      method: request.method,
+      method,
       message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
       type: error?.constructor?.name,
+      secret_length: process.env.BETTER_AUTH_SECRET?.length ?? 0,
+      has_db_url: Boolean(
+        process.env.DATABASE_URL ||
+        process.env.POSTGRES_URL ||
+        process.env.POSTGRES_PRISMA_URL
+      ),
+      better_auth_url: process.env.BETTER_AUTH_URL ?? '(not set)',
     })
 
     // In development, surface more detail so the local dev experience isn't painful.
@@ -104,11 +117,9 @@ async function handleWithError(
 }
 
 export async function GET(request: NextRequest) {
-  const { GET: authGET } = getAuthHandlers()
-  return handleWithError(authGET, request)
+  return handleWithError(request, 'GET')
 }
 
 export async function POST(request: NextRequest) {
-  const { POST: authPOST } = getAuthHandlers()
-  return handleWithError(authPOST, request)
+  return handleWithError(request, 'POST')
 }
