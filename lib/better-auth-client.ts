@@ -1,7 +1,7 @@
 "use client"
 
 import { createAuthClient } from "better-auth/react"
-import { adminClient, twoFactorClient } from "better-auth/client/plugins"
+import { adminClient } from "better-auth/client/plugins"
 
 /** Must match `basePath` in `lib/better-auth.ts` (server). */
 const AUTH_BASE_PATH = "/api/auth"
@@ -31,7 +31,7 @@ function getAuthOrigin(): string {
 export const authClient = createAuthClient({
   baseURL: getAuthOrigin(),
   basePath: AUTH_BASE_PATH,
-  plugins: [twoFactorClient(), adminClient()],
+  plugins: [adminClient()],
 })
 
 export const {
@@ -39,7 +39,6 @@ export const {
   signUp,
   signOut,
   useSession,
-  twoFactor,
   admin,
 } = authClient
 

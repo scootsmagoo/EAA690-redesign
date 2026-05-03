@@ -1,9 +1,8 @@
 import { betterAuth } from "better-auth"
-import { twoFactor, admin } from "better-auth/plugins"
+import { admin } from "better-auth/plugins"
 import { Pool } from "pg"
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from "./db-resolver"
 import { getSiteBaseURL } from "./site-url"
-import { relaxTwoFactorPlugin } from "./better-auth-plugins/relax-two-factor"
 import { sendPasswordResetEmail } from "./password-reset-email"
 
 // Lazy initialization — Postgres
@@ -193,17 +192,7 @@ export function getAuth(): NonNullable<typeof _auth> {
           "/reset-password": { window: 60, max: 10 },
         },
       },
-      /**
-       * Order matters: `relaxTwoFactorPlugin` must run before `twoFactor` so allowlisted dev emails
-       * can sign in without a second factor when the DB has 2FA enabled.
-       */
-      plugins: [
-        relaxTwoFactorPlugin(),
-        twoFactor({
-          issuer: "EAA Chapter 690",
-        }),
-        admin(),
-      ],
+      plugins: [admin()],
       session: {
         expiresIn: 60 * 60 * 24 * 7,
         updateAge: 60 * 60 * 24,
@@ -221,7 +210,7 @@ export function getAuth(): NonNullable<typeof _auth> {
         }
         return extra
       },
-    })
+    }) as NonNullable<typeof _auth>
   }
   return _auth
 }

@@ -10,7 +10,7 @@ Live preview: **[eaa-960-redesign.vercel.app](https://eaa-960-redesign.vercel.ap
 | **Framework** | Next.js 16 (App Router) |
 | **Language** | TypeScript |
 | **Styling** | Tailwind CSS |
-| **Auth** | BetterAuth (email/password, 2FA, admin roles) |
+| **Auth** | BetterAuth (email/password, admin roles) |
 | **Database** | PostgreSQL via Supabase |
 | **CMS** | Sanity (schemas in `sanity/schemas/`) |
 | **Deployment** | Vercel |
@@ -75,7 +75,7 @@ scripts/              # One-off admin/DB scripts
 
 ## Authentication
 
-BetterAuth handles email/password login, 2FA, and admin roles.
+BetterAuth handles email/password login and admin roles.
 
 - **First-time setup:** visit `/admin/setup` to create the first admin account
 - **Protected pages:** wrap with `<AuthGuard>` or `<AdminGuard>`

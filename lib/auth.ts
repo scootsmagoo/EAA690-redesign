@@ -2,7 +2,7 @@
  * @deprecated This file is deprecated. Use BetterAuth instead.
  * 
  * This module was used for Squarespace authentication but has been replaced
- * with BetterAuth for better security, MFA support, and more features.
+ * with BetterAuth for better security and more features.
  * 
  * See: lib/better-auth.ts and lib/better-auth-client.ts
  * 

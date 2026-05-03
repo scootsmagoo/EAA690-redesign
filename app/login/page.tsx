@@ -35,10 +35,6 @@ function LoginForm() {
         setError((result.error as { message?: string }).message || 'Invalid email or password')
         return
       }
-      if (result.data && 'twoFactorRedirect' in result.data && result.data.twoFactorRedirect) {
-        router.push(`/sign-in/two-factor?redirect=${encodeURIComponent(redirect)}`)
-        return
-      }
       router.push(redirect)
       router.refresh()
     } catch (err) {

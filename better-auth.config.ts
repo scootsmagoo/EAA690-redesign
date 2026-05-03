@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth"
-import { twoFactor, admin } from "better-auth/plugins"
+import { admin } from "better-auth/plugins"
 import { Pool } from "pg"
 import 'dotenv/config'
 
@@ -13,7 +13,7 @@ const pool = process.env.DATABASE_URL
     })
   : null
 
-// BetterAuth configuration with MFA
+// BetterAuth configuration
 const auth = betterAuth({
   database: pool || undefined,
   baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
@@ -22,10 +22,7 @@ const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false,
   },
-  plugins: [
-    twoFactor(),
-    admin(),
-  ],
+  plugins: [admin()],
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,

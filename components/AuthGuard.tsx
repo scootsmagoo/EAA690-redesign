@@ -1,9 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useSession } from '@/lib/better-auth-client'
-import { shouldRedirectToMfaSetup } from '@/lib/auth-security'
 
 interface AuthGuardProps {
   children: React.ReactNode
@@ -16,7 +15,6 @@ const SESSION_STALL_MS = 15000
 export default function AuthGuard({ children, requireAuth = false }: AuthGuardProps) {
   const { data: session, isPending } = useSession()
   const router = useRouter()
-  const pathname = usePathname()
   const [stalled, setStalled] = useState(false)
 
   useEffect(() => {
@@ -56,25 +54,6 @@ export default function AuthGuard({ children, requireAuth = false }: AuthGuardPr
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-eaa-blue mx-auto mb-4"></div>
           <p className="text-gray-600" role="status" aria-live="polite">Redirecting to login…</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (
-    requireAuth &&
-    session &&
-    pathname &&
-    shouldRedirectToMfaSetup(pathname, session.user as { email?: string; twoFactorEnabled?: boolean })
-  ) {
-    router.replace('/account?setup2fa=1')
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center max-w-sm px-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-eaa-blue mx-auto mb-4"></div>
-          <p className="text-gray-600" role="status" aria-live="polite">
-            Two-factor setup required…
-          </p>
         </div>
       </div>
     )
