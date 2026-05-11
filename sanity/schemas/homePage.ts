@@ -157,6 +157,7 @@ export default {
       name: 'programsSectionTitle',
       title: 'Programs section title',
       type: 'string',
+      description: 'Heading above the grid of program cards on the home page.',
     },
     {
       name: 'programsSectionSubtitle',
@@ -167,6 +168,8 @@ export default {
     {
       name: 'programCards',
       title: 'Program cards',
+      description:
+        'Cards in the “Get Involved” / programs area on the home page (icon, title, blurb, link path, and button label). When this list is empty (or a row is missing required fields), the public site uses built-in defaults from the app instead—publish a full set here to control links and copy in Sanity without a deployment.',
       type: 'array',
       of: [
         {
