@@ -161,11 +161,6 @@ export default async function KudosDetailPage({
   const hasBody = Array.isArray(kudo.content) && kudo.content.length > 0
   const formattedDate = formatDate(kudo.date)
 
-  // Reuse MediaImageGrid (already a fully-accessible lightbox: focus trap,
-  // ESC/arrow keys, ARIA dialog, polite live region).
-  const buildGalleryUrl = (img: MediaGalleryImage, width: number) =>
-    urlFor(img).width(width).fit('max').url()
-
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <nav aria-label="Breadcrumb" className="mb-6">
@@ -280,7 +275,7 @@ export default async function KudosDetailPage({
               </svg>
               Photo Gallery
             </h2>
-            <MediaImageGrid images={gallery} getImageUrl={buildGalleryUrl} />
+            <MediaImageGrid images={gallery} />
           </section>
         ) : null}
       </article>

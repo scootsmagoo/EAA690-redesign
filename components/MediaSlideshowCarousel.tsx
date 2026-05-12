@@ -3,13 +3,17 @@
 import { useEffect, useId, useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
 import type { MediaGalleryImage } from '@/lib/sanity-types'
+import { urlFor } from '@/lib/sanity'
 
 interface Props {
   images: MediaGalleryImage[]
-  getImageUrl: (image: MediaGalleryImage, width: number) => string
 }
 
-export default function MediaSlideshowCarousel({ images, getImageUrl }: Props) {
+function getImageUrl(image: MediaGalleryImage, width: number): string {
+  return urlFor(image).width(width).fit('max').url()
+}
+
+export default function MediaSlideshowCarousel({ images }: Props) {
   const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
   const thumbnailRef = useRef<HTMLDivElement>(null)

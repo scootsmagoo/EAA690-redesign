@@ -7,7 +7,6 @@ import { PortableText } from '@portabletext/react'
 import {
   getMediaGalleryBySlug,
   getMediaGallerySlugs,
-  urlFor,
 } from '@/lib/sanity'
 import { safePortableTextLinkHref } from '@/lib/search-safety'
 import type { MediaGallery, MediaGalleryImage } from '@/lib/sanity-types'
@@ -44,11 +43,6 @@ export async function generateMetadata({
   } catch {
     return { title: 'Media | EAA 690' }
   }
-}
-
-/** Build a Sanity image URL string for use in the gallery components. */
-function buildImageUrl(img: MediaGalleryImage, width: number): string {
-  return urlFor(img).width(width).fit('max').url()
 }
 
 function hasImageAsset(img: MediaGalleryImage | null | undefined): img is MediaGalleryImage {
@@ -179,7 +173,7 @@ export default async function MediaGalleryPage({
       {gallery.displayType === 'slideshow' && (
         <>
           {images.length > 0 ? (
-            <MediaSlideshowCarousel images={images} getImageUrl={buildImageUrl} />
+            <MediaSlideshowCarousel images={images} />
           ) : (
             <p className="text-gray-500 italic">No images have been added to this gallery yet.</p>
           )}
@@ -189,7 +183,7 @@ export default async function MediaGalleryPage({
       {gallery.displayType === 'imageGrid' && (
         <>
           {images.length > 0 ? (
-            <MediaImageGrid images={images} getImageUrl={buildImageUrl} />
+            <MediaImageGrid images={images} />
           ) : (
             <p className="text-gray-500 italic">No images have been added to this gallery yet.</p>
           )}

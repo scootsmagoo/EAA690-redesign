@@ -3,13 +3,17 @@
 import { useState, useEffect, useCallback, useRef, useId } from 'react'
 import Image from 'next/image'
 import type { MediaGalleryImage } from '@/lib/sanity-types'
+import { urlFor } from '@/lib/sanity'
 
 interface Props {
   images: MediaGalleryImage[]
-  getImageUrl: (image: MediaGalleryImage, width: number) => string
 }
 
-export default function MediaImageGrid({ images, getImageUrl }: Props) {
+function getImageUrl(image: MediaGalleryImage, width: number): string {
+  return urlFor(image).width(width).fit('max').url()
+}
+
+export default function MediaImageGrid({ images }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   // WCAG 2.4.3 — track the element that opened the lightbox to restore focus on close.
   const triggerRef = useRef<HTMLButtonElement | null>(null)
