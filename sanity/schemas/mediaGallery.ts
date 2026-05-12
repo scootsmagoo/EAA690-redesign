@@ -3,6 +3,8 @@
 //   imageGrid  : responsive masonry grid with lightbox
 //   videoEmbed : YouTube / Vimeo embed with optional text
 
+import { MediaGalleryImagesInput } from '../components/MediaGalleryImagesInput'
+
 /** Shared block definition for rich description (with hyperlink annotation). */
 const richDescriptionBlock = {
   type: 'block',
@@ -40,8 +42,6 @@ const richDescriptionBlock = {
 
 /** Image with alt text and optional caption. */
 const galleryImage = {
-  name: 'galleryImage',
-  title: 'Gallery image',
   type: 'image',
   options: { hotspot: true },
   fields: [
@@ -152,6 +152,7 @@ export default {
       type: 'array',
       of: [galleryImage],
       description: 'Add all photos for the slideshow or grid.',
+      components: { input: MediaGalleryImagesInput },
       hidden: ({ parent }: { parent?: { displayType?: string } }) =>
         parent?.displayType === 'videoEmbed',
     },
