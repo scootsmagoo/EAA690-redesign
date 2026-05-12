@@ -732,7 +732,7 @@ export async function getMediaGalleries() {
       coverImageAlt,
       description,
       displayType,
-      "imageCount": count(images)
+      "imageCount": count(images[defined(asset._ref)])
     }
   `)
 }
@@ -757,7 +757,7 @@ export async function getMediaGalleryBySlug(slug: string) {
       description,
       richDescription,
       displayType,
-      images[] {
+      images[defined(asset._ref)] {
         ...,
         alt,
         caption

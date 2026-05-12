@@ -51,6 +51,10 @@ function buildImageUrl(img: MediaGalleryImage, width: number): string {
   return urlFor(img).width(width).fit('max').url()
 }
 
+function hasImageAsset(img: MediaGalleryImage | null | undefined): img is MediaGalleryImage {
+  return typeof img?.asset?._ref === 'string' && img.asset._ref.length > 0
+}
+
 /** Shared PortableText component config (mirrors news article style). */
 const richDescriptionComponents = {
   block: {
@@ -134,7 +138,7 @@ export default async function MediaGalleryPage({
 
   if (!gallery) notFound()
 
-  const images = gallery.images ?? []
+  const images = (gallery.images ?? []).filter(hasImageAsset)
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
