@@ -40,6 +40,8 @@ const richDescriptionBlock = {
 
 /** Image with alt text and optional caption. */
 const galleryImage = {
+  name: 'galleryImage',
+  title: 'Gallery image',
   type: 'image',
   options: { hotspot: true },
   fields: [
