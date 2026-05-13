@@ -93,6 +93,15 @@ export default function JoinPage() {
 
   const handleJoin = async (tier: TierKey) => {
     if (loadingTier !== null) return
+    const checkoutWindow = window.open('', '_blank')
+    if (!checkoutWindow) {
+      setError('Please allow pop-ups for this site so Stripe Checkout can open in a new tab.')
+      return
+    }
+    checkoutWindow.opener = null
+    checkoutWindow.document.title = 'Opening Stripe Checkout...'
+    checkoutWindow.document.body.textContent = 'Opening secure Stripe Checkout...'
+
     setLoadingTier(tier)
     setError(null)
     try {
@@ -118,8 +127,9 @@ export default function JoinPage() {
       if (!isStripeHostedCheckoutUrl(data.url)) {
         throw new Error('Invalid checkout link. Please refresh and try again.')
       }
-      window.location.href = data.url
+      checkoutWindow.location.href = data.url
     } catch (err) {
+      checkoutWindow.close()
       setError(
         clipPublicError(
           err instanceof Error ? err.message : 'Something went wrong. Please try again.'
@@ -275,7 +285,7 @@ export default function JoinPage() {
                   aria-describedby={tier.recurring ? `join-plan-${tier.tier}-renew` : undefined}
                   aria-label={
                     loadingTier === tier.tier
-                      ? `Redirecting to checkout for ${tier.name} membership`
+                      ? `Opening checkout for ${tier.name} membership in a new tab`
                       : `Join or renew ${tier.name} membership — ${tier.price} ${tier.period}`
                   }
                   className={`block w-full text-center py-3 rounded-xl font-bold transition-all motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue ${
@@ -284,7 +294,7 @@ export default function JoinPage() {
                       : 'bg-eaa-blue text-white hover:bg-blue-900'
                   } disabled:opacity-60 disabled:cursor-not-allowed`}
                 >
-                  {loadingTier === tier.tier ? 'Redirecting…' : 'Join / Renew'}
+                  {loadingTier === tier.tier ? 'Opening…' : 'Join / Renew'}
                 </button>
                 {tier.recurring && (
                   <p id={`join-plan-${tier.tier}-renew`} className="sr-only">
