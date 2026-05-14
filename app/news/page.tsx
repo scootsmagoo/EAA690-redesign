@@ -1,3 +1,4 @@
+import { resolvedNavcomArchiveFolderUrl } from '@/lib/newsletter'
 import { getNewsArticles, getNewsPage, getSiteSettings, urlFor } from '@/lib/sanity'
 import type { NewsArticle } from '@/lib/sanity-types'
 import Link from 'next/link'
@@ -68,12 +69,12 @@ export default async function NewsPage() {
     console.log('Using fallback news (Sanity not configured)')
   }
 
-  let legacyArchiveUrl: string | null = null
+  let legacyArchiveUrl = resolvedNavcomArchiveFolderUrl(undefined)
   try {
     const settings = (await getSiteSettings()) as { newsletterArchiveFolderUrl?: string } | null
-    legacyArchiveUrl = settings?.newsletterArchiveFolderUrl?.trim() || null
+    legacyArchiveUrl = resolvedNavcomArchiveFolderUrl(settings?.newsletterArchiveFolderUrl)
   } catch {
-    legacyArchiveUrl = null
+    // keep default Drive URL from resolvedNavcomArchiveFolderUrl
   }
 
   return (
@@ -141,39 +142,37 @@ export default async function NewsPage() {
         </p>
       </div>
 
-      {legacyArchiveUrl ? (
-        <aside
-          aria-labelledby="navcom-archive-callout"
-          className="mt-8 rounded-lg border border-blue-100 bg-blue-50/80 p-6"
+      <aside
+        aria-labelledby="navcom-archive-callout"
+        className="mt-8 rounded-lg border border-blue-100 bg-blue-50/80 p-6"
+      >
+        <h2 id="navcom-archive-callout" className="text-xl font-bold text-eaa-blue mb-2">
+          Full NAVCOM archive
+        </h2>
+        <p className="text-gray-700 mb-4">
+          Looking for older chapter news? Our complete historical NAVCOM newsletter archive — going back
+          decades — lives in a public Google Drive folder (organized by year). Anything not yet imported into
+          this site can be found there.
+        </p>
+        <a
+          href={legacyArchiveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
         >
-          <h2 id="navcom-archive-callout" className="text-xl font-bold text-eaa-blue mb-2">
-            Full NAVCOM archive
-          </h2>
-          <p className="text-gray-700 mb-4">
-            Looking for older chapter news? Our complete historical NAVCOM newsletter archive — going back
-            decades — lives in a public Google Drive folder. Anything not yet imported into this site can be
-            found there.
-          </p>
-          <a
-            href={legacyArchiveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+          Open full NAVCOM archive (Google Drive)
+          <span className="sr-only"> (opens in a new tab)</span>
+          <svg
+            className="h-4 w-4 shrink-0"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
           >
-            Open full NAVCOM archive (Google Drive)
-            <span className="sr-only"> (opens in a new tab)</span>
-            <svg
-              className="h-4 w-4"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-              <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-            </svg>
-          </a>
-        </aside>
-      ) : null}
+            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+            <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+          </svg>
+        </a>
+      </aside>
       </div>
     </div>
   )

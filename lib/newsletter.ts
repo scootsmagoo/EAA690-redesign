@@ -1,6 +1,19 @@
 import type { SanityImageSource } from '@sanity/image-url'
 import { isSafeSiteHref } from '@/lib/search-safety'
 
+/**
+ * Public Google Drive folder with historical NAVCOM PDFs (Navigation Communication).
+ * Same root as `scripts/import-navcom-archive.ts` (NAVCOM_DRIVE_FOLDER_ID) and the archive linked from the legacy site.
+ */
+export const DEFAULT_NAVCOM_DRIVE_ARCHIVE_URL =
+  'https://drive.google.com/drive/folders/1C0g5SKQHN4TLTFfdj_IjPTxkv9VUIZRw'
+
+/** Prefer Sanity `newsletterArchiveFolderUrl`; otherwise the chapter’s default Drive archive. */
+export function resolvedNavcomArchiveFolderUrl(settingsUrl: string | null | undefined): string {
+  const t = typeof settingsUrl === 'string' ? settingsUrl.trim() : ''
+  return t || DEFAULT_NAVCOM_DRIVE_ARCHIVE_URL
+}
+
 /** Reference to a NAVCOM section, as projected by GROQ. */
 export type NewsletterSectionRef = {
   _id: string

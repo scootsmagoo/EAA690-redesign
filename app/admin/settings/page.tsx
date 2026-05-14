@@ -452,7 +452,7 @@ function SiteSettingsForm() {
                   onChange={(e) => setForm((f) => ({ ...f, newsletterArchiveFolderUrl: e.target.value }))}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Optional — e.g. Google Drive folder; shown on the public NAVCOM archive page.
+                  {`Optional override. Leave blank to use the chapter's default Google Drive NAVCOM archive on /newsletter and /news.`}
                 </p>
               </div>
             </div>

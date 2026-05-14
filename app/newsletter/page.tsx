@@ -7,7 +7,11 @@ import {
   getNewsletterSections,
   getSiteSettings,
 } from '@/lib/sanity'
-import { issueYear, type NewsletterIssueListRow } from '@/lib/newsletter'
+import {
+  issueYear,
+  resolvedNavcomArchiveFolderUrl,
+  type NewsletterIssueListRow,
+} from '@/lib/newsletter'
 import NewsletterPageHero from '@/components/newsletter/NewsletterPageHero'
 import LatestIssueHero from '@/components/newsletter/LatestIssueHero'
 import NewsletterArchive from '@/components/newsletter/NewsletterArchive'
@@ -88,8 +92,9 @@ export default async function NewsletterArchivePage({ searchParams }: Props) {
     ? sections.find((s) => s.slug?.current === sectionParam)?.slug?.current ?? null
     : null
 
-  const legacyArchiveUrl =
-    (settings as { newsletterArchiveFolderUrl?: string } | null)?.newsletterArchiveFolderUrl?.trim() || null
+  const legacyArchiveUrl = resolvedNavcomArchiveFolderUrl(
+    (settings as { newsletterArchiveFolderUrl?: string } | null)?.newsletterArchiveFolderUrl
+  )
   const fallbackPdfUrl =
     (settings as { newsletterUrl?: string } | null)?.newsletterUrl?.trim() || null
 
@@ -188,24 +193,27 @@ export default async function NewsletterArchivePage({ searchParams }: Props) {
           />
         )}
 
-        {legacyArchiveUrl ? (
-          <div className="mt-12 rounded-lg border border-blue-100 bg-blue-50/80 px-5 py-4 text-gray-800">
-            <p className="font-semibold text-eaa-blue mb-1">Older PDF archive</p>
-            <p className="text-sm text-gray-700 mb-3">
-              Many older issues live in our historical Google Drive folder, including editions from before this
-              site’s archive.
-            </p>
-            <a
-              href={legacyArchiveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
-            >
-              Open full PDF archive (folder)
-              <span className="sr-only"> (opens in a new tab)</span>
-            </a>
-          </div>
-        ) : null}
+        <div className="mt-12 rounded-lg border border-blue-100 bg-blue-50/80 px-5 py-4 text-gray-800">
+          <p className="font-semibold text-eaa-blue mb-1">Full NAVCOM archive</p>
+          <p className="text-sm text-gray-700 mb-3">
+            Our complete historical newsletter PDFs — including decades of past issues organized by year in
+            Drive — live in this public folder. Anything not yet listed in the web archive above is available
+            there.
+          </p>
+          <a
+            href={legacyArchiveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+          >
+            Open full NAVCOM archive (Google Drive)
+            <span className="sr-only"> (opens in a new tab)</span>
+            <svg className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+              <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+            </svg>
+          </a>
+        </div>
       </section>
     </div>
   )

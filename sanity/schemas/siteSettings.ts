@@ -60,7 +60,7 @@ export default {
       title: 'Full PDF archive (external folder)',
       type: 'url',
       description:
-        'Optional — e.g. Google Drive folder with older PDFs. Shown on the NAVCOM archive page when set.',
+        'Optional override for the historical PDF folder URL. When blank, the site uses the chapter’s default Google Drive NAVCOM archive (same public folder as the legacy site).',
     },
     {
       name: 'socialLinks',
