@@ -43,7 +43,7 @@ export default function SignupPage() {
       if ('error' in result && result.error) {
         setError((result.error as { message?: string }).message || 'Failed to create account')
       } else {
-        router.push('/sign-in?message=Account+created+successfully.+Please+sign+in.')
+        router.push('/sign-in?message=Registration+submitted.+An+EAA+690+admin+will+review+your+account+before+member+access+is+enabled.')
       }
     } catch (err) {
       setError('An error occurred. Please try again.')
@@ -58,8 +58,12 @@ export default function SignupPage() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-eaa-blue">
-            Create your account
+            Request member account access
           </h2>
+          <p className="mt-3 text-center text-sm text-gray-600">
+            Website accounts are limited to current EAA 690 members. After registering, an admin will
+            review your request before member-only access is enabled.
+          </p>
           <div className="mt-6 flex rounded-lg border border-gray-200 overflow-hidden">
             <Link
               href="/sign-in"

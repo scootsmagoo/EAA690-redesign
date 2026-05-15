@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
-import { getAuth } from '@/lib/better-auth'
 import { getSiteBaseURL } from '@/lib/site-url'
+import { requireApprovedSession } from '@/lib/account-approval'
 
 /**
  * POST /api/stripe/portal
@@ -13,10 +13,8 @@ import { getSiteBaseURL } from '@/lib/site-url'
  * customer's billing portal by supplying a different ID.
  */
 export async function POST(request: NextRequest) {
-  const auth = await getAuth().api.getSession({ headers: request.headers })
-  if (!auth?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const auth = await requireApprovedSession(request)
+  if (auth instanceof NextResponse) return auth
 
   // stripeCustomerId is stored on the user record in the database.
   // It is populated by the checkout.session.completed webhook when a user first

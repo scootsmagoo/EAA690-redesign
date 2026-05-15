@@ -16,6 +16,12 @@ CREATE TABLE "user" (
   "twoFactorEnabled" BOOLEAN DEFAULT FALSE,
   role TEXT DEFAULT 'user',
   banned BOOLEAN DEFAULT FALSE,
+  "approvalStatus" TEXT DEFAULT 'pending',
+  "approvedAt" TIMESTAMP,
+  "approvedBy" TEXT,
+  "rejectedAt" TIMESTAMP,
+  "rejectedBy" TEXT,
+  "rejectionReason" TEXT,
   "createdAt" TIMESTAMP DEFAULT NOW(),
   "updatedAt" TIMESTAMP DEFAULT NOW()
 );

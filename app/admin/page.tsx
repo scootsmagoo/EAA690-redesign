@@ -23,6 +23,19 @@ export default function AdminPage() {
           </div>
 
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
+            <h2 className="text-lg font-bold text-eaa-blue mb-1">Registration Review</h2>
+            <p className="text-gray-500 text-sm mb-4 flex-1">
+              Review new account requests and approve access for confirmed EAA 690 members.
+            </p>
+            <Link
+              href="/admin/registrations"
+              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
+            >
+              Review Registrations
+            </Link>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
             <h2 className="text-lg font-bold text-eaa-blue mb-1">Content Studio</h2>
             <p className="text-gray-500 text-sm mb-4 flex-1">
               Edit events, news, presentations, board members, and site settings via Sanity CMS.

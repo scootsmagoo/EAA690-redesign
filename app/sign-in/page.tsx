@@ -16,6 +16,7 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = safeRedirect(searchParams?.get('redirect'))
+  const message = searchParams?.get('message')
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -66,6 +67,12 @@ function LoginForm() {
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit} noValidate>
+          {message && (
+            <div className="rounded-md bg-blue-50 p-4 border border-blue-100" role="status">
+              <div className="text-sm text-blue-900">{message}</div>
+            </div>
+          )}
+
           {/* role="alert" ensures screen readers announce errors immediately on submit */}
           {error && (
             <div className="rounded-md bg-red-50 p-4" role="alert" aria-live="assertive">

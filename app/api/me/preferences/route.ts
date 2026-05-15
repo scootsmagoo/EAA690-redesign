@@ -20,7 +20,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getAuth } from '@/lib/better-auth'
+import { requireApprovedSession } from '@/lib/account-approval'
 import { getUserPreferences, setUserPreferences } from '@/lib/user-preferences-db'
 import { parsePreferences } from '@/lib/preferences'
 
@@ -30,13 +30,14 @@ export const dynamic = 'force-dynamic'
 const MAX_BODY_BYTES = 2_048
 
 async function getSessionUser(request: NextRequest) {
-  const session = await getAuth().api.getSession({ headers: request.headers })
-  return session?.user ? { id: String(session.user.id) } : null
+  const check = await requireApprovedSession(request)
+  if (check instanceof NextResponse) return check
+  return { id: check.user.id }
 }
 
 export async function GET(request: NextRequest) {
   const user = await getSessionUser(request)
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (user instanceof NextResponse) return user
   try {
     const prefs = await getUserPreferences(user.id)
     return NextResponse.json(
@@ -51,7 +52,7 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   const user = await getSessionUser(request)
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (user instanceof NextResponse) return user
 
   // Hard size cap before JSON parsing — preferences are ~150 bytes serialized.
   const cl = Number(request.headers.get('content-length') ?? '0')

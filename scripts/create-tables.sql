@@ -8,6 +8,12 @@ CREATE TABLE IF NOT EXISTS "user" (
   email TEXT UNIQUE NOT NULL,
   "emailVerified" BOOLEAN DEFAULT FALSE,
   image TEXT,
+  "approvalStatus" TEXT DEFAULT 'pending',
+  "approvedAt" TIMESTAMP,
+  "approvedBy" TEXT,
+  "rejectedAt" TIMESTAMP,
+  "rejectedBy" TEXT,
+  "rejectionReason" TEXT,
   "createdAt" TIMESTAMP DEFAULT NOW(),
   "updatedAt" TIMESTAMP DEFAULT NOW()
 );

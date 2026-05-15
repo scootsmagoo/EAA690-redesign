@@ -4,6 +4,7 @@ import { Pool } from "pg"
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from "./db-resolver"
 import { getSiteBaseURL } from "./site-url"
 import { sendPasswordResetEmail } from "./password-reset-email"
+import { ensureUserApprovalSchema } from "./account-approval-db"
 
 // Lazy initialization — Postgres
 let _pool: Pool | null = null
@@ -229,6 +230,7 @@ export async function ensureBetterAuthSchema(): Promise<void> {
     schemaReady = (async () => {
       const ctx = await getAuth().$context
       await ctx.runMigrations()
+      await ensureUserApprovalSchema()
     })().catch((err) => {
       // "already exists" (42P07) means tables are already set up — safe to ignore
       const msg: string = err?.message ?? ""
