@@ -1,111 +1,179 @@
+'use client'
+
+import { useState } from 'react'
 import AdminGuard from '@/components/AdminGuard'
 import Link from 'next/link'
 
+type AdminAction = {
+  label: string
+  href: string
+  variant?: 'primary' | 'secondary'
+}
+
+type AdminItem = {
+  title: string
+  description: string
+  note: string
+  actions: AdminAction[]
+}
+
+type AdminTab = {
+  id: 'people' | 'content' | 'operations'
+  label: string
+  summary: string
+  items: AdminItem[]
+}
+
+const ADMIN_TABS: AdminTab[] = [
+  {
+    id: 'people',
+    label: 'People',
+    summary: 'Review account access and manage website roles.',
+    items: [
+      {
+        title: 'Registration Review',
+        description: 'Approve new website account requests for confirmed EAA 690 members.',
+        note: 'Member access',
+        actions: [{ label: 'Review Registrations', href: '/admin/registrations' }],
+      },
+      {
+        title: 'User Management',
+        description: 'View all users and assign Admin, Editor, or Member roles.',
+        note: 'Roles',
+        actions: [{ label: 'Manage Users', href: '/admin/users' }],
+      },
+    ],
+  },
+  {
+    id: 'content',
+    label: 'Content',
+    summary: 'Edit site content, publish updates, and maintain site-wide settings.',
+    items: [
+      {
+        title: 'Content Studio',
+        description: 'Edit events, news, presentations, board members, and CMS-managed pages.',
+        note: 'Sanity CMS',
+        actions: [
+          { label: 'Open Studio', href: '/studio' },
+          { label: 'Publish Queue', href: '/admin/content', variant: 'secondary' },
+        ],
+      },
+      {
+        title: 'Site Settings',
+        description: 'Update chapter details, contact info, breakfast promos, social links, and store settings.',
+        note: 'Global config',
+        actions: [{ label: 'Open Site Settings', href: '/admin/settings' }],
+      },
+    ],
+  },
+  {
+    id: 'operations',
+    label: 'Operations',
+    summary: 'Review submissions, contact messages, and payment activity.',
+    items: [
+      {
+        title: 'Program Submissions',
+        description: 'View, filter, and export form submissions from chapter programs.',
+        note: 'Forms',
+        actions: [{ label: 'View Submissions', href: '/admin/submissions' }],
+      },
+      {
+        title: 'Contact Messages',
+        description: 'Review inquiries from the public contact form, separate from program registrations.',
+        note: 'Inbox',
+        actions: [{ label: 'View Messages', href: '/admin/contact' }],
+      },
+      {
+        title: 'Payments',
+        description: 'View recent Stripe charges, active memberships, and subscription statuses.',
+        note: 'Stripe',
+        actions: [{ label: 'View Payments', href: '/admin/payments' }],
+      },
+    ],
+  },
+]
+
+function ActionLink({ action }: { action: AdminAction }) {
+  const isSecondary = action.variant === 'secondary'
+  return (
+    <Link
+      href={action.href}
+      className={`inline-flex justify-center rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
+        isSecondary
+          ? 'border border-eaa-blue text-eaa-blue hover:bg-blue-50'
+          : 'bg-eaa-blue text-white hover:bg-eaa-light-blue'
+      }`}
+    >
+      {action.label}
+    </Link>
+  )
+}
+
 export default function AdminPage() {
+  const [activeTabId, setActiveTabId] = useState<AdminTab['id']>('people')
+  const activeTab = ADMIN_TABS.find((tab) => tab.id === activeTabId) ?? ADMIN_TABS[0]
+
   return (
     <AdminGuard>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl font-bold text-eaa-blue mb-2">Admin Dashboard</h1>
-        <p className="text-gray-500 mb-8">EAA 690 site administration</p>
+        <p className="text-gray-500 mb-8">EAA 690 site administration, grouped by the work you need to do.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
-            <h2 className="text-lg font-bold text-eaa-blue mb-1">User Management</h2>
-            <p className="text-gray-500 text-sm mb-4 flex-1">
-              View all members and assign Admin, Editor, or Member roles.
-            </p>
-            <Link
-              href="/admin/users"
-              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
-            >
-              Manage Users
-            </Link>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
-            <h2 className="text-lg font-bold text-eaa-blue mb-1">Registration Review</h2>
-            <p className="text-gray-500 text-sm mb-4 flex-1">
-              Review new account requests and approve access for confirmed EAA 690 members.
-            </p>
-            <Link
-              href="/admin/registrations"
-              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
-            >
-              Review Registrations
-            </Link>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
-            <h2 className="text-lg font-bold text-eaa-blue mb-1">Content Studio</h2>
-            <p className="text-gray-500 text-sm mb-4 flex-1">
-              Edit events, news, presentations, board members, and site settings via Sanity CMS.
-            </p>
-            <div className="flex gap-2">
-              <Link
-                href="/studio"
-                className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
-              >
-                Open Studio
-              </Link>
-              <Link
-                href="/admin/content"
-                className="inline-block px-4 py-2 border border-eaa-blue text-eaa-blue text-sm rounded-md hover:bg-blue-50 transition-colors text-center"
-              >
-                Publish Queue
-              </Link>
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+          <div className="border-b border-gray-200 bg-gray-50 px-4 py-3 sm:px-6">
+            <div className="flex flex-wrap gap-2" role="tablist" aria-label="Admin sections">
+              {ADMIN_TABS.map((tab) => {
+                const selected = tab.id === activeTab.id
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    onClick={() => setActiveTabId(tab.id)}
+                    className={`rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
+                      selected
+                        ? 'bg-eaa-blue text-white shadow-sm'
+                        : 'text-gray-600 hover:bg-white hover:text-eaa-blue'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                )
+              })}
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
-            <h2 className="text-lg font-bold text-eaa-blue mb-1">Program Submissions</h2>
-            <p className="text-gray-500 text-sm mb-4 flex-1">
-              View, filter, and export form submissions from Summer Camp, Scholarships, VMC/IMC Club, and Youth Aviation.
-            </p>
-            <Link
-              href="/admin/submissions"
-              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
-            >
-              View Submissions
-            </Link>
-          </div>
+          <div className="px-4 py-5 sm:px-6">
+            <div className="mb-5">
+              <h2 className="text-2xl font-bold text-eaa-blue">{activeTab.label}</h2>
+              <p className="mt-1 text-sm text-gray-500">{activeTab.summary}</p>
+            </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
-            <h2 className="text-lg font-bold text-eaa-blue mb-1">Contact messages</h2>
-            <p className="text-gray-500 text-sm mb-4 flex-1">
-              Inquiries from the public /contact form (separate from program registration forms).
-            </p>
-            <Link
-              href="/admin/contact"
-              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
-            >
-              View messages
-            </Link>
-          </div>
+            <div className="divide-y divide-gray-200 rounded-lg border border-gray-200">
+              {activeTab.items.map((item) => (
+                <div
+                  key={item.title}
+                  className="grid grid-cols-1 gap-4 px-4 py-5 sm:grid-cols-[1fr_auto] sm:items-center sm:px-5"
+                >
+                  <div className="min-w-0">
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                      <h3 className="text-lg font-bold text-gray-900">{item.title}</h3>
+                      <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-eaa-blue">
+                        {item.note}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600">{item.description}</p>
+                  </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
-            <h2 className="text-lg font-bold text-eaa-blue mb-1">Payments</h2>
-            <p className="text-gray-500 text-sm mb-4 flex-1">
-              View recent Stripe charges, active memberships, and subscription statuses.
-            </p>
-            <Link
-              href="/admin/payments"
-              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
-            >
-              View Payments
-            </Link>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col">
-            <h2 className="text-lg font-bold text-eaa-blue mb-1">Site Settings</h2>
-            <p className="text-gray-500 text-sm mb-4 flex-1">
-              Edit chapter name, contact info, breakfast promos, newsletter link, and social URLs (stored in Sanity).
-            </p>
-            <Link
-              href="/admin/settings"
-              className="inline-block px-4 py-2 bg-eaa-blue text-white text-sm rounded-md hover:bg-eaa-light-blue transition-colors text-center"
-            >
-              Open Site Settings
-            </Link>
+                  <div className="flex flex-wrap gap-2 sm:justify-end">
+                    {item.actions.map((action) => (
+                      <ActionLink key={`${item.title}-${action.href}`} action={action} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
