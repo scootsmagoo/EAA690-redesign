@@ -6,7 +6,6 @@ export default function ChapterPage() {
     { name: 'Board', href: '/chapter/board', description: 'Meet the EAA 690 board members' },
     { name: 'Bylaws', href: '/chapter/bylaws', description: 'Chapter bylaws and governance' },
     { name: 'General Info', href: '/chapter/general-info', description: 'General information about EAA 690' },
-    { name: 'Hangar Rental', href: '/chapter/hangar-rental', description: 'Information about hangar rental' },
     { name: 'Visit Us', href: '/chapter/visit-us', description: 'Directions and information for visiting' },
   ]
 

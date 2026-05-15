@@ -154,9 +154,6 @@ export default function Navigation({
         { name: 'Board', href: '/chapter/board' },
         { name: 'Bylaws', href: '/chapter/bylaws' },
         { name: 'General Info', href: '/chapter/general-info' },
-        ...(showSessionNavItems
-          ? [{ name: 'Hangar Rental', href: '/chapter/hangar-rental' }]
-          : []),
         { name: 'Visit Us', href: '/chapter/visit-us' },
       ],
     },

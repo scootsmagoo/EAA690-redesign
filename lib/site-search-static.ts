@@ -38,7 +38,7 @@ export const STATIC_SITE_SEARCH_INDEX: StaticSearchEntry[] = [
   { title: 'Board & chapter leaders', href: '/chapter/board', snippet: 'Officers, Board of Trustees, Members of the Year, and food service chairs.' },
   { title: 'Bylaws', href: '/chapter/bylaws', snippet: 'Chapter bylaws and governance documents.' },
   { title: 'General information', href: '/chapter/general-info', snippet: 'General chapter details for members and visitors.' },
-  { title: 'Hangar rental', href: '/chapter/hangar-rental', snippet: 'Hangar and ramp information for qualifying members.' },
+  { title: 'Hangar rental', href: '/members/hangar-rental', snippet: 'Hangar and ramp information for qualifying members.' },
   { title: 'Visit us', href: '/chapter/visit-us', snippet: 'Directions to Briscoe Field (KLZU), hangar location, and visiting the chapter.' },
   { title: 'Programs overview', href: '/programs', snippet: 'Youth aviation, scholarships, summer camp, Young Eagles, Eagle Flights, and more.' },
   { title: 'Young Eagles', href: '/programs/young-eagles', snippet: 'Free first flights for youth ages 8–17.' },

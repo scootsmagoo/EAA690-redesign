@@ -15,25 +15,43 @@ export default function MembersPage() {
           <p className="text-gray-700">
             You are logged in with your EAA 690 account. Welcome to the members area!
           </p>
-          <div className="mt-4">
+          <div className="mt-4 flex flex-wrap gap-4">
             <Link
               href="/account"
               className="text-eaa-blue hover:text-eaa-light-blue font-medium"
             >
               Manage Account Settings →
             </Link>
+            <Link
+              href="/members/hangar-rental"
+              className="text-eaa-blue hover:text-eaa-light-blue font-medium"
+            >
+              Hangar Rental →
+            </Link>
           </div>
         </div>
 
-        <div className="mt-8 bg-blue-50 p-6 rounded-lg">
-          <h3 className="text-xl font-bold text-eaa-blue mb-4">Member Benefits</h3>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Access to exclusive member content</li>
-            <li>Event registration and management</li>
-            <li>Member directory access</li>
-            <li>Newsletter archives</li>
-            <li>Special member discounts</li>
-          </ul>
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Link
+            href="/members/hangar-rental"
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-2 border-transparent hover:border-eaa-yellow"
+          >
+            <h3 className="text-xl font-bold text-eaa-blue mb-2">Hangar Rental</h3>
+            <p className="text-gray-700">
+              View hangar rental information, water agreements, and inquiry details for chapter members.
+            </p>
+          </Link>
+
+          <div className="bg-blue-50 p-6 rounded-lg">
+            <h3 className="text-xl font-bold text-eaa-blue mb-4">Member Benefits</h3>
+            <ul className="list-disc list-inside space-y-2 text-gray-700">
+              <li>Access to exclusive member content</li>
+              <li>Event registration and management</li>
+              <li>Member directory access</li>
+              <li>Newsletter archives</li>
+              <li>Special member discounts</li>
+            </ul>
+          </div>
         </div>
       </div>
     </AuthGuard>
