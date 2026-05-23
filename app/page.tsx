@@ -174,6 +174,59 @@ function resolvePrograms(home: HomePageContent | null): HomeProgramCard[] {
   return valid.length > 0 ? valid : FALLBACK_PROGRAMS
 }
 
+/** Compact hero panel — keep count low so the block stays above the fold beside the intro. */
+const HERO_PROGRAMS_PANEL_LIMIT = 4
+
+function HeroProgramsPanel({
+  title,
+  subtitle,
+  programs,
+}: {
+  title: string
+  subtitle: string
+  programs: HomeProgramCard[]
+}) {
+  const featured = programs.slice(0, HERO_PROGRAMS_PANEL_LIMIT)
+
+  return (
+    <aside className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-lg">
+      <h2 className="text-2xl font-bold text-eaa-blue mb-2">{title}</h2>
+      <p className="text-sm text-gray-700 leading-relaxed mb-5">{subtitle}</p>
+      <ul className="space-y-4">
+        {featured.map((program) => {
+          const href = isSafeSiteHref(program.href!.trim()) ? program.href!.trim() : '/programs'
+          return (
+            <li key={`${program.name}-${program.href}`} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+              <div className="flex gap-3">
+                <span className="text-2xl shrink-0" aria-hidden="true">
+                  {program.icon ?? '✈️'}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-base font-bold text-eaa-blue leading-snug">{program.name}</h3>
+                  <p className="text-sm text-gray-600 leading-snug mt-0.5 line-clamp-2">{program.description}</p>
+                  <Link
+                    href={href}
+                    aria-label={`${program.cta} — ${program.name}`}
+                    className="inline-block mt-2 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue hover:underline"
+                  >
+                    {program.cta} <span aria-hidden="true">→</span>
+                  </Link>
+                </div>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+      <Link
+        href="/programs"
+        className="mt-6 block w-full text-center text-eaa-blue border-2 border-eaa-blue px-4 py-2.5 rounded-full text-sm font-bold hover:bg-eaa-blue hover:text-white transition-colors"
+      >
+        View All Programs
+      </Link>
+    </aside>
+  )
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const home = await getHomePage()
@@ -208,7 +261,7 @@ export default async function Home() {
 
   const programs = resolvePrograms(home)
   const heroHeadline = home?.heroHeadline?.trim() || 'Welcome to EAA 690'
-  const programsTitle = home?.programsSectionTitle?.trim() || 'Get Involved'
+  const programsTitle = home?.programsSectionTitle?.trim() || 'Programs'
   const programsSubtitle =
     home?.programsSectionSubtitle?.trim() ||
     "From free youth flights to scholarships and hands-on build programs — there's a place for everyone at EAA 690."
@@ -225,8 +278,7 @@ export default async function Home() {
   const showSpotlight = home?.spotlightEnabled !== false
   const spotlightTitle = home?.spotlightTitle?.trim() || 'April 5th Presentation at 10 AM'
   const spotlightSubtitle = home?.spotlightSubtitle?.trim() || 'Alex Ortlano — "Dust Off"'
-  const heroVisual = home?.heroVisual === 'heroImage' && home?.heroImage ? 'heroImage' : 'goldBadge'
-  const goldCode = home?.goldBadgeCode?.trim() || 'EAA 020-202'
+  const showHeroImage = home?.heroVisual === 'heroImage' && Boolean(home?.heroImage)
   const heroImageAltText =
     home?.heroImageAlt?.trim() || (heroHeadline ? `Photograph: ${heroHeadline}` : 'EAA Chapter 690')
   const spotlightPhotoAlt =
@@ -264,8 +316,8 @@ export default async function Home() {
               </Link>
             </div>
           </div>
-          <div className="flex justify-center">
-            {heroVisual === 'heroImage' && home?.heroImage ? (
+          <div className="flex justify-center lg:justify-end">
+            {showHeroImage && home?.heroImage ? (
               <div className="relative w-full max-w-md aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
                 <Image
                   src={urlFor(home.heroImage).width(800).height(600).fit('crop').url()}
@@ -277,52 +329,8 @@ export default async function Home() {
                 />
               </div>
             ) : (
-              <div className="w-48 h-48 bg-eaa-yellow rounded-full flex items-center justify-center shadow-lg">
-                <div className="text-center">
-                  <div className="text-eaa-blue font-bold text-2xl mb-2">GOLD</div>
-                  <div className="text-eaa-blue font-bold text-xl">CHAPTER</div>
-                  <div className="text-eaa-blue text-sm mt-2">{goldCode}</div>
-                </div>
-              </div>
+              <HeroProgramsPanel title={programsTitle} subtitle={programsSubtitle} programs={programs} />
             )}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-white border-t border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-eaa-blue mb-3">{programsTitle}</h2>
-            <p className="text-lg text-gray-700 max-w-2xl mx-auto">{programsSubtitle}</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {programs.map((program) => (
-              <div
-                key={`${program.name}-${program.href}`}
-                className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex flex-col p-6"
-              >
-                <div className="text-4xl mb-4" aria-hidden="true">
-                  {program.icon ?? '✈️'}
-                </div>
-                <h3 className="text-lg font-bold text-eaa-blue mb-2">{program.name}</h3>
-                <p className="text-gray-700 text-sm leading-relaxed flex-1 mb-5">{program.description}</p>
-                <Link
-                  href={isSafeSiteHref(program.href!.trim()) ? program.href!.trim() : '/programs'}
-                  aria-label={`${program.cta} — ${program.name}`}
-                  className="inline-block text-center bg-eaa-blue text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-eaa-light-blue transition-colors"
-                >
-                  {program.cta} <span aria-hidden="true">→</span>
-                </Link>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link
-              href="/programs"
-              className="inline-block text-eaa-blue border-2 border-eaa-blue px-8 py-3 rounded-full font-bold hover:bg-eaa-blue hover:text-white transition-colors"
-            >
-              View All Programs
-            </Link>
           </div>
         </div>
       </section>

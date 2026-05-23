@@ -133,11 +133,11 @@ export interface HomePageContent {
   _id?: string
   heroHeadline?: string
   heroIntro?: unknown[]
-  heroVisual?: 'goldBadge' | 'heroImage'
+  /** `goldBadge` is legacy CMS value — treated as programs panel on the public site. */
+  heroVisual?: 'programsPanel' | 'heroImage' | 'goldBadge'
   heroImage?: SanityImage
   /** Screen reader label for hero photo (when heroVisual is heroImage). */
   heroImageAlt?: string
-  goldBadgeCode?: string
   programsSectionTitle?: string
   programsSectionSubtitle?: string
   programCards?: HomeProgramCard[]

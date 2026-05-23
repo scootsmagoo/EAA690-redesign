@@ -273,7 +273,6 @@ export async function getHomePage() {
       heroVisual,
       heroImage,
       heroImageAlt,
-      goldBadgeCode,
       programsSectionTitle,
       programsSectionSubtitle,
       programCards[] {

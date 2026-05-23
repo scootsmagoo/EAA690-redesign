@@ -119,10 +119,10 @@ export default {
       name: 'heroVisual',
       title: 'Hero right column',
       type: 'string',
-      initialValue: 'goldBadge',
+      initialValue: 'programsPanel',
       options: {
         list: [
-          { title: 'Gold Chapter badge', value: 'goldBadge' },
+          { title: 'Programs panel', value: 'programsPanel' },
           { title: 'Photo / image', value: 'heroImage' },
         ],
         layout: 'radio',
@@ -146,30 +146,24 @@ export default {
       validation: (Rule: any) => Rule.max(180),
     },
     {
-      name: 'goldBadgeCode',
-      title: 'Gold badge code line',
-      type: 'string',
-      description: 'Small text under GOLD CHAPTER (e.g. EAA 020-202).',
-      hidden: ({ parent }: { parent?: { heroVisual?: string } }) =>
-        parent?.heroVisual !== 'goldBadge',
-    },
-    {
       name: 'programsSectionTitle',
-      title: 'Programs section title',
+      title: 'Programs panel title',
       type: 'string',
-      description: 'Heading above the grid of program cards on the home page.',
+      description: 'Heading for the compact programs panel in the hero (right column on desktop).',
+      initialValue: 'Programs',
     },
     {
       name: 'programsSectionSubtitle',
-      title: 'Programs section subtitle',
+      title: 'Programs panel subtitle',
       type: 'text',
       rows: 2,
+      description: 'Short line under the panel heading on the home page hero.',
     },
     {
       name: 'programCards',
       title: 'Program cards',
       description:
-        'Cards in the “Get Involved” / programs area on the home page (icon, title, blurb, link path, and button label). When this list is empty (or a row is missing required fields), the public site uses built-in defaults from the app instead—publish a full set here to control links and copy in Sanity without a deployment.',
+        'Programs listed in the home page hero panel (icon, title, blurb, link path, and button label). The first four appear in the panel; use order in this list to set priority. When empty or incomplete, the site uses built-in defaults.',
       type: 'array',
       of: [
         {
