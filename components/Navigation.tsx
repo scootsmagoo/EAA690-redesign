@@ -150,7 +150,6 @@ export default function Navigation({
       name: 'Chapter',
       href: '/chapter',
       submenu: [
-        { name: 'Agenda', href: '/chapter/agenda' },
         { name: 'Board', href: '/chapter/board' },
         { name: 'Bylaws', href: '/chapter/bylaws' },
         { name: 'General Info', href: '/chapter/general-info' },

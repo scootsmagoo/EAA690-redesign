@@ -34,7 +34,6 @@ export const STATIC_SITE_SEARCH_INDEX: StaticSearchEntry[] = [
   { title: 'Media', href: '/media', snippet: 'Photos, videos, and media from chapter events and programs.' },
   { title: 'Kudos', href: '/kudos', snippet: 'Celebrating members’ achievements in aviation and the community.' },
   { title: 'Chapter overview', href: '/chapter', snippet: 'Chapter information, leadership, and quick links to chapter pages.' },
-  { title: 'Agenda', href: '/chapter/agenda', snippet: 'Board of Directors meeting agendas and chapter business.' },
   { title: 'Board & chapter leaders', href: '/chapter/board', snippet: 'Officers, Board of Trustees, Members of the Year, and food service chairs.' },
   { title: 'Bylaws', href: '/chapter/bylaws', snippet: 'Chapter bylaws and governance documents.' },
   { title: 'General information', href: '/chapter/general-info', snippet: 'General chapter details for members and visitors.' },
