@@ -151,7 +151,6 @@ export default function Navigation({
       href: '/chapter',
       submenu: [
         { name: 'Board', href: '/chapter/board' },
-        { name: 'Bylaws', href: '/chapter/bylaws' },
         { name: 'General Info', href: '/chapter/general-info' },
         { name: 'Visit Us', href: '/chapter/visit-us' },
       ],

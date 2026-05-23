@@ -3,7 +3,6 @@ import Link from 'next/link'
 export default function ChapterPage() {
   const chapterLinks = [
     { name: 'Board', href: '/chapter/board', description: 'Meet the EAA 690 board members' },
-    { name: 'Bylaws', href: '/chapter/bylaws', description: 'Chapter bylaws and governance' },
     { name: 'General Info', href: '/chapter/general-info', description: 'General information about EAA 690' },
     { name: 'Visit Us', href: '/chapter/visit-us', description: 'Directions and information for visiting' },
   ]

@@ -28,6 +28,9 @@ export default function MembersPage() {
             >
               Hangar Rental →
             </Link>
+            <Link href="/members/bylaws" className="text-eaa-blue hover:text-eaa-light-blue font-medium">
+              Bylaws →
+            </Link>
           </div>
         </div>
 
@@ -42,7 +45,17 @@ export default function MembersPage() {
             </p>
           </Link>
 
-          <div className="bg-blue-50 p-6 rounded-lg">
+          <Link
+            href="/members/bylaws"
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-2 border-transparent hover:border-eaa-yellow"
+          >
+            <h3 className="text-xl font-bold text-eaa-blue mb-2">Bylaws</h3>
+            <p className="text-gray-700">
+              Download chapter bylaws and review governance documents for EAA 690.
+            </p>
+          </Link>
+
+          <div className="bg-blue-50 p-6 rounded-lg md:col-span-2">
             <h3 className="text-xl font-bold text-eaa-blue mb-4">Member Benefits</h3>
             <ul className="list-disc list-inside space-y-2 text-gray-700">
               <li>Access to exclusive member content</li>
