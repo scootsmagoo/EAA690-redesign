@@ -53,7 +53,8 @@ app/                  # Pages (Next.js App Router)
   chapter/            # Chapter info subpages
   programs/           # Programs subpages
   store/              # Store
-  calendar/           # Events
+  calendar/           # Public events (read-only Google Calendar embed)
+  admin/calendar/     # Google Calendar setup (admin only)
   news/ kudos/ media/ # Content pages
   sign-in/ signup/    # Auth pages
   members/            # Protected member area

@@ -50,8 +50,15 @@ const ADMIN_TABS: AdminTab[] = [
     summary: 'Edit site content, publish updates, and maintain site-wide settings.',
     items: [
       {
+        title: 'Chapter calendar',
+        description:
+          'Events are edited in Google Calendar (read-only on the public site). Connect the calendar ID and share setup steps.',
+        note: 'Google Calendar',
+        actions: [{ label: 'Calendar setup', href: '/admin/calendar' }],
+      },
+      {
         title: 'Content Studio',
-        description: 'Edit events, news, presentations, board members, and CMS-managed pages.',
+        description: 'Edit news, presentations, board members, and CMS-managed pages.',
         note: 'Sanity CMS',
         actions: [
           { label: 'Open Studio', href: '/studio' },
