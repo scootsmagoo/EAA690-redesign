@@ -86,7 +86,6 @@ function ChevronDownIcon({ className }: { className?: string }) {
 
 const DEFAULT_PROGRAM_SUBMENU = [
   { name: 'Eagle Flights', href: '/programs/eagle-flights' },
-  { name: 'Ground School', href: '/programs/ground-school' },
   { name: 'Outreach', href: '/programs/outreach' },
   { name: 'Scholarships', href: '/programs/scholarships' },
   { name: 'Summer Camp', href: '/programs/summer-camp' },

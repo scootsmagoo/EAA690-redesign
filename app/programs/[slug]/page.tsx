@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getProgramPageBySlug, getProgramPageSlugs } from '@/lib/sanity'
+import { isRetiredProgramSlug } from '@/lib/program-nav-fallback'
 import ProgramPageSections from '@/components/programs/ProgramPageSections'
 
 /** Always render from Sanity on the server — avoids stale SSG HTML missing newly published fields (e.g. CTA buttons). */
@@ -24,7 +25,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug: raw } = await params
   const slug = typeof raw === 'string' ? raw.trim() : ''
-  if (!slug) return { title: 'Program' }
+  if (!slug || isRetiredProgramSlug(slug)) return { title: 'Program' }
   const page = await getProgramPageBySlug(slug)
   if (!page) return { title: 'Program' }
   const seo = page.seo as { metaTitle?: string; metaDescription?: string } | undefined
@@ -38,7 +39,7 @@ export async function generateMetadata({
 export default async function ProgramDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug: raw } = await params
   const slug = typeof raw === 'string' ? raw.trim() : ''
-  if (!slug) notFound()
+  if (!slug || isRetiredProgramSlug(slug)) notFound()
 
   const page = await getProgramPageBySlug(slug)
   if (!page || !page.title) notFound()

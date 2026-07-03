@@ -1,6 +1,7 @@
 import { createClient, type SanityClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url'
+import { isRetiredProgramSlug } from '@/lib/program-nav-fallback'
 
 let _client: SanityClient | null | undefined
 
@@ -887,7 +888,7 @@ export async function getProgramNavItems(): Promise<ProgramNavRow[]> {
       return (rows ?? [])
         .map((r) => {
           const slug = r.slug?.current?.trim()
-          if (!slug) return null
+          if (!slug || isRetiredProgramSlug(slug)) return null
           const name = (r.navLabel?.trim() || r.title?.trim() || slug).trim()
           return { name, href: `/programs/${slug}` }
         })
@@ -919,7 +920,7 @@ export async function getProgramsIndexList(): Promise<ProgramIndexRow[]> {
       return (rows ?? [])
         .map((r) => {
           const slug = r.slug?.current?.trim()
-          if (!slug) return null
+          if (!slug || isRetiredProgramSlug(slug)) return null
           const name = r.title?.trim() || slug
           const description = (r.shortDescription?.trim() || '').trim() || 'Chapter aviation program.'
           return { name, href: `/programs/${slug}`, description }
@@ -931,6 +932,7 @@ export async function getProgramsIndexList(): Promise<ProgramIndexRow[]> {
 }
 
 export async function getProgramPageBySlug(slug: string) {
+  if (isRetiredProgramSlug(slug)) return null
   return safeProgramQuery(
     'getProgramPageBySlug',
     () =>
@@ -961,5 +963,5 @@ export async function getProgramPageSlugs() {
     }
   `),
     []
-  )
+  ).then((rows) => (rows ?? []).filter((r) => r.slug && !isRetiredProgramSlug(r.slug)))
 }

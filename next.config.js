@@ -17,7 +17,13 @@ const nextConfig = {
     ],
   },
   async redirects() {
-    return []
+    return [
+      {
+        source: '/programs/ground-school',
+        destination: '/programs',
+        permanent: true,
+      },
+    ]
   },
   async headers() {
     // In development, skip strict CSP/security headers. Chrome enforces CSP; embedded

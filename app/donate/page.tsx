@@ -201,7 +201,6 @@ export default function DonatePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 { icon: '✈️', label: 'Young Eagles', desc: 'Free flights for youth ages 8–17' },
-                { icon: '🎓', label: 'Ground School', desc: 'Affordable pilot education' },
                 { icon: '🏕️', label: 'Summer Camp', desc: 'Aviation summer programming' },
                 { icon: '🔧', label: 'Build Programs', desc: 'Hands-on aircraft construction' },
               ].map(({ icon, label, desc }) => (

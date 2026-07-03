@@ -336,11 +336,6 @@ export default function JoinPage() {
                 desc: 'Hands-on aircraft construction projects with guidance from experienced builders.',
               },
               {
-                icon: '🎓',
-                title: 'Ground School',
-                desc: 'Affordable ground school instruction for student pilots and those pursuing ratings.',
-              },
-              {
                 icon: '🏆',
                 title: 'Historic Aircraft Events',
                 desc: 'We host legendary aircraft like EAA\'s B-17 "Aluminum Overcast" and the Ford Tri-Motor.',

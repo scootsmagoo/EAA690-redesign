@@ -44,7 +44,6 @@ export const STATIC_SITE_SEARCH_INDEX: StaticSearchEntry[] = [
   { title: 'Scholarships', href: '/programs/scholarships', snippet: 'Ray Aviation and chapter scholarships for young pilots.' },
   { title: 'Summer Camp', href: '/programs/summer-camp', snippet: 'Week-long aviation STEM summer camp at Gwinnett County Airport.' },
   { title: 'VMC / IMC Club', href: '/programs/vmc-imc-club', snippet: 'Monthly scenario-based safety meetings for pilots.' },
-  { title: 'Ground School', href: '/programs/ground-school', snippet: 'Ground training resources and chapter study groups.' },
   { title: 'Outreach', href: '/programs/outreach', snippet: 'Community outreach and aviation education.' },
   { title: 'Sign in', href: '/sign-in', snippet: 'Member and volunteer sign-in.' },
   { title: 'Members area', href: '/members', snippet: 'Resources for logged-in chapter members.' },
