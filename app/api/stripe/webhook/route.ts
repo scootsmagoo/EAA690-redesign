@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
+import { storeStripeCustomerId } from '@/lib/stripe-customer-db'
 import type Stripe from 'stripe'
 
 export async function POST(request: NextRequest) {
@@ -49,14 +50,28 @@ async function handleEvent(event: Stripe.Event) {
         amountTotal: session.amount_total,
       })
 
-      if (meta.type === 'membership') {
-        // TODO: Store session.customer (Stripe customer ID) on the matching user record
-        // so the Customer Portal and subscription management can work.
-        // Example: await updateUserStripeCustomerId(session.customer_email, session.customer)
-      }
-
-      if (meta.type === 'donation') {
-        // TODO: Send thank-you email or log to analytics
+      // Store Stripe customer ID on the user record for all checkout types
+      // that involve an authenticated user flow (membership, donation, store).
+      // This enables the Stripe Customer Portal and subscription management.
+      if (
+        typeof session.customer === 'string' &&
+        typeof session.customer_email === 'string'
+      ) {
+        const stored = await storeStripeCustomerId({
+          email: session.customer_email,
+          stripeCustomerId: session.customer,
+        })
+        if (stored) {
+          console.log(
+            'Stored Stripe customer ID for email:',
+            session.customer_email.replace(/^(.{2}).*(@.*)$/, '$1***$2')
+          )
+        } else {
+          console.log(
+            'Stripe customer ID not stored (user not found by email or already set):',
+            session.customer_email.replace(/^(.{2}).*(@.*)$/, '$1***$2')
+          )
+        }
       }
 
       if (meta.type === 'store_product' || meta.type === 'store_cart') {

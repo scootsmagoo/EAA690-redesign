@@ -5,6 +5,7 @@ import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from ".
 import { getSiteBaseURL } from "./site-url"
 import { sendPasswordResetEmail } from "./password-reset-email"
 import { ensureUserApprovalSchema } from "./account-approval-db"
+import { ensureStripeCustomerIdColumn } from "./stripe-customer-db"
 
 // Lazy initialization — Postgres
 let _pool: Pool | null = null
@@ -231,6 +232,7 @@ export async function ensureBetterAuthSchema(): Promise<void> {
       const ctx = await getAuth().$context
       await ctx.runMigrations()
       await ensureUserApprovalSchema()
+      await ensureStripeCustomerIdColumn()
     })().catch((err) => {
       // "already exists" (42P07) means tables are already set up — safe to ignore
       const msg: string = err?.message ?? ""
