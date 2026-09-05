@@ -7,15 +7,30 @@ updates:
       day: monday
     open-pull-requests-limit: 5
     groups:
-      # One PR per week for routine minor/patch bumps; majors arrive individually
-      # so their changelogs get read (see the better-auth 1.7 incident).
+      # Packages that share a peer-dependency contract must bump together, or
+      # npm refuses to install (e.g. @fullcalendar/core 7 vs daygrid 6 peers).
+      fullcalendar:
+        patterns: ['@fullcalendar/*']
+      sanity:
+        patterns: ['sanity', '@sanity/*', 'next-sanity', '@portabletext/*']
+      react:
+        patterns: ['react', 'react-dom', '@types/react', '@types/react-dom']
+      next:
+        patterns: ['next', 'eslint-config-next']
+      # Everything else: one PR per week for routine minor/patch bumps; majors
+      # arrive individually so their changelogs get read.
       minor-and-patch:
         update-types: [minor, patch]
     ignore:
       # Auth library: patch releases only via Dependabot; minors/majors are
-      # deliberate upgrades that require reading the migration guide first.
+      # deliberate upgrades that require reading the migration guide first
+      # (see the better-auth 1.7 incident).
       - dependency-name: better-auth
         update-types: [version-update:semver-major, version-update:semver-minor]
+      # Keep Node type definitions on the runtime we actually deploy with
+      # (Vercel + CI run Node 22); bump deliberately alongside the engine.
+      - dependency-name: '@types/node'
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: github-actions
     directory: /
