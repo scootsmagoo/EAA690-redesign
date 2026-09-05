@@ -12,7 +12,7 @@ export type StaticSearchEntry = {
   keywords?: string
 }
 
-export const STATIC_SITE_SEARCH_INDEX: StaticSearchEntry[] = [
+const STATIC_SITE_SEARCH_INDEX: StaticSearchEntry[] = [
   { title: 'Home', href: '/', snippet: 'EAA 690 at Briscoe Field (KLZU), Gold Chapter, Young Eagles, pancake breakfast.' },
   { title: 'Calendar', href: '/calendar', snippet: 'Chapter events, pancake breakfasts, fly-outs, and subscribe to ICS feeds.' },
   { title: 'Contact', href: '/contact', snippet: 'Reach the chapter by email, phone, or visit Hangar 1 at Briscoe Field.' },

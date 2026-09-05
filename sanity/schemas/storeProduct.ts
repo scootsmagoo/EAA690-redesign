@@ -138,7 +138,6 @@ export default {
       return {
         title: title || 'Product',
         subtitle: [price, active === false ? '(hidden)' : ''].filter(Boolean).join(' '),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Sanity preview media typing
         media: selection.media as any,
       }
     },

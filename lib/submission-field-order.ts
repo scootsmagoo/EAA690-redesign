@@ -4,7 +4,7 @@ import type { FormType } from '@/lib/forms-db'
  * Display / CSV column order per form — matches the order fields appear in each form component.
  * Unknown keys (future fields) sort to the end alphabetically.
  */
-export const SUBMISSION_FIELD_ORDER: Record<FormType, readonly string[]> = {
+const SUBMISSION_FIELD_ORDER: Record<FormType, readonly string[]> = {
   summer_camp: [
     'camper_first_name',
     'camper_last_name',

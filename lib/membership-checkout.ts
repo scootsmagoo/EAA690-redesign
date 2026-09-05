@@ -3,13 +3,13 @@ import { loadStoreCatalog } from '@/lib/store'
 export type MembershipTier = 'student' | 'individual' | 'family'
 
 /** Slug `slug.current` for each tier — must match store catalog / Sanity. */
-export const MEMBERSHIP_SLUG_BY_TIER: Record<MembershipTier, string> = {
+const MEMBERSHIP_SLUG_BY_TIER: Record<MembershipTier, string> = {
   student: 'student-membership',
   individual: 'individual-membership',
   family: 'family-membership',
 }
 
-export const MEMBERSHIP_MODE: Record<MembershipTier, 'payment' | 'subscription'> = {
+const MEMBERSHIP_MODE: Record<MembershipTier, 'payment' | 'subscription'> = {
   student: 'payment',
   individual: 'subscription',
   family: 'subscription',

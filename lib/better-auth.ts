@@ -217,8 +217,6 @@ export function getAuth(): NonNullable<typeof _auth> {
   return _auth
 }
 
-export type Session = ReturnType<typeof getAuth>["$Infer"]["Session"]
-
 let schemaReady: Promise<void> | null = null
 
 /**

@@ -18,7 +18,7 @@ export function isGoogleCalendarConfigured(): boolean {
   return Boolean(getGoogleCalendarId())
 }
 
-export function getGoogleCalendarTimezone(): string {
+function getGoogleCalendarTimezone(): string {
   return process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_TIMEZONE?.trim() || DEFAULT_TIMEZONE
 }
 
@@ -46,13 +46,6 @@ export function buildGoogleCalendarIcsUrl(calendarId?: string): string {
   const id = calendarId ?? getGoogleCalendarId()
   if (!id) return ''
   return `https://calendar.google.com/calendar/ical/${encodeURIComponent(id)}/public/basic.ics`
-}
-
-/** Open the calendar in Google Calendar (view; edit requires Google account with access). */
-export function buildGoogleCalendarViewUrl(calendarId?: string): string {
-  const id = calendarId ?? getGoogleCalendarId()
-  if (!id) return 'https://calendar.google.com/calendar'
-  return `https://calendar.google.com/calendar/embed?src=${encodeURIComponent(id)}`
 }
 
 /** Add-by-URL flow in Google Calendar (subscribe to chapter feed). */

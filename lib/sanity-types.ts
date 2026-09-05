@@ -43,89 +43,12 @@ export interface NewsArticle {
   image?: SanityImage
 }
 
-export interface Presentation {
-  _id: string
-  title: string
-  date: string
-  speakerName: string
-  topic?: string
-  speakerBio?: any[]
-  image?: SanityImage
-}
-
-export interface BoardMember {
-  _id: string
-  name: string
-  role: string
-  email?: string
-  bio?: string
-  image?: SanityImage
-  order?: number
-}
-
-export interface SiteSettings {
-  siteName: string
-  tagline?: string
-  logo?: SanityImage
-  contactEmail?: string
-  phone?: string
-  address?: string
-  breakfastPrice?: string
-  breakfastTime?: string
-  newsletterUrl?: string
-  /** Optional Google Drive (or other) folder for pre-migration PDFs. */
-  newsletterArchiveFolderUrl?: string
-  socialLinks?: {
-    facebook?: string
-    twitter?: string
-    instagram?: string
-    youtube?: string
-  }
-  /**
-   * Recipient configuration for form-submission alerts. See
-   * `lib/form-notifications.ts` for resolution precedence
-   * (per-form override → default → CONTACT_EMAIL_TO env var).
-   */
-  formNotifications?: {
-    enabled?: boolean
-    defaultEmailRecipients?: string[]
-    perFormEmailRecipients?: {
-      youthAviation?: string[]
-      scholarship?: string[]
-      summerCamp?: string[]
-      vmcImc?: string[]
-      outreach?: string[]
-    }
-    /** E.164 phone numbers (Twilio). No-op until TWILIO_* env vars are set. */
-    smsRecipients?: string[]
-    adminUserCreatedAlerts?: boolean
-  }
-}
-
-export interface Page {
-  _id: string
-  title: string
-  slug: { current: string }
-  content?: any[]
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
-}
-
 export interface HomeProgramCard {
   icon?: string
   name?: string
   description?: string
   href?: string
   cta?: string
-}
-
-/** Singleton `newsPage` — see sanity/schemas/newsPage.ts */
-export interface NewsPageContent {
-  _id?: string
-  heroImage?: SanityImage
-  heroImageAlt?: string
 }
 
 /** Singleton `homePage` — see sanity/schemas/homePage.ts */

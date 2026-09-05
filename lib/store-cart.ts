@@ -3,7 +3,7 @@ import { isValidStoreProductId } from '@/lib/store-ids'
 import { productCanCheckoutOnSite } from '@/lib/store-product'
 
 /** v2: server resolves Stripe Price / cents from catalog by productId */
-export const STORE_CART_STORAGE_KEY = 'eaa690-store-cart-v2'
+const STORE_CART_STORAGE_KEY = 'eaa690-store-cart-v2'
 const LEGACY_CART_STORAGE_KEY = 'eaa690-store-cart-v1'
 
 export type CartLine = {

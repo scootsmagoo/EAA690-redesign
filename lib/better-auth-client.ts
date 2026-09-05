@@ -39,6 +39,5 @@ export const {
   signUp,
   signOut,
   useSession,
-  admin,
 } = authClient
 

@@ -1,7 +1,7 @@
 export type ProgramFormSlotKey = 'youthAviation' | 'scholarship' | 'summerCamp' | 'vmcImc' | 'outreach'
 
 /** Matches `FormType` in `lib/forms-db` — kept here so this module stays client-safe (no `pg`). */
-export const FORM_TYPE_TO_PROGRAM_KEY = {
+const FORM_TYPE_TO_PROGRAM_KEY = {
   youth_aviation: 'youthAviation',
   scholarship: 'scholarship',
   summer_camp: 'summerCamp',
@@ -30,7 +30,7 @@ type RawSlot = {
 }
 
 /** Limit CMS-sourced copy (defense in depth vs oversized payloads / UI overflow). */
-export const MAX_PROGRAM_CLOSED_MESSAGE_LENGTH = 2000
+const MAX_PROGRAM_CLOSED_MESSAGE_LENGTH = 2000
 
 function clampClosedMessage(s: string): string {
   const t = s.trim()

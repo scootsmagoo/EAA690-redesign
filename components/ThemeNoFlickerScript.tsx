@@ -80,7 +80,6 @@ export function ThemeNoFlickerScript() {
 
   return (
     <script
-      // eslint-disable-next-line react/no-danger -- intentional: see file header.
       dangerouslySetInnerHTML={{ __html: code }}
     />
   )

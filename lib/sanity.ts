@@ -23,10 +23,6 @@ function getSanityClient(): SanityClient | null {
   return _client
 }
 
-export function isSanityConfigured(): boolean {
-  return true
-}
-
 // Image URL builder for Sanity images
 export function urlFor(source: SanityImageSource) {
   const client = getSanityClient()
@@ -41,27 +37,6 @@ export function urlFor(source: SanityImageSource) {
 // ============================================
 // GROQ Queries
 // ============================================
-
-// Fetch all upcoming events (sorted by date)
-export async function getUpcomingEvents() {
-  const client = getSanityClient()
-  if (!client) return []
-  return client.fetch(`
-    *[_type == "event" && date >= now()] | order(date asc) {
-      _id,
-      title,
-      date,
-      startTime,
-      endTime,
-      description,
-      location,
-      eventType,
-      isRecurring,
-      recurringInfo,
-      image
-    }
-  `)
-}
 
 // Fetch all events (past + future) for the calendar widget.
 // Uses useCdn:false so freshly published events appear immediately without
@@ -112,29 +87,6 @@ export async function getEventById(id: string) {
     }
   `,
     { id }
-  )
-}
-
-// Fetch a single event by slug
-export async function getEventBySlug(slug: string) {
-  const client = getSanityClient()
-  if (!client) return null
-  return client.fetch(
-    `
-    *[_type == "event" && slug.current == $slug][0] {
-      _id,
-      title,
-      slug,
-      date,
-      startTime,
-      endTime,
-      description,
-      location,
-      image,
-      content
-    }
-  `,
-    { slug }
   )
 }
 
@@ -200,59 +152,6 @@ export async function getNewsArticleSlugs() {
       "slug": slug.current
     }
   `)
-}
-
-// Fetch presentations/speakers
-export async function getPresentations(limit?: number) {
-  const client = getSanityClient()
-  if (!client) return []
-  const limitClause = limit ? `[0...${limit}]` : ''
-  return client.fetch(`
-    *[_type == "presentation"] | order(date desc) ${limitClause} {
-      _id,
-      title,
-      date,
-      speakerName,
-      speakerBio,
-      topic,
-      image
-    }
-  `)
-}
-
-// Fetch upcoming/featured presentation
-export async function getFeaturedPresentation() {
-  const client = getSanityClient()
-  if (!client) return null
-  return client.fetch(`
-    *[_type == "presentation" && date >= now()] | order(date asc) [0] {
-      _id,
-      title,
-      date,
-      speakerName,
-      speakerBio,
-      topic,
-      image
-    }
-  `)
-}
-
-// Fetch page content by slug (for generic editable pages)
-export async function getPageBySlug(slug: string) {
-  const client = getSanityClient()
-  if (!client) return null
-  return client.fetch(
-    `
-    *[_type == "page" && slug.current == $slug][0] {
-      _id,
-      title,
-      slug,
-      content,
-      seo
-    }
-  `,
-    { slug }
-  )
 }
 
 /** Singleton home page content (Studio → Home Page).

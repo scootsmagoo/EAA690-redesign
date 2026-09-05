@@ -7,6 +7,7 @@ import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import type { EventClickArg, EventInput } from '@fullcalendar/core'
 import type { Event, EventType } from '@/lib/sanity-types'
+import { nextDayCompact } from '@/lib/ics'
 
 // ─── Color map keyed by eventType ────────────────────────────────────────────
 const EVENT_COLORS: Record<EventType | 'default', { bg: string; border: string }> = {
@@ -64,12 +65,6 @@ function toOutlookDateTime(date: string, time?: string): string {
   if (period === 'PM' && hours !== 12) hours += 12
   if (period === 'AM' && hours === 12) hours = 0
   return `${date}T${String(hours).padStart(2, '0')}:${minutes}:00`
-}
-
-function nextDayCompact(dateStr: string): string {
-  const d = new Date(dateStr + 'T00:00:00')
-  d.setDate(d.getDate() + 1)
-  return d.toISOString().slice(0, 10).replace(/-/g, '')
 }
 
 function formatDisplayDate(dateStr: string, startTime?: string, endTime?: string): string {

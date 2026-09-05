@@ -151,7 +151,7 @@ export function normalizeFormNotificationsConfig(raw: unknown): FormNotification
   }
 }
 
-export function resolveEmailRecipientsForForm(
+function resolveEmailRecipientsForForm(
   formType: FormType,
   config: FormNotificationsConfig
 ): string[] {
@@ -161,7 +161,7 @@ export function resolveEmailRecipientsForForm(
   return envEmailRecipients()
 }
 
-export async function loadFormNotificationsConfig(): Promise<FormNotificationsConfig> {
+async function loadFormNotificationsConfig(): Promise<FormNotificationsConfig> {
   try {
     const settings = (await getSiteSettings()) as
       | { formNotifications?: unknown }

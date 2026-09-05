@@ -124,7 +124,7 @@ const programInlineImage = {
   },
 }
 
-export const programSectionAlert = {
+const programSectionAlert = {
   name: 'programSectionAlert',
   title: 'Alert (highlight box)',
   type: 'object',
@@ -146,7 +146,7 @@ export const programSectionAlert = {
   },
 }
 
-export const programSectionRich = {
+const programSectionRich = {
   name: 'programSectionRich',
   title: 'Content card',
   type: 'object',
@@ -179,7 +179,7 @@ export const programSectionRich = {
  * Side-by-side image + text card. Distinct from inline images inside a Content
  * card: this enforces a clean two-column desktop layout with no float quirks.
  */
-export const programSectionImageText = {
+const programSectionImageText = {
   name: 'programSectionImageText',
   title: 'Image + text (side by side)',
   type: 'object',
@@ -259,7 +259,7 @@ export const programSectionImageText = {
   },
 }
 
-export const programSectionFeatureColumns = {
+const programSectionFeatureColumns = {
   name: 'programSectionFeatureColumns',
   title: 'Feature columns (3-up)',
   type: 'object',
@@ -299,7 +299,7 @@ export const programSectionFeatureColumns = {
   },
 }
 
-export const programSectionPdfLinks = {
+const programSectionPdfLinks = {
   name: 'programSectionPdfLinks',
   title: 'Document / PDF links',
   type: 'object',
@@ -366,7 +366,7 @@ export const programSectionPdfLinks = {
   },
 }
 
-export const programSectionPricing = {
+const programSectionPricing = {
   name: 'programSectionPricing',
   title: 'Pricing tiers',
   type: 'object',
@@ -419,7 +419,7 @@ export const programSectionPricing = {
   },
 }
 
-export const programSectionForm = {
+const programSectionForm = {
   name: 'programSectionForm',
   title: 'Program form',
   type: 'object',
@@ -462,7 +462,7 @@ export const programSectionForm = {
   },
 }
 
-export const programSectionVideoEmbed = {
+const programSectionVideoEmbed = {
   name: 'programSectionVideoEmbed',
   title: 'Video embed (YouTube / Vimeo)',
   type: 'object',
@@ -545,7 +545,7 @@ const ctaButtonItem = {
   },
 }
 
-export const programSectionCta = {
+const programSectionCta = {
   name: 'programSectionCta',
   title: 'Call-to-action banner',
   type: 'object',

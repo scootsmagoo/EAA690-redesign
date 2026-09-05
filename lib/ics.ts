@@ -3,7 +3,7 @@ import type { Event } from '@/lib/sanity-types'
 // ─── Helpers (RFC 5545) ──────────────────────────────────────────────────────
 
 /** Convert "h:MM AM/PM" + "YYYY-MM-DD" to compact ICS form (YYYYMMDDTHHmmss). */
-export function toIcsDate(date: string, time?: string): string {
+function toIcsDate(date: string, time?: string): string {
   if (!time) return date.replace(/-/g, '')
   const match = time.match(/^(\d+):(\d+)\s*(AM|PM)$/i)
   if (!match) return date.replace(/-/g, '')
@@ -22,7 +22,7 @@ export function nextDayCompact(dateStr: string): string {
   return d.toISOString().slice(0, 10).replace(/-/g, '')
 }
 
-export function icsEscape(str: string): string {
+function icsEscape(str: string): string {
   return str
     .replace(/\\/g, '\\\\')
     .replace(/;/g, '\\;')
@@ -32,7 +32,7 @@ export function icsEscape(str: string): string {
 }
 
 /** Fold long content lines at 75 octets per RFC 5545 §3.1 */
-export function foldLine(line: string): string {
+function foldLine(line: string): string {
   if (line.length <= 75) return line
   const chunks: string[] = [line.slice(0, 75)]
   let i = 75

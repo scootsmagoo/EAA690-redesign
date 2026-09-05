@@ -2,7 +2,7 @@
 export type ProgramNavItem = { name: string; href: string }
 
 /** Program slugs removed from the site — still filtered from Sanity-driven lists. */
-export const RETIRED_PROGRAM_SLUGS = ['ground-school'] as const
+const RETIRED_PROGRAM_SLUGS = ['ground-school'] as const
 
 export function isRetiredProgramSlug(slug: string): boolean {
   return (RETIRED_PROGRAM_SLUGS as readonly string[]).includes(slug)

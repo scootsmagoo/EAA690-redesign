@@ -10,8 +10,6 @@
 
 import { useSession } from "@/lib/better-auth-client"
 
-export type UserRole = "admin" | "editor" | "user"
-
 function getRole(session: any): string | undefined {
   return (session?.user as any)?.role || (session?.user as any)?.data?.role
 }
@@ -31,25 +29,6 @@ export function useIsEditor(): boolean {
 /** True for any role that should be allowed into the Sanity Studio. */
 export function useCanAccessStudio(): boolean {
   const { data: session } = useSession()
-  const role = getRole(session)
-  return role === "admin" || role === "editor"
-}
-
-/** Check if the current user has a specific role (exact match). */
-export function useHasRole(role: UserRole): boolean {
-  const { data: session } = useSession()
-  return getRole(session) === role
-}
-
-/** Server-side helper: true only for admins. */
-export async function isAdmin(session: any): Promise<boolean> {
-  if (!session?.user) return false
-  return getRole(session) === "admin"
-}
-
-/** Server-side helper: true for admins and editors. */
-export async function canAccessStudio(session: any): Promise<boolean> {
-  if (!session?.user) return false
   const role = getRole(session)
   return role === "admin" || role === "editor"
 }

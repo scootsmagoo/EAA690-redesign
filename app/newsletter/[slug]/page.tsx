@@ -233,7 +233,6 @@ export default async function NewsletterIssuePage({
     <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 print:py-4">
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 

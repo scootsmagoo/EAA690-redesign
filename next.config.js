@@ -23,6 +23,12 @@ const nextConfig = {
         destination: '/programs',
         permanent: true,
       },
+      {
+        // Legacy duplicate of /sign-in (page removed).
+        source: '/login',
+        destination: '/sign-in',
+        permanent: true,
+      },
     ]
   },
   async headers() {

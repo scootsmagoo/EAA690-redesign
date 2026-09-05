@@ -3,8 +3,8 @@
  *
  * Populated by the `checkout.session.completed` webhook when a member
  * completes their first payment. The Stripe Customer Portal
- * (/api/stripe/portal) and subscription-management workflows read this
- * value — without it, the portal is unusable and subscription status
+ * (/api/stripe/portal) reads this value from the session user record —
+ * without it, the portal is unusable and subscription status
  * cannot be synced.
  *
  * Follows the same Postgres + SQLite dual-backend pattern as
@@ -104,49 +104,6 @@ export async function storeStripeCustomerId(args: {
       )
       .run(stripeCustomerId, email, stripeCustomerId)
     return info.changes > 0
-  } finally {
-    db.close()
-  }
-}
-
-/**
- * Look up a user's Stripe customer ID by email.
- * Returns null when the user doesn't exist or has no customer ID yet.
- */
-export async function getStripeCustomerIdByEmail(
-  email: string
-): Promise<string | null> {
-  if (!email || !getEffectiveDatabaseUrl()) return null
-
-  await ensureStripeCustomerIdColumn()
-
-  if (usingPostgres()) {
-    const pool = makePool()
-    try {
-      const result = await pool.query(
-        `SELECT "stripeCustomerId" FROM "user"
-         WHERE LOWER(email) = LOWER($1)
-         LIMIT 1`,
-        [email]
-      )
-      const val = result.rows[0]?.stripeCustomerId
-      return typeof val === 'string' && val.length > 0 ? val : null
-    } finally {
-      await pool.end().catch(() => {})
-    }
-  }
-
-  const db = openSqlite()
-  try {
-    const row = db
-      .prepare(
-        `SELECT "stripeCustomerId" FROM "user"
-         WHERE LOWER(email) = LOWER(?)
-         LIMIT 1`
-      )
-      .get(email) as { stripeCustomerId: string | null } | undefined
-    const val = row?.stripeCustomerId
-    return typeof val === 'string' && val.length > 0 ? val : null
   } finally {
     db.close()
   }

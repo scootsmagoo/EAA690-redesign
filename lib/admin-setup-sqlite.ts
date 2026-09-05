@@ -3,7 +3,7 @@ import { APIError } from "better-auth"
 import { getAuth, ensureBetterAuthSchema } from "@/lib/better-auth"
 import { resolveSqliteFilePath } from "@/lib/db-resolver"
 
-export function openSqliteFromUrl(dbUrl: string): Database.Database {
+function openSqliteFromUrl(dbUrl: string): Database.Database {
   return new Database(resolveSqliteFilePath(dbUrl))
 }
 
@@ -15,7 +15,7 @@ function tableColumns(db: Database.Database, table: string): Set<string> {
 /**
  * Mark user as admin + email verified (Better Auth admin plugin + login requirements).
  */
-export function promoteUserToAdminSqlite(db: Database.Database, userId: string): void {
+function promoteUserToAdminSqlite(db: Database.Database, userId: string): void {
   const cols = tableColumns(db, "user")
 
   const evCol = cols.has("emailVerified")

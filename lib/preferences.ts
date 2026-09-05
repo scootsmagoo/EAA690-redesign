@@ -20,7 +20,7 @@
  *     payload, never raw user JSON, before writing to the DB.
  */
 
-export const PREFERENCES_VERSION = 1
+const PREFERENCES_VERSION = 1
 export const STORAGE_KEY = 'eaa690:prefs:v1'
 /** Public, non-HttpOnly cookie consumed by the SSR layout for first-paint theming. */
 export const THEME_COOKIE = 'eaa690_theme'

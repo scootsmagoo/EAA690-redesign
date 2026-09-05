@@ -5,9 +5,6 @@ import {
   type ContactSubjectKey,
 } from './contact-categories'
 
-export type { ContactSubjectKey } from './contact-categories'
-export { getContactSubjectLabel } from './contact-categories'
-
 export type ContactPayload = {
   name: string
   email: string

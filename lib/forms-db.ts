@@ -3,7 +3,6 @@ import { Pool } from 'pg'
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from './db-resolver'
 
 export type FormType = 'summer_camp' | 'scholarship' | 'vmc_imc' | 'youth_aviation' | 'outreach'
-export type ProgramFormType = FormType
 /** All rows in `form_submissions`, including the public /contact form. */
 export type SubmissionFormType = FormType | 'contact'
 export type SubmissionStatus = 'pending' | 'reviewed' | 'accepted' | 'declined'

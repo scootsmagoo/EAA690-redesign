@@ -4,14 +4,14 @@
  */
 
 /** Extract up to 10 US digits; leading 1 (country code) is dropped when present. */
-export function parseUsPhoneDigits(input: string): string {
+function parseUsPhoneDigits(input: string): string {
   let d = input.replace(/\D/g, '')
   if (d.length >= 11 && d[0] === '1') d = d.slice(1)
   return d.slice(0, 10)
 }
 
 /** Format digit string (0–10 digits) as xxx-xxx-xxxx with hyphens as the user types. */
-export function formatUsPhoneDisplayFromDigits(digits: string): string {
+function formatUsPhoneDisplayFromDigits(digits: string): string {
   const d = digits.slice(0, 10)
   const a = d.slice(0, 3)
   const b = d.slice(3, 6)
