@@ -1,0 +1,39 @@
+name: Uptime check
+
+# Free, zero-dependency uptime monitor: every 15 minutes, hit the health
+# endpoint and the sign-in page on the live site. A failing run emails the
+# repository owner via GitHub's normal workflow-failure notifications.
+#
+# Notes:
+#  - GitHub may delay scheduled runs by several minutes under load.
+#  - GitHub disables scheduled workflows after 60 days without repo activity;
+#    re-enable under Actions if that happens.
+#  - Override the target with a repository variable named SITE_URL.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SITE_URL: ${{ vars.SITE_URL || 'https://eaa-960-redesign.vercel.app' }}
+    steps:
+      - name: Health endpoint
+        run: |
+          set -euo pipefail
+          body=$(curl -fsS --retry 3 --retry-delay 10 --max-time 30 "$SITE_URL/api/health")
+          echo "$body"
+          echo "$body" | grep -q '"ok":true'
+
+      - name: Sign-in page renders
+        run: |
+          set -euo pipefail
+          html=$(curl -fsSL --retry 3 --retry-delay 10 --max-time 30 "$SITE_URL/sign-in")
+          echo "$html" | grep -qi 'sign in'
+
+      - name: Home page renders
+        run: curl -fsSL --retry 3 --retry-delay 10 --max-time 30 -o /dev/null "$SITE_URL/"

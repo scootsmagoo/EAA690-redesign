@@ -153,12 +153,12 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
         {!fromSanity && (
           <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-md px-3 py-2 shrink-0">
             Showing sample inventory. Add products in{' '}
-            <a
+            <Link
               href="/studio"
               className="underline font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
             >
               Sanity Studio
-            </a>{' '}
+            </Link>{' '}
             to manage this page.
           </p>
         )}

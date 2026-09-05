@@ -1,18 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Pool } from 'pg'
+import { getPgPool } from '@/lib/pg-pool'
 import { getAuth } from '@/lib/better-auth'
 import { notifyAdminUserPromoted } from '@/lib/form-notifications'
 
 const VALID_ROLES = ['admin', 'editor', 'user'] as const
 type Role = (typeof VALID_ROLES)[number]
-
-function getPool(): Pool {
-  return new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL?.includes('localhost') ? false : { rejectUnauthorized: false },
-    max: 1,
-  })
-}
 
 /** Verify the calling session is an admin. */
 async function requireAdmin(request: NextRequest): Promise<true | NextResponse> {
@@ -32,7 +24,7 @@ export async function GET(request: NextRequest) {
   const check = await requireAdmin(request)
   if (check !== true) return check
 
-  const pool = getPool()
+  const pool = getPgPool()
   try {
     const result = await pool.query(
       `SELECT id, name, email, role, "emailVerified", "createdAt"
@@ -43,8 +35,6 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Failed to list users:', error)
     return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 })
-  } finally {
-    await pool.end().catch(() => {})
   }
 }
 
@@ -84,7 +74,7 @@ export async function PATCH(request: NextRequest) {
     )
   }
 
-  const pool = getPool()
+  const pool = getPgPool()
   try {
     /**
      * Capture the prior role so we can detect a *new* admin promotion
@@ -137,7 +127,5 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     console.error('Failed to update role:', error)
     return NextResponse.json({ error: 'Failed to update role' }, { status: 500 })
-  } finally {
-    await pool.end().catch(() => {})
   }
 }

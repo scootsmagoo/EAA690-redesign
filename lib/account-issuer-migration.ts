@@ -16,21 +16,12 @@
  * dual-backend pattern as account-approval-db.ts.
  */
 
-import { Pool } from 'pg'
+import { getPgPool } from './pg-pool'
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from './db-resolver'
 
 function usingPostgres(): boolean {
   const url = getEffectiveDatabaseUrl()
   return !!url && isPostgresUrl(url)
-}
-
-function makePool(): Pool {
-  const url = getEffectiveDatabaseUrl()!
-  return new Pool({
-    connectionString: url,
-    ssl: url.includes('localhost') ? false : { rejectUnauthorized: false },
-    max: 1,
-  })
 }
 
 function openSqlite() {
@@ -43,34 +34,30 @@ export async function ensureAccountIssuerColumn(): Promise<void> {
   if (!getEffectiveDatabaseUrl()) return
 
   if (usingPostgres()) {
-    const pool = makePool()
-    try {
-      const exists = await pool.query(
-        `SELECT 1 FROM information_schema.tables WHERE table_name = 'account' LIMIT 1`
-      )
-      // Fresh database: let Better Auth create the table with the 1.7 schema.
-      if (exists.rowCount === 0) return
+    const pool = getPgPool()
+    const exists = await pool.query(
+      `SELECT 1 FROM information_schema.tables WHERE table_name = 'account' LIMIT 1`
+    )
+    // Fresh database: let Better Auth create the table with the 1.7 schema.
+    if (exists.rowCount === 0) return
 
-      const col = await pool.query(
-        `SELECT 1 FROM information_schema.columns
-         WHERE table_name = 'account' AND column_name = 'issuer' LIMIT 1`
-      )
-      if ((col.rowCount ?? 0) > 0) return
+    const col = await pool.query(
+      `SELECT 1 FROM information_schema.columns
+       WHERE table_name = 'account' AND column_name = 'issuer' LIMIT 1`
+    )
+    if ((col.rowCount ?? 0) > 0) return
 
-      await pool.query(`ALTER TABLE "account" ADD COLUMN IF NOT EXISTS "issuer" TEXT`)
-      await pool.query(`
-        UPDATE "account"
-        SET "issuer" = CASE
-          WHEN "providerId" = 'credential' THEN 'local:credential'
-          ELSE 'local:oauth:' || "providerId"
-        END
-        WHERE "issuer" IS NULL
-      `)
-      await pool.query(`ALTER TABLE "account" ALTER COLUMN "issuer" SET NOT NULL`)
-      console.log('Better Auth 1.7: backfilled account.issuer (Postgres)')
-    } finally {
-      await pool.end().catch(() => {})
-    }
+    await pool.query(`ALTER TABLE "account" ADD COLUMN IF NOT EXISTS "issuer" TEXT`)
+    await pool.query(`
+      UPDATE "account"
+      SET "issuer" = CASE
+        WHEN "providerId" = 'credential' THEN 'local:credential'
+        ELSE 'local:oauth:' || "providerId"
+      END
+      WHERE "issuer" IS NULL
+    `)
+    await pool.query(`ALTER TABLE "account" ALTER COLUMN "issuer" SET NOT NULL`)
+    console.log('Better Auth 1.7: backfilled account.issuer (Postgres)')
     return
   }
 

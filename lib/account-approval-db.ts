@@ -1,4 +1,4 @@
-import { Pool } from 'pg'
+import { getPgPool } from './pg-pool'
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from './db-resolver'
 
 export const APPROVAL_STATUSES = ['pending', 'approved', 'rejected'] as const
@@ -21,15 +21,6 @@ export type UserApprovalState = {
 function usingPostgres(): boolean {
   const url = getEffectiveDatabaseUrl()
   return !!url && isPostgresUrl(url)
-}
-
-function makePool(): Pool {
-  const url = getEffectiveDatabaseUrl()!
-  return new Pool({
-    connectionString: url,
-    ssl: url.includes('localhost') ? false : { rejectUnauthorized: false },
-    max: 1,
-  })
 }
 
 function openSqlite() {
@@ -72,28 +63,24 @@ export async function ensureUserApprovalSchema(): Promise<void> {
   if (!schemaReady) {
     schemaReady = (async () => {
       if (usingPostgres()) {
-        const pool = makePool()
-        try {
-          await pool.query(`
-            ALTER TABLE "user"
-              ADD COLUMN IF NOT EXISTS "approvalStatus" TEXT,
-              ADD COLUMN IF NOT EXISTS "approvedAt" TIMESTAMP,
-              ADD COLUMN IF NOT EXISTS "approvedBy" TEXT,
-              ADD COLUMN IF NOT EXISTS "rejectedAt" TIMESTAMP,
-              ADD COLUMN IF NOT EXISTS "rejectedBy" TEXT,
-              ADD COLUMN IF NOT EXISTS "rejectionReason" TEXT
-          `)
-          await pool.query(`
-            UPDATE "user"
-            SET
-              "approvalStatus" = 'approved',
-              "approvedAt" = COALESCE("approvedAt", "createdAt", NOW())
-            WHERE "approvalStatus" IS NULL
-          `)
-          await pool.query(`ALTER TABLE "user" ALTER COLUMN "approvalStatus" SET DEFAULT 'pending'`)
-        } finally {
-          await pool.end().catch(() => {})
-        }
+        const pool = getPgPool()
+        await pool.query(`
+          ALTER TABLE "user"
+            ADD COLUMN IF NOT EXISTS "approvalStatus" TEXT,
+            ADD COLUMN IF NOT EXISTS "approvedAt" TIMESTAMP,
+            ADD COLUMN IF NOT EXISTS "approvedBy" TEXT,
+            ADD COLUMN IF NOT EXISTS "rejectedAt" TIMESTAMP,
+            ADD COLUMN IF NOT EXISTS "rejectedBy" TEXT,
+            ADD COLUMN IF NOT EXISTS "rejectionReason" TEXT
+        `)
+        await pool.query(`
+          UPDATE "user"
+          SET
+            "approvalStatus" = 'approved',
+            "approvedAt" = COALESCE("approvedAt", "createdAt", NOW())
+          WHERE "approvalStatus" IS NULL
+        `)
+        await pool.query(`ALTER TABLE "user" ALTER COLUMN "approvalStatus" SET DEFAULT 'pending'`)
         return
       }
 
@@ -154,20 +141,16 @@ export async function getUserApprovalState(userId: string): Promise<UserApproval
   if (!getEffectiveDatabaseUrl()) return null
 
   if (usingPostgres()) {
-    const pool = makePool()
-    try {
-      const res = await pool.query(
-        `SELECT id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-                "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"
-         FROM "user"
-         WHERE id = $1
-         LIMIT 1`,
-        [userId]
-      )
-      return res.rows[0] ? mapApprovalRow(res.rows[0]) : null
-    } finally {
-      await pool.end().catch(() => {})
-    }
+    const pool = getPgPool()
+    const res = await pool.query(
+      `SELECT id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
+              "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"
+       FROM "user"
+       WHERE id = $1
+       LIMIT 1`,
+      [userId]
+    )
+    return res.rows[0] ? mapApprovalRow(res.rows[0]) : null
   }
 
   const db = openSqlite()
@@ -192,23 +175,19 @@ export async function listUsersByApprovalStatus(status?: ApprovalStatus): Promis
   if (!getEffectiveDatabaseUrl()) return []
 
   if (usingPostgres()) {
-    const pool = makePool()
-    try {
-      const values = status ? [status] : []
-      const res = await pool.query(
-        `SELECT id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-                "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"
-         FROM "user"
-         ${status ? 'WHERE "approvalStatus" = $1' : ''}
-         ORDER BY
-           CASE "approvalStatus" WHEN 'pending' THEN 0 WHEN 'rejected' THEN 1 ELSE 2 END,
-           "createdAt" DESC`,
-        values
-      )
-      return res.rows.map((row) => mapApprovalRow(row))
-    } finally {
-      await pool.end().catch(() => {})
-    }
+    const pool = getPgPool()
+    const values = status ? [status] : []
+    const res = await pool.query(
+      `SELECT id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
+              "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"
+       FROM "user"
+       ${status ? 'WHERE "approvalStatus" = $1' : ''}
+       ORDER BY
+         CASE "approvalStatus" WHEN 'pending' THEN 0 WHEN 'rejected' THEN 1 ELSE 2 END,
+         "createdAt" DESC`,
+      values
+    )
+    return res.rows.map((row) => mapApprovalRow(row))
   }
 
   const db = openSqlite()
@@ -242,36 +221,32 @@ export async function setUserApprovalStatus(args: {
   if (!getEffectiveDatabaseUrl()) return null
 
   if (usingPostgres()) {
-    const pool = makePool()
-    try {
-      const res = await pool.query(
-        args.status === 'approved'
-          ? `UPDATE "user"
-             SET "approvalStatus" = 'approved',
-                 "approvedAt" = NOW(),
-                 "approvedBy" = $2,
-                 "rejectedAt" = NULL,
-                 "rejectedBy" = NULL,
-                 "rejectionReason" = NULL
-             WHERE id = $1
-             RETURNING id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-                       "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"`
-          : `UPDATE "user"
-             SET "approvalStatus" = $3,
-                 "rejectedAt" = CASE WHEN $3 = 'rejected' THEN NOW() ELSE "rejectedAt" END,
-                 "rejectedBy" = CASE WHEN $3 = 'rejected' THEN $2 ELSE "rejectedBy" END,
-                 "rejectionReason" = CASE WHEN $3 = 'rejected' THEN $4 ELSE "rejectionReason" END
-             WHERE id = $1
-             RETURNING id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-                       "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"`,
-        args.status === 'approved'
-          ? [args.userId, args.actorId]
-          : [args.userId, args.actorId, args.status, reason]
-      )
-      return res.rows[0] ? mapApprovalRow(res.rows[0]) : null
-    } finally {
-      await pool.end().catch(() => {})
-    }
+    const pool = getPgPool()
+    const res = await pool.query(
+      args.status === 'approved'
+        ? `UPDATE "user"
+           SET "approvalStatus" = 'approved',
+               "approvedAt" = NOW(),
+               "approvedBy" = $2,
+               "rejectedAt" = NULL,
+               "rejectedBy" = NULL,
+               "rejectionReason" = NULL
+           WHERE id = $1
+           RETURNING id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
+                     "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"`
+        : `UPDATE "user"
+           SET "approvalStatus" = $3,
+               "rejectedAt" = CASE WHEN $3 = 'rejected' THEN NOW() ELSE "rejectedAt" END,
+               "rejectedBy" = CASE WHEN $3 = 'rejected' THEN $2 ELSE "rejectedBy" END,
+               "rejectionReason" = CASE WHEN $3 = 'rejected' THEN $4 ELSE "rejectionReason" END
+           WHERE id = $1
+           RETURNING id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
+                     "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"`,
+      args.status === 'approved'
+        ? [args.userId, args.actorId]
+        : [args.userId, args.actorId, args.status, reason]
+    )
+    return res.rows[0] ? mapApprovalRow(res.rows[0]) : null
   }
 
   const db = openSqlite()

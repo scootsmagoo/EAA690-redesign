@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth"
 import { admin } from "better-auth/plugins"
-import { Pool } from "pg"
+import type { Pool } from "pg"
+import { getPgPool } from "./pg-pool"
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from "./db-resolver"
 import { getSiteBaseURL } from "./site-url"
 import { sendPasswordResetEmail } from "./password-reset-email"
@@ -8,47 +9,18 @@ import { ensureUserApprovalSchema } from "./account-approval-db"
 import { ensureStripeCustomerIdColumn } from "./stripe-customer-db"
 import { ensureAccountIssuerColumn } from "./account-issuer-migration"
 
-// Lazy initialization — Postgres
-let _pool: Pool | null = null
-
+// Postgres: shared process-wide pool (see lib/pg-pool.ts)
 function getPool(): Pool | null {
-  if (_pool) return _pool
-
   const url = getEffectiveDatabaseUrl()
   if (!url || !isPostgresUrl(url)) return null
-
   try {
-    console.log("Creating database pool:", {
-      isLocalhost: url.includes("localhost"),
-    })
-
-    _pool = new Pool({
-      connectionString: url,
-      // rejectUnauthorized: false is required for hosted Postgres providers (e.g. Supabase) whose
-      // SSL termination proxies use self-signed or intermediate certs. The connection is still
-      // encrypted; the client just doesn't verify the server certificate.
-      ssl: url.includes("localhost") ? false : { rejectUnauthorized: false },
-      connectionTimeoutMillis: 10000,
-      max: 1,
-    })
-
-    _pool.on("error", (err) => {
-      console.error("Unexpected database pool error:", {
-        message: err.message,
-        code: (err as { code?: string })?.code,
-        detail: (err as { detail?: string })?.detail,
-      })
-    })
+    return getPgPool()
   } catch (error) {
     console.error("Failed to create database pool:", {
-      error,
       message: error instanceof Error ? error.message : "Unknown error",
-      code: (error as { code?: string })?.code,
     })
-    _pool = null
+    return null
   }
-
-  return _pool
 }
 
 // Lazy SQLite — require() only when needed so Vercel (Postgres-only) never loads the native addon.

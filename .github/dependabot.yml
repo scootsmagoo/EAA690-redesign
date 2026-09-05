@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # One PR per week for routine minor/patch bumps; majors arrive individually
+      # so their changelogs get read (see the better-auth 1.7 incident).
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Auth library: patch releases only via Dependabot; minors/majors are
+      # deliberate upgrades that require reading the migration guide first.
+      - dependency-name: better-auth
+        update-types: [version-update:semver-major, version-update:semver-minor]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

@@ -11,21 +11,12 @@
  * account-approval-db.ts and forms-db.ts.
  */
 
-import { Pool } from 'pg'
+import { getPgPool } from './pg-pool'
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from './db-resolver'
 
 function usingPostgres(): boolean {
   const url = getEffectiveDatabaseUrl()
   return !!url && isPostgresUrl(url)
-}
-
-function makePool(): Pool {
-  const url = getEffectiveDatabaseUrl()!
-  return new Pool({
-    connectionString: url,
-    ssl: url.includes('localhost') ? false : { rejectUnauthorized: false },
-    max: 1,
-  })
 }
 
 function openSqlite() {
@@ -39,15 +30,11 @@ export async function ensureStripeCustomerIdColumn(): Promise<void> {
   if (!getEffectiveDatabaseUrl()) return
 
   if (usingPostgres()) {
-    const pool = makePool()
-    try {
-      await pool.query(`
-        ALTER TABLE "user"
-          ADD COLUMN IF NOT EXISTS "stripeCustomerId" TEXT
-      `)
-    } finally {
-      await pool.end().catch(() => {})
-    }
+    const pool = getPgPool()
+    await pool.query(`
+      ALTER TABLE "user"
+        ADD COLUMN IF NOT EXISTS "stripeCustomerId" TEXT
+    `)
     return
   }
 
@@ -79,19 +66,15 @@ export async function storeStripeCustomerId(args: {
   await ensureStripeCustomerIdColumn()
 
   if (usingPostgres()) {
-    const pool = makePool()
-    try {
-      const result = await pool.query(
-        `UPDATE "user" SET "stripeCustomerId" = $1
-         WHERE LOWER(email) = LOWER($2)
-           AND ("stripeCustomerId" IS NULL OR "stripeCustomerId" = $1)
-         RETURNING id`,
-        [stripeCustomerId, email]
-      )
-      return (result.rowCount ?? 0) > 0
-    } finally {
-      await pool.end().catch(() => {})
-    }
+    const pool = getPgPool()
+    const result = await pool.query(
+      `UPDATE "user" SET "stripeCustomerId" = $1
+       WHERE LOWER(email) = LOWER($2)
+         AND ("stripeCustomerId" IS NULL OR "stripeCustomerId" = $1)
+       RETURNING id`,
+      [stripeCustomerId, email]
+    )
+    return (result.rowCount ?? 0) > 0
   }
 
   const db = openSqlite()

@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { PT_Serif, Cormorant_Garamond } from 'next/font/google'
 import { cookies } from 'next/headers'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import SiteChrome from '@/components/SiteChrome'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { ThemeNoFlickerScript } from '@/components/ThemeNoFlickerScript'
 import { getSiteSettings, getProgramNavItems } from '@/lib/sanity'
+import { getSiteBaseURL } from '@/lib/site-url'
 import { getAnnouncementBar } from '@/lib/site-settings-display'
 import { PROGRAM_NAV_FALLBACK } from '@/lib/program-nav-fallback'
 import { RESOLVED_THEME_COOKIE, THEME_COOKIE, type ResolvedTheme } from '@/lib/preferences'
@@ -30,11 +32,32 @@ const cormorant = Cormorant_Garamond({
   fallback: ['Cormorant', 'Georgia', 'Times New Roman', 'serif'],
 })
 
+const SITE_TITLE = 'EAA 690 - Experimental Aircraft Association Chapter 690'
+const SITE_DESCRIPTION =
+  'EAA 690 is a Chapter of the Experimental Aircraft Association, located at Briscoe Field (KLZU) in Lawrenceville, Georgia.'
+
 export const metadata: Metadata = {
-  title: 'EAA 690 - Experimental Aircraft Association Chapter 690',
-  description: 'EAA 690 is a Chapter of the Experimental Aircraft Association, located at Briscoe Field (KLZU) in Lawrenceville, Georgia.',
+  // Resolves relative URLs in Open Graph / canonical tags. Follows BETTER_AUTH_URL,
+  // so it moves with the site when the custom domain lands.
+  metadataBase: new URL(getSiteBaseURL()),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   icons: {
     icon: '/logo.png',
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'EAA Chapter 690',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    locale: 'en_US',
+    images: [{ url: '/logo.png', alt: 'EAA Chapter 690 logo' }],
+  },
+  twitter: {
+    card: 'summary',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ['/logo.png'],
   },
 }
 
@@ -81,6 +104,7 @@ export default async function RootLayout({
             {children}
           </SiteChrome>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )

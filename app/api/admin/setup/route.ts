@@ -3,7 +3,8 @@ import { APIError } from 'better-auth'
 import { getAuth, ensureBetterAuthSchema } from '@/lib/better-auth'
 import { getEffectiveDatabaseUrl, isPostgresUrl } from '@/lib/db-resolver'
 import { runSqliteAdminSetup } from '@/lib/admin-setup-sqlite'
-import { Pool } from 'pg'
+import type { Pool } from 'pg'
+import { getPgPool } from '@/lib/pg-pool'
 
 function adminSetupDisabledInProduction(): NextResponse | null {
   if (process.env.VERCEL_ENV !== 'production') return null
@@ -19,11 +20,7 @@ async function adminAlreadyExists(): Promise<boolean> {
   if (!dbUrl) return false
 
   if (isPostgresUrl(dbUrl)) {
-    const pool = new Pool({
-      connectionString: dbUrl,
-      ssl: dbUrl.includes('localhost') ? false : { rejectUnauthorized: false },
-      max: 1,
-    })
+    const pool = getPgPool()
     try {
       const result = await pool.query<{ count: string }>(
         `SELECT COUNT(*)::text AS count FROM "user" WHERE role = 'admin'`
@@ -31,8 +28,6 @@ async function adminAlreadyExists(): Promise<boolean> {
       return parseInt(result.rows[0]?.count ?? '0', 10) > 0
     } catch {
       return false
-    } finally {
-      await pool.end().catch(() => {})
     }
   } else {
     // SQLite
@@ -125,10 +120,7 @@ export async function POST(request: NextRequest) {
     }
 
     // PostgreSQL
-    pool = new Pool({
-      connectionString: dbUrl,
-      ssl: dbUrl.includes('localhost') ? false : { rejectUnauthorized: false },
-    })
+    pool = getPgPool()
 
     // Test database connection
     try {
@@ -338,11 +330,6 @@ export async function POST(request: NextRequest) {
       },
       { status: 500 }
     )
-  } finally {
-    // Close database connection if it was created
-    if (pool) {
-      await pool.end().catch(console.error)
-    }
   }
 }
 

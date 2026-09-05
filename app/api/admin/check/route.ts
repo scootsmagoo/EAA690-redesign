@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Pool } from 'pg'
+import { getPgPool } from '@/lib/pg-pool'
 import { getAuth } from '@/lib/better-auth'
 
 /**
@@ -45,17 +45,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'A valid `email` query parameter is required.' }, { status: 400 })
   }
 
-  let pool: Pool | null = null
   try {
-    pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: process.env.DATABASE_URL.includes('localhost')
-        ? false
-        : { rejectUnauthorized: false },
-      max: 1,
-    })
-
-    const userResult = await pool.query<{ id: string; role: string | null }>(
+    const userResult = await getPgPool().query<{ id: string; role: string | null }>(
       'SELECT id, role FROM "user" WHERE email = $1 LIMIT 1',
       [email]
     )
@@ -69,7 +60,5 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('admin/check error:', error)
     return NextResponse.json({ error: 'Failed to check user' }, { status: 500 })
-  } finally {
-    if (pool) await pool.end().catch(() => {})
   }
 }

@@ -20,7 +20,7 @@
  *     payload values.
  */
 
-import { Pool } from 'pg'
+import { getPgPool } from './pg-pool'
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from './db-resolver'
 import {
   DEFAULT_PREFERENCES,
@@ -32,15 +32,6 @@ import {
 function usingPostgres(): boolean {
   const url = getEffectiveDatabaseUrl()
   return !!url && isPostgresUrl(url)
-}
-
-function makePool(): Pool {
-  const url = getEffectiveDatabaseUrl()!
-  return new Pool({
-    connectionString: url,
-    ssl: url.includes('localhost') ? false : { rejectUnauthorized: false },
-    max: 1,
-  })
 }
 
 function openSqlite() {
@@ -57,12 +48,8 @@ async function ensureColumn(): Promise<void> {
   if (!columnReady) {
     columnReady = (async () => {
       if (usingPostgres()) {
-        const pool = makePool()
-        try {
-          await pool.query(`ALTER TABLE "user" ADD COLUMN IF NOT EXISTS preferences TEXT`)
-        } finally {
-          await pool.end().catch(() => {})
-        }
+        const pool = getPgPool()
+        await pool.query(`ALTER TABLE "user" ADD COLUMN IF NOT EXISTS preferences TEXT`)
       } else {
         const db = openSqlite()
         try {
@@ -93,21 +80,17 @@ export async function getUserPreferences(userId: string): Promise<UserPreference
   await ensureColumn()
 
   if (usingPostgres()) {
-    const pool = makePool()
+    const pool = getPgPool()
+    const res = await pool.query<{ preferences: string | null }>(
+      `SELECT preferences FROM "user" WHERE id = $1 LIMIT 1`,
+      [userId]
+    )
+    const raw = res.rows[0]?.preferences
+    if (!raw) return { ...DEFAULT_PREFERENCES }
     try {
-      const res = await pool.query<{ preferences: string | null }>(
-        `SELECT preferences FROM "user" WHERE id = $1 LIMIT 1`,
-        [userId]
-      )
-      const raw = res.rows[0]?.preferences
-      if (!raw) return { ...DEFAULT_PREFERENCES }
-      try {
-        return parsePreferences(JSON.parse(raw))
-      } catch {
-        return { ...DEFAULT_PREFERENCES }
-      }
-    } finally {
-      await pool.end().catch(() => {})
+      return parsePreferences(JSON.parse(raw))
+    } catch {
+      return { ...DEFAULT_PREFERENCES }
     }
   }
 
@@ -139,15 +122,11 @@ export async function setUserPreferences(
   const serialized = serializePreferences(merged)
 
   if (usingPostgres()) {
-    const pool = makePool()
-    try {
-      await pool.query(`UPDATE "user" SET preferences = $1, "updatedAt" = NOW() WHERE id = $2`, [
-        serialized,
-        userId,
-      ])
-    } finally {
-      await pool.end().catch(() => {})
-    }
+    const pool = getPgPool()
+    await pool.query(`UPDATE "user" SET preferences = $1, "updatedAt" = NOW() WHERE id = $2`, [
+      serialized,
+      userId,
+    ])
   } else {
     const db = openSqlite()
     try {
