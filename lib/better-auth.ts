@@ -6,6 +6,7 @@ import { getSiteBaseURL } from "./site-url"
 import { sendPasswordResetEmail } from "./password-reset-email"
 import { ensureUserApprovalSchema } from "./account-approval-db"
 import { ensureStripeCustomerIdColumn } from "./stripe-customer-db"
+import { ensureAccountIssuerColumn } from "./account-issuer-migration"
 
 // Lazy initialization — Postgres
 let _pool: Pool | null = null
@@ -227,6 +228,9 @@ export async function ensureBetterAuthSchema(): Promise<void> {
   if (!getAuthDatabase()) return
   if (!schemaReady) {
     schemaReady = (async () => {
+      // Better Auth 1.7 added a required account.issuer column; runMigrations()
+      // cannot add it to a populated table, so backfill it first.
+      await ensureAccountIssuerColumn()
       const ctx = await getAuth().$context
       await ctx.runMigrations()
       await ensureUserApprovalSchema()
