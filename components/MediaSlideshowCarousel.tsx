@@ -1,6 +1,15 @@
 'use client'
 
-import { useEffect, useId, useRef, useState, useCallback } from 'react'
+import {
+  addTransitionType,
+  startTransition,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  ViewTransition,
+} from 'react'
 import Image from 'next/image'
 import type { MediaGalleryImage } from '@/lib/sanity-types'
 import { urlFor } from '@/lib/sanity'
@@ -20,17 +29,22 @@ export default function MediaSlideshowCarousel({ images }: Props) {
   const count = images.length
   const slideId = useId()
 
+  // Slide changes run as a Transition tagged with a direction, so the
+  // <ViewTransition> around the main image slides the right way (globals.css).
   const goTo = useCallback(
-    (index: number) => {
-      setCurrent(((index % count) + count) % count)
+    (index: number, direction: 'next' | 'prev' = 'next') => {
+      startTransition(() => {
+        addTransitionType(direction === 'next' ? 'nav-forward' : 'nav-back')
+        setCurrent(((index % count) + count) % count)
+      })
     },
     [count]
   )
 
   // When the user manually navigates, pause auto-advance so the aria-live
   // region (set to polite when paused) can announce the change to screen readers.
-  const prev = useCallback(() => { setPaused(true); goTo(current - 1) }, [current, goTo])
-  const next = useCallback(() => { setPaused(true); goTo(current + 1) }, [current, goTo])
+  const prev = useCallback(() => { setPaused(true); goTo(current - 1, 'prev') }, [current, goTo])
+  const next = useCallback(() => { setPaused(true); goTo(current + 1, 'next') }, [current, goTo])
 
   // Auto-advance every 4 seconds unless the user has paused.
   useEffect(() => {
@@ -87,15 +101,23 @@ export default function MediaSlideshowCarousel({ images }: Props) {
         aria-label={`Slide ${current + 1} of ${count}`}
         className="relative w-full aspect-[4/3] sm:aspect-[16/9] bg-gray-900 overflow-hidden rounded-lg"
       >
-        <Image
-          key={mainSrc}
-          src={mainSrc}
-          alt={altText}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-          className="object-contain transition-opacity duration-300"
-          priority={current === 0}
-        />
+        <ViewTransition
+          key={current}
+          enter={{ 'nav-forward': 'nav-forward', 'nav-back': 'nav-back', default: 'none' }}
+          exit={{ 'nav-forward': 'nav-forward', 'nav-back': 'nav-back', default: 'none' }}
+          default="none"
+        >
+          <div className="absolute inset-0">
+            <Image
+              src={mainSrc}
+              alt={altText}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+              className="object-contain"
+              priority={current === 0}
+            />
+          </div>
+        </ViewTransition>
 
         {/* Visual counter — aria-hidden because the live region below handles AT. */}
         <div
@@ -174,7 +196,7 @@ export default function MediaSlideshowCarousel({ images }: Props) {
                 aria-current={isActive ? 'true' : undefined}
                 aria-controls={slideId}
                 data-active={isActive}
-                onClick={() => { setPaused(true); goTo(i) }}
+                onClick={() => { setPaused(true); goTo(i, i > current ? 'next' : 'prev') }}
                 className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow ${
                   isActive
                     ? 'border-eaa-yellow opacity-100'

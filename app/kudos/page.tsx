@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getKudos, getKudosPage, urlFor } from '@/lib/sanity'
+import SharedElement from '@/components/SharedElement'
 
 /** No ISR cache: editors expect Sanity edits to show without waiting (matches /news, /media). */
 export const revalidate = 0
@@ -198,13 +199,15 @@ export default async function KudosPage() {
                   >
                     {imageUrl ? (
                       <div className="sm:w-56 sm:shrink-0 relative">
-                        <Image
-                          src={imageUrl}
-                          alt={`${kudo.name}${kudo.achievement ? ` — ${kudo.achievement}` : ''}`}
-                          width={400}
-                          height={300}
-                          className="w-full h-48 sm:h-full object-cover"
-                        />
+                        <SharedElement name={slug ? `kudos-image-${slug}` : null}>
+                          <Image
+                            src={imageUrl}
+                            alt={`${kudo.name}${kudo.achievement ? ` — ${kudo.achievement}` : ''}`}
+                            width={400}
+                            height={300}
+                            className="w-full h-48 sm:h-full object-cover"
+                          />
+                        </SharedElement>
                       </div>
                     ) : (
                       <div
@@ -230,19 +233,21 @@ export default async function KudosPage() {
                     <div className="p-6 flex flex-col justify-between flex-1">
                       <div>
                         <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
-                          <h2 id={titleId} className="text-xl font-bold text-eaa-blue">
-                            {detailHref ? (
-                              <Link
-                                href={detailHref}
-                                aria-label={detailLabel}
-                                className="hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
-                              >
-                                {kudo.name}
-                              </Link>
-                            ) : (
-                              kudo.name
-                            )}
-                          </h2>
+                          <SharedElement name={slug ? `kudos-name-${slug}` : null}>
+                            <h2 id={titleId} className="text-xl font-bold text-eaa-blue">
+                              {detailHref ? (
+                                <Link
+                                  href={detailHref}
+                                  aria-label={detailLabel}
+                                  className="hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+                                >
+                                  {kudo.name}
+                                </Link>
+                              ) : (
+                                kudo.name
+                              )}
+                            </h2>
+                          </SharedElement>
                           {formattedDate && kudo.date ? (
                             <time
                               dateTime={kudo.date}

@@ -6,6 +6,7 @@ import type { ReactNode } from 'react'
 import { PortableText } from '@portabletext/react'
 import { getNewsArticleBySlug, getNewsArticleSlugs, urlFor } from '@/lib/sanity'
 import { safePortableTextLinkHref } from '@/lib/search-safety'
+import SharedElement from '@/components/SharedElement'
 
 /** No ISR cache: editors expect Sanity edits to show without waiting (see /news/page.tsx). */
 export const revalidate = 0
@@ -145,9 +146,11 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
             <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
             {article.author ? ` · By ${article.author}` : null}
           </p>
-          <h1 id="article-heading" className="text-3xl sm:text-4xl font-bold text-eaa-blue mb-4">
-            {article.title}
-          </h1>
+          <SharedElement name={`news-title-${slug}`}>
+            <h1 id="article-heading" className="text-3xl sm:text-4xl font-bold text-eaa-blue mb-4">
+              {article.title}
+            </h1>
+          </SharedElement>
           {article.excerpt ? (
             <p className="text-lg text-gray-700 border-l-4 border-eaa-yellow pl-4 py-1">{article.excerpt}</p>
           ) : null}

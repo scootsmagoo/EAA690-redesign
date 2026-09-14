@@ -190,6 +190,7 @@ export default async function NewsletterArchivePage({ searchParams }: Props) {
             sections={sections.map((s) => ({ _id: s._id, title: s.title, slug: s.slug }))}
             initialYear={selectedYear}
             initialSectionSlug={validatedSectionSlug}
+            latestIssueId={(latestRaw as { _id?: string } | null)?._id ?? null}
           />
         )}
 

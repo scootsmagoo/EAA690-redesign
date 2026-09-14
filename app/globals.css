@@ -647,3 +647,136 @@
     margin: 0.6in;
   }
 }
+
+/**
+ * ── React View Transitions ────────────────────────────────────────────────
+ * Class hooks for React 19.3's <ViewTransition> (share / enter / exit props)
+ * and <Link transitionTypes>. Chromium 125+ and recent Safari / Firefox
+ * animate; older browsers swap content instantly, exactly as before.
+ */
+:root {
+  --vt-exit: 150ms;
+  --vt-enter: 210ms;
+  --vt-move: 320ms;
+}
+
+/* Keep the live page clickable while a transition plays. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* The site header is anchored: page content animates underneath it. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* Shared-element morph: list card → detail page (title / cover image). */
+::view-transition-group(.morph) {
+  animation-duration: var(--vt-move);
+}
+::view-transition-image-pair(.morph) {
+  animation-name: vt-blur;
+}
+@keyframes vt-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
+/* Directional slides (older / newer NAVCOM issue, carousel, lightbox). */
+::view-transition-old(.nav-forward) {
+  --vt-slide-offset: -48px;
+  animation:
+    var(--vt-exit) ease-in both vt-fade reverse,
+    var(--vt-move) ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-forward) {
+  --vt-slide-offset: 48px;
+  animation:
+    var(--vt-enter) ease-out var(--vt-exit) both vt-fade,
+    var(--vt-move) ease-in-out both vt-slide;
+}
+::view-transition-old(.nav-back) {
+  --vt-slide-offset: 48px;
+  animation:
+    var(--vt-exit) ease-in both vt-fade reverse,
+    var(--vt-move) ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-back) {
+  --vt-slide-offset: -48px;
+  animation:
+    var(--vt-enter) ease-out var(--vt-exit) both vt-fade,
+    var(--vt-move) ease-in-out both vt-slide;
+}
+
+/* Overlay fade (image lightbox). */
+::view-transition-new(.fade-in) {
+  animation: var(--vt-enter) ease-out both vt-fade;
+}
+::view-transition-old(.fade-out) {
+  animation: var(--vt-exit) ease-in both vt-fade reverse;
+}
+
+/* Mobile navigation drawer. */
+::view-transition-new(.drawer-in) {
+  animation:
+    var(--vt-enter) ease-out both vt-fade,
+    var(--vt-enter) ease-out both vt-drop;
+}
+::view-transition-old(.drawer-out) {
+  animation:
+    var(--vt-exit) ease-in both vt-fade reverse,
+    var(--vt-exit) ease-in both vt-drop reverse;
+}
+
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes vt-slide {
+  from {
+    translate: var(--vt-slide-offset) 0;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+@keyframes vt-drop {
+  from {
+    translate: 0 -8px;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+/*
+ * Reduced motion — the OS preference OR the /settings toggle. The `*` rules
+ * earlier in this file don't reach the ::view-transition pseudo-elements
+ * (they hang off the root), so they get their own zero-duration block.
+ */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+:root[data-reduce-motion='true']::view-transition-group(*),
+:root[data-reduce-motion='true']::view-transition-old(*),
+:root[data-reduce-motion='true']::view-transition-new(*) {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+}

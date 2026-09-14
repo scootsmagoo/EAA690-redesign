@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getMediaPage, getMediaGalleries, urlFor } from '@/lib/sanity'
+import SharedElement from '@/components/SharedElement'
 import type { MediaGalleryCard, MediaPageContent } from '@/lib/sanity-types'
 
 export const revalidate = 0
@@ -117,9 +118,11 @@ export default async function MediaPage() {
 
                   {/* Card body */}
                   <div className="p-4">
-                    <h2 className="font-semibold text-eaa-blue text-lg leading-snug group-hover:underline">
-                      {gallery.title}
-                    </h2>
+                    <SharedElement name={`media-title-${slug}`}>
+                      <h2 className="font-semibold text-eaa-blue text-lg leading-snug group-hover:underline">
+                        {gallery.title}
+                      </h2>
+                    </SharedElement>
                     {gallery.publishedAt && (
                       <p className="text-xs text-gray-500 mt-1">{formatDate(gallery.publishedAt)}</p>
                     )}
