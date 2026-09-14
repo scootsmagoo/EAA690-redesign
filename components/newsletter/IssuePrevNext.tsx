@@ -26,6 +26,7 @@ export default function IssuePrevNext({ previous, next }: Props) {
         <Link
           href={`/newsletter/${previous.slug.current}`}
           rel="prev"
+          transitionTypes={['issue-older']}
           className="group rounded-xl border border-gray-200 bg-white p-4 hover:border-eaa-blue/50 hover:shadow-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
         >
           <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 inline-flex items-center gap-1">
@@ -49,6 +50,7 @@ export default function IssuePrevNext({ previous, next }: Props) {
         <Link
           href={`/newsletter/${next.slug.current}`}
           rel="next"
+          transitionTypes={['issue-newer']}
           className="group rounded-xl border border-gray-200 bg-white p-4 sm:text-right hover:border-eaa-blue/50 hover:shadow-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
         >
           <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 inline-flex items-center gap-1 sm:flex-row-reverse">

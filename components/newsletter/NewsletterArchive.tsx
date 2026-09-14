@@ -1,6 +1,14 @@
 'use client'
 
-import { useId, useMemo, useState, useTransition, useDeferredValue } from 'react'
+import {
+  addTransitionType,
+  useDeferredValue,
+  useId,
+  useMemo,
+  useState,
+  useTransition,
+  ViewTransition,
+} from 'react'
 import IssueCard from './IssueCard'
 import { issueYear, type NewsletterIssueListRow } from '@/lib/newsletter'
 
@@ -15,6 +23,8 @@ type Props = {
   sections: Section[]
   initialYear: number | null
   initialSectionSlug: string | null
+  /** Issue already shown in the "Latest issue" hero — its card must not reuse the hero's view-transition names. */
+  latestIssueId?: string | null
 }
 
 type ViewMode = 'list' | 'grid'
@@ -64,6 +74,7 @@ export default function NewsletterArchive({
   sections,
   initialYear,
   initialSectionSlug,
+  latestIssueId = null,
 }: Props) {
   const [view, setView] = useState<ViewMode>(() => readInitialView())
   const [year, setYear] = useState<number | null>(initialYear)
@@ -78,7 +89,10 @@ export default function NewsletterArchive({
   const liveRegionId = useId()
 
   function persistView(next: ViewMode) {
-    setView(next)
+    startTransition(() => {
+      addTransitionType('filter')
+      setView(next)
+    })
     try {
       window.localStorage.setItem(VIEW_STORAGE_KEY, next)
     } catch {
@@ -124,11 +138,19 @@ export default function NewsletterArchive({
   const resultCountLabel =
     filtered.length === 1 ? '1 issue matches your filters.' : `${filtered.length} issues match your filters.`
 
+  // Tag chip/toggle changes so only those crossfade the results below —
+  // keystrokes in the search box (a deferred value) re-filter without animating.
   function chooseYear(next: number | null) {
-    startTransition(() => setYear(next))
+    startTransition(() => {
+      addTransitionType('filter')
+      setYear(next)
+    })
   }
   function chooseSection(next: string | null) {
-    startTransition(() => setSectionSlug(next))
+    startTransition(() => {
+      addTransitionType('filter')
+      setSectionSlug(next)
+    })
   }
 
   return (
@@ -273,23 +295,37 @@ export default function NewsletterArchive({
         {resultCountLabel}
       </p>
 
-      {filtered.length === 0 ? (
-        <p className="text-gray-600 py-8">
-          No issues match your filters. Try clearing the search or selecting a different year.
-        </p>
-      ) : view === 'grid' ? (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((issue) => (
-            <IssueCard key={issue._id} issue={issue} view="grid" />
-          ))}
-        </ul>
-      ) : (
-        <ul className="space-y-6">
-          {filtered.map((issue) => (
-            <IssueCard key={issue._id} issue={issue} view="list" />
-          ))}
-        </ul>
-      )}
+      <ViewTransition update={{ filter: 'auto', default: 'none' }} default="none">
+        <div>
+          {filtered.length === 0 ? (
+            <p className="text-gray-600 py-8">
+              No issues match your filters. Try clearing the search or selecting a different year.
+            </p>
+          ) : view === 'grid' ? (
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filtered.map((issue) => (
+                <IssueCard
+                  key={issue._id}
+                  issue={issue}
+                  view="grid"
+                  shareTransition={issue._id !== latestIssueId}
+                />
+              ))}
+            </ul>
+          ) : (
+            <ul className="space-y-6">
+              {filtered.map((issue) => (
+                <IssueCard
+                  key={issue._id}
+                  issue={issue}
+                  view="list"
+                  shareTransition={issue._id !== latestIssueId}
+                />
+              ))}
+            </ul>
+          )}
+        </div>
+      </ViewTransition>
     </div>
   )
 }

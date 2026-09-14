@@ -1,17 +1,37 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, use, useState } from 'react'
+import { browser } from 'react-dom'
 
-export default function CookieBanner() {
-  const [visible, setVisible] = useState(false)
+const CONSENT_KEY = 'cookie-consent'
 
-  useEffect(() => {
-    const choice = localStorage.getItem('cookie-consent')
-    if (!choice) setVisible(true)
-  }, [])
+function readConsent(): string | null {
+  try {
+    return localStorage.getItem(CONSENT_KEY)
+  } catch {
+    // Storage disabled (private mode, blocked) — treat as "not yet answered".
+    return null
+  }
+}
+
+/**
+ * The banner has no meaningful server output — whether it shows depends on
+ * localStorage. React 19.3's `browser()` makes that explicit: `use(browser())`
+ * suspends during SSR (the <Suspense> fallback, nothing, is what ships in the
+ * HTML) and is a no-op in the browser, so after hydration the consent check
+ * happens synchronously in the first client render instead of in a mount
+ * effect that forces a second render.
+ */
+function CookieBannerContent() {
+  use(browser())
+  const [visible, setVisible] = useState(() => readConsent() === null)
 
   const dismiss = (choice: 'accepted' | 'declined') => {
-    localStorage.setItem('cookie-consent', choice)
+    try {
+      localStorage.setItem(CONSENT_KEY, choice)
+    } catch {
+      // Storage disabled — hide for this page view anyway.
+    }
     setVisible(false)
   }
 
@@ -46,5 +66,13 @@ export default function CookieBanner() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CookieBanner() {
+  return (
+    <Suspense fallback={null}>
+      <CookieBannerContent />
+    </Suspense>
   )
 }

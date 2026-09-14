@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import SharedElement from '@/components/SharedElement'
 import { urlFor } from '@/lib/sanity'
 import {
   formatNewsletterIssueDate,
@@ -50,14 +51,16 @@ export default function LatestIssueHero({ issue }: Props) {
       <div className="grid grid-cols-1 md:grid-cols-5 gap-0">
         <div className="md:col-span-2 relative bg-gray-100 aspect-[4/3] md:aspect-auto md:min-h-[280px]">
           {cover ? (
-            <Image
-              src={cover}
-              alt={altText}
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-            />
+            <SharedElement name={`navcom-cover-${slug}`}>
+              <Image
+                src={cover}
+                alt={altText}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 40vw"
+              />
+            </SharedElement>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-gray-400">
               No cover image
@@ -74,14 +77,16 @@ export default function LatestIssueHero({ issue }: Props) {
               <span className="text-gray-400"> · {issue.pageCount} pp</span>
             ) : null}
           </p>
-          <h3 className="text-2xl sm:text-3xl font-bold text-eaa-blue mb-3 leading-tight">
-            <Link
-              href={`/newsletter/${slug}`}
-              className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
-            >
-              {issue.title}
-            </Link>
-          </h3>
+          <SharedElement name={`navcom-title-${slug}`}>
+            <h3 className="text-2xl sm:text-3xl font-bold text-eaa-blue mb-3 leading-tight">
+              <Link
+                href={`/newsletter/${slug}`}
+                className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+              >
+                {issue.title}
+              </Link>
+            </h3>
+          </SharedElement>
           {issue.excerpt ? (
             <p className="text-gray-700 leading-relaxed mb-5 line-clamp-4">{issue.excerpt}</p>
           ) : null}

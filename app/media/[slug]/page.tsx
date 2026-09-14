@@ -13,6 +13,7 @@ import type { MediaGallery, MediaGalleryImage } from '@/lib/sanity-types'
 import MediaSlideshowCarousel from '@/components/MediaSlideshowCarousel'
 import MediaImageGrid from '@/components/MediaImageGrid'
 import MediaVideoEmbed from '@/components/MediaVideoEmbed'
+import SharedElement from '@/components/SharedElement'
 
 export const revalidate = 0
 
@@ -148,7 +149,9 @@ export default async function MediaGalleryPage({
       </Link>
 
       {/* Title */}
-      <h1 className="text-3xl sm:text-4xl font-bold text-eaa-blue mb-2">{gallery.title}</h1>
+      <SharedElement name={`media-title-${slug}`}>
+        <h1 className="text-3xl sm:text-4xl font-bold text-eaa-blue mb-2">{gallery.title}</h1>
+      </SharedElement>
       {gallery.publishedAt && (
         <p className="text-sm text-gray-500 mb-6">{formatDate(gallery.publishedAt)}</p>
       )}

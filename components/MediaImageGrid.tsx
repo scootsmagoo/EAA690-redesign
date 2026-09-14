@@ -1,6 +1,15 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef, useId } from 'react'
+import {
+  addTransitionType,
+  startTransition,
+  useEffect,
+  useEffectEvent,
+  useId,
+  useRef,
+  useState,
+  ViewTransition,
+} from 'react'
 import Image from 'next/image'
 import type { MediaGalleryImage } from '@/lib/sanity-types'
 import { urlFor } from '@/lib/sanity'
@@ -13,30 +22,37 @@ function getImageUrl(image: MediaGalleryImage, width: number): string {
   return urlFor(image).width(width).fit('max').url()
 }
 
+/** Directional enter/exit for the lightbox photo; untyped updates don't animate. */
+const PHOTO_SLIDE = { 'nav-forward': 'nav-forward', 'nav-back': 'nav-back', default: 'none' }
+
 export default function MediaImageGrid({ images }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const lightboxOpen = lightboxIndex !== null
   // WCAG 2.4.3 — track the element that opened the lightbox to restore focus on close.
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const closeBtnRef = useRef<HTMLButtonElement | null>(null)
   const dialogRef = useRef<HTMLDivElement | null>(null)
   const liveRegionId = useId()
 
-  const openAt = useCallback((i: number, btn: HTMLButtonElement) => {
+  // Open/close/step run as Transitions so the <ViewTransition>s below animate:
+  // the overlay fades, and the photo slides in the direction of travel.
+  function openAt(i: number, btn: HTMLButtonElement) {
     triggerRef.current = btn
-    setLightboxIndex(i)
-  }, [])
+    startTransition(() => setLightboxIndex(i))
+  }
 
-  const close = useCallback(() => setLightboxIndex(null), [])
+  function close() {
+    startTransition(() => setLightboxIndex(null))
+  }
 
-  const prev = useCallback(() => {
-    if (lightboxIndex === null) return
-    setLightboxIndex(((lightboxIndex - 1) + images.length) % images.length)
-  }, [lightboxIndex, images.length])
-
-  const next = useCallback(() => {
-    if (lightboxIndex === null) return
-    setLightboxIndex((lightboxIndex + 1) % images.length)
-  }, [lightboxIndex, images.length])
+  function step(delta: 1 | -1) {
+    startTransition(() => {
+      addTransitionType(delta === 1 ? 'nav-forward' : 'nav-back')
+      setLightboxIndex((i) => (i === null ? null : (i + delta + images.length) % images.length))
+    })
+  }
+  const prev = () => step(-1)
+  const next = () => step(1)
 
   // WCAG 2.4.3 — move focus into dialog on open; return to trigger on close.
   const isFirstOpenRef = useRef(false)
@@ -53,43 +69,57 @@ export default function MediaImageGrid({ images }: Props) {
   }, [lightboxIndex])
 
   // Keyboard: Escape + arrow navigation + WCAG 2.1.2 focus trap.
-  useEffect(() => {
-    if (lightboxIndex === null) return
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { close(); return }
-      if (e.key === 'ArrowLeft') { prev(); return }
-      if (e.key === 'ArrowRight') { next(); return }
+  // An Effect Event always sees the latest handlers, so the listener is
+  // attached once per open rather than re-subscribed on every photo change.
+  const onLightboxKeyDown = useEffectEvent((e: KeyboardEvent) => {
+    if (e.key === 'Escape') { close(); return }
+    if (e.key === 'ArrowLeft') { prev(); return }
+    if (e.key === 'ArrowRight') { next(); return }
 
-      // Focus trap — keep Tab cycling within the dialog's focusable elements.
-      if (e.key === 'Tab' && dialogRef.current) {
-        const focusable = Array.from(
-          dialogRef.current.querySelectorAll<HTMLElement>(
-            'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-          )
+    // Focus trap — keep Tab cycling within the dialog's focusable elements.
+    if (e.key === 'Tab' && dialogRef.current) {
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
         )
-        if (focusable.length === 0) return
-        const first = focusable[0]
-        const last = focusable[focusable.length - 1]
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault()
-          last.focus()
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault()
-          first.focus()
-        }
+      )
+      if (focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
       }
     }
+  })
+  useEffect(() => {
+    if (!lightboxOpen) return
+    const handleKey = (e: KeyboardEvent) => onLightboxKeyDown(e)
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [lightboxIndex, close, prev, next])
+  }, [lightboxOpen])
 
   // Prevent body scroll while lightbox is open.
   useEffect(() => {
-    document.body.style.overflow = lightboxIndex !== null ? 'hidden' : ''
+    document.body.style.overflow = lightboxOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
-  }, [lightboxIndex])
+  }, [lightboxOpen])
 
   if (!images.length) return null
+
+  const activeImg = lightboxIndex !== null ? images[lightboxIndex] : null
+  const lightboxSrc = activeImg ? getImageUrl(activeImg, 1600) : null
+  const altText =
+    activeImg && lightboxIndex !== null
+      ? activeImg.alt || activeImg.caption || `Photo ${lightboxIndex + 1} of ${images.length}`
+      : ''
+  const caption =
+    activeImg && typeof activeImg.caption === 'string' && activeImg.caption.trim()
+      ? activeImg.caption.trim()
+      : ''
 
   return (
     <>
@@ -121,15 +151,8 @@ export default function MediaImageGrid({ images }: Props) {
       </div>
 
       {/* Lightbox overlay */}
-      {lightboxIndex !== null && (() => {
-        const activeImg = images[lightboxIndex]
-        const lightboxSrc = getImageUrl(activeImg, 1600)
-        const altText = activeImg.alt || activeImg.caption || `Photo ${lightboxIndex + 1} of ${images.length}`
-        const caption =
-          typeof activeImg.caption === 'string' && activeImg.caption.trim()
-            ? activeImg.caption.trim()
-            : ''
-        return (
+      {lightboxIndex !== null && lightboxSrc && (
+        <ViewTransition enter="fade-in" exit="fade-out" default="none">
           <div
             ref={dialogRef}
             role="dialog"
@@ -170,19 +193,23 @@ export default function MediaImageGrid({ images }: Props) {
               {lightboxIndex + 1} / {images.length}
             </div>
 
-            {/* Image */}
+            {/* Image — keyed per photo so prev/next slide the old one out and the new one in. */}
             <div
               className="relative w-full h-full max-w-6xl mx-auto px-16 py-8"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
-                src={lightboxSrc}
-                alt={altText}
-                fill
-                sizes="(max-width: 1280px) 100vw, 1280px"
-                className="object-contain"
-                priority
-              />
+              <ViewTransition key={lightboxIndex} enter={PHOTO_SLIDE} exit={PHOTO_SLIDE} default="none">
+                <div className="relative w-full h-full">
+                  <Image
+                    src={lightboxSrc}
+                    alt={altText}
+                    fill
+                    sizes="(max-width: 1280px) 100vw, 1280px"
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+              </ViewTransition>
             </div>
 
             {/* Caption */}
@@ -221,8 +248,8 @@ export default function MediaImageGrid({ images }: Props) {
               </button>
             )}
           </div>
-        )
-      })()}
+        </ViewTransition>
+      )}
     </>
   )
 }

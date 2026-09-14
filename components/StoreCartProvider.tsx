@@ -74,7 +74,7 @@ export function StoreCartProvider({ children }: { children: React.ReactNode }) {
     [lines, ready, totalItems, addProduct, setQuantity, remove, clear],
   )
 
-  return <StoreCartContext.Provider value={value}>{children}</StoreCartContext.Provider>
+  return <StoreCartContext value={value}>{children}</StoreCartContext>
 }
 
 export function useStoreCart(): StoreCartContextValue {

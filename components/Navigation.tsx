@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { startTransition, useEffect, useState, ViewTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import SearchForm from '@/components/SearchForm'
@@ -170,7 +170,11 @@ export default function Navigation({
   ]
 
   return (
-    <nav className="bg-eaa-blue dark:bg-eaa-bg-dark text-white border-b border-transparent dark:border-eaa-border-dark">
+    <nav
+      className="bg-eaa-blue dark:bg-eaa-bg-dark text-white border-b border-transparent dark:border-eaa-border-dark"
+      // Named so view transitions (globals.css) hold the header still while page content animates.
+      style={{ viewTransitionName: 'site-header' }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Desktop: primary row — logo, links, account only (no search here) */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 h-20">
@@ -291,7 +295,8 @@ export default function Navigation({
             ) : null}
             <button
               type="button"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              // A Transition so the drawer's <ViewTransition> enter/exit animates.
+              onClick={() => startTransition(() => setIsMenuOpen((open) => !open))}
               className="p-2 rounded-md hover:bg-eaa-light-blue dark:hover:bg-white/10 transition-colors"
               aria-label="Toggle menu"
               aria-expanded={isMenuOpen}
@@ -319,6 +324,7 @@ export default function Navigation({
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
+          <ViewTransition enter="drawer-in" exit="drawer-out" default="none">
           <div id="mobile-menu" className="xl:hidden pb-4 border-t border-white/10 pt-4">
             <div className="px-1 mb-4 max-w-md">
               <SearchForm compact />
@@ -440,6 +446,7 @@ export default function Navigation({
               )}
             </div>
           </div>
+          </ViewTransition>
         )}
       </div>
     </nav>

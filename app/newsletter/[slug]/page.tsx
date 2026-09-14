@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import type { ReactNode } from 'react'
+import { ViewTransition, type ReactNode } from 'react'
 import { PortableText } from '@portabletext/react'
 import {
   getAdjacentNewsletterIssues,
@@ -24,6 +24,7 @@ import IssueTableOfContents from '@/components/newsletter/IssueTableOfContents'
 import IssueShareToolbar from '@/components/newsletter/IssueShareToolbar'
 import IssuePdfPanel from '@/components/newsletter/IssuePdfPanel'
 import IssuePrevNext from '@/components/newsletter/IssuePrevNext'
+import SharedElement from '@/components/SharedElement'
 
 export const revalidate = 120
 
@@ -229,7 +230,17 @@ export default async function NewsletterIssuePage({
       : undefined,
   }
 
+  // Older/newer links (IssuePrevNext) tag the navigation so the issue slides in
+  // from the matching side; every other way of arriving (archive card, back
+  // button, refresh) swaps instantly and lets the cover/title morph do the work.
+  const slideByType = {
+    'issue-older': 'nav-back',
+    'issue-newer': 'nav-forward',
+    default: 'none',
+  }
+
   return (
+    <ViewTransition enter={slideByType} exit={slideByType} default="none">
     <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 print:py-4">
       <script
         type="application/ld+json"
@@ -266,7 +277,9 @@ export default async function NewsletterIssuePage({
           {issue.volumeLabel ? ` · ${issue.volumeLabel}` : ''}
           {typeof issue.pageCount === 'number' ? ` · ${issue.pageCount} pages` : ''}
         </p>
-        <h1 className="text-3xl sm:text-4xl font-bold text-eaa-blue mb-4">{issue.title}</h1>
+        <SharedElement name={`navcom-title-${slug}`}>
+          <h1 className="text-3xl sm:text-4xl font-bold text-eaa-blue mb-4">{issue.title}</h1>
+        </SharedElement>
         {issue.featured ? (
           <p className="mb-4">
             <span className="inline-flex items-center gap-1 rounded-full bg-eaa-yellow text-eaa-blue px-2.5 py-0.5 text-xs font-bold">
@@ -314,15 +327,17 @@ export default async function NewsletterIssuePage({
 
       {coverUrl ? (
         <figure className="mb-10 rounded-xl overflow-hidden shadow-md print:shadow-none">
-          <Image
-            src={coverUrl}
-            alt={coverAlt}
-            width={960}
-            height={520}
-            className="w-full object-cover"
-            priority
-            sizes="(max-width: 768px) 100vw, 768px"
-          />
+          <SharedElement name={`navcom-cover-${slug}`}>
+            <Image
+              src={coverUrl}
+              alt={coverAlt}
+              width={960}
+              height={520}
+              className="w-full object-cover"
+              priority
+              sizes="(max-width: 768px) 100vw, 768px"
+            />
+          </SharedElement>
           {issue.coverImageAlt?.trim() ? (
             <figcaption className="sr-only">{coverAlt}</figcaption>
           ) : null}
@@ -356,6 +371,7 @@ export default async function NewsletterIssuePage({
         Back to NAVCOM archive
       </Link>
     </article>
+    </ViewTransition>
   )
 }
 

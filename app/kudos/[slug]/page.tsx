@@ -7,6 +7,7 @@ import { PortableText } from '@portabletext/react'
 import { getKudosBySlug, getKudosSlugs, urlFor } from '@/lib/sanity'
 import { safePortableTextLinkHref } from '@/lib/search-safety'
 import MediaImageGrid from '@/components/MediaImageGrid'
+import SharedElement from '@/components/SharedElement'
 import type { MediaGalleryImage } from '@/lib/sanity-types'
 
 /** No ISR cache so editor publishes show without waiting (matches sibling pages). */
@@ -212,12 +213,14 @@ export default async function KudosDetailPage({
 
       <article aria-labelledby="kudo-heading">
         <header className="mb-8">
-          <h1
-            id="kudo-heading"
-            className="text-3xl sm:text-4xl font-bold text-eaa-blue mb-1"
-          >
-            {kudo.name}
-          </h1>
+          <SharedElement name={`kudos-name-${slug}`}>
+            <h1
+              id="kudo-heading"
+              className="text-3xl sm:text-4xl font-bold text-eaa-blue mb-1"
+            >
+              {kudo.name}
+            </h1>
+          </SharedElement>
           {kudo.achievement ? (
             <p className="text-eaa-light-blue font-semibold text-lg mb-1">{kudo.achievement}</p>
           ) : null}
@@ -230,14 +233,16 @@ export default async function KudosDetailPage({
 
         {featuredUrl ? (
           <div className="mb-8 rounded-xl overflow-hidden shadow-md">
-            <Image
-              src={featuredUrl}
-              alt={`${kudo.name}${kudo.achievement ? ` — ${kudo.achievement}` : ''}`}
-              width={960}
-              height={560}
-              className="w-full object-cover"
-              priority
-            />
+            <SharedElement name={`kudos-image-${slug}`}>
+              <Image
+                src={featuredUrl}
+                alt={`${kudo.name}${kudo.achievement ? ` — ${kudo.achievement}` : ''}`}
+                width={960}
+                height={560}
+                className="w-full object-cover"
+                priority
+              />
+            </SharedElement>
           </div>
         ) : null}
 

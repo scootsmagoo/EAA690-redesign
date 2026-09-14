@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import SharedElement from '@/components/SharedElement'
 import { urlFor } from '@/lib/sanity'
 import {
   formatNewsletterIssueDate,
@@ -14,13 +15,27 @@ type Props = {
   view: 'list' | 'grid'
   /** Optional cap on number of section badges shown. */
   maxSections?: number
+  /**
+   * Name the cover/title for a shared-element morph into `/newsletter/[slug]`.
+   * Pass `false` for a card that duplicates an issue already named elsewhere
+   * on the page (the archive's "Latest issue" hero) — a view-transition name
+   * must be unique among mounted elements.
+   */
+  shareTransition?: boolean
 }
 
 const DEFAULT_MAX_SECTIONS = 3
 
-export default function IssueCard({ issue, view, maxSections = DEFAULT_MAX_SECTIONS }: Props) {
+export default function IssueCard({
+  issue,
+  view,
+  maxSections = DEFAULT_MAX_SECTIONS,
+  shareTransition = true,
+}: Props) {
   const slug = issue.slug?.current
   if (!slug) return null
+  const coverName = shareTransition ? `navcom-cover-${slug}` : null
+  const titleName = shareTransition ? `navcom-title-${slug}` : null
   const pdfHref = getNewsletterIssuePdfHref(issue)
   const altText = issue.coverImageAlt?.trim() || (issue.title ? `Cover: ${issue.title}` : 'NAVCOM cover')
 
@@ -40,13 +55,15 @@ export default function IssueCard({ issue, view, maxSections = DEFAULT_MAX_SECTI
             aria-label={`Read NAVCOM: ${issue.title}`}
           >
             {cover ? (
-              <Image
-                src={cover}
-                alt={altText}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              />
+              <SharedElement name={coverName}>
+                <Image
+                  src={cover}
+                  alt={altText}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              </SharedElement>
             ) : (
               <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
                 No cover image
@@ -66,14 +83,16 @@ export default function IssueCard({ issue, view, maxSections = DEFAULT_MAX_SECTI
               </time>
               {issue.volumeLabel ? <span className="text-gray-400"> · {issue.volumeLabel}</span> : null}
             </p>
-            <h3 className="text-base font-bold text-eaa-blue mb-2 leading-snug">
-              <Link
-                href={`/newsletter/${slug}`}
-                className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
-              >
-                {issue.title}
-              </Link>
-            </h3>
+            <SharedElement name={titleName}>
+              <h3 className="text-base font-bold text-eaa-blue mb-2 leading-snug">
+                <Link
+                  href={`/newsletter/${slug}`}
+                  className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+                >
+                  {issue.title}
+                </Link>
+              </h3>
+            </SharedElement>
             {issue.excerpt ? (
               <p className="text-sm text-gray-600 line-clamp-3 mb-3">{issue.excerpt}</p>
             ) : null}
@@ -133,13 +152,15 @@ export default function IssueCard({ issue, view, maxSections = DEFAULT_MAX_SECTI
       <article className="flex flex-col sm:flex-row gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
         {cover ? (
           <div className="relative h-36 w-full shrink-0 sm:w-44 rounded-lg overflow-hidden bg-gray-100">
-            <Image
-              src={cover}
-              alt={altText}
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 100vw, 176px"
-            />
+            <SharedElement name={coverName}>
+              <Image
+                src={cover}
+                alt={altText}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 176px"
+              />
+            </SharedElement>
             {issue.featured ? (
               <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-eaa-yellow text-eaa-blue px-2 py-0.5 text-[10px] font-bold shadow">
                 <span aria-hidden="true">★</span>
@@ -161,6 +182,7 @@ export default function IssueCard({ issue, view, maxSections = DEFAULT_MAX_SECTI
               </>
             ) : null}
           </p>
+          <SharedElement name={titleName}>
           <h2 className="text-xl font-bold text-eaa-blue mb-2">
             <Link
               href={`/newsletter/${slug}`}
@@ -175,6 +197,7 @@ export default function IssueCard({ issue, view, maxSections = DEFAULT_MAX_SECTI
               ) : null}
             </Link>
           </h2>
+          </SharedElement>
           {issue.excerpt ? (
             <p className="text-gray-700 text-sm mb-3 line-clamp-3">{issue.excerpt}</p>
           ) : null}

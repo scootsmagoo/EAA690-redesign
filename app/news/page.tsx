@@ -3,6 +3,7 @@ import { getNewsArticles, getNewsPage, getSiteSettings, urlFor } from '@/lib/san
 import type { NewsArticle } from '@/lib/sanity-types'
 import Link from 'next/link'
 import Image from 'next/image'
+import SharedElement from '@/components/SharedElement'
 
 /** Dynamic: avoid stale listing after CMS publishes (ISR was caching HTML for minutes). */
 export const revalidate = 0
@@ -109,18 +110,20 @@ export default async function NewsPage() {
                 <span className="text-sm text-gray-500">By {item.author}</span>
               )}
             </div>
-            <h2 id={`news-title-${item._id}`} className="text-2xl font-bold text-eaa-blue mb-3">
-              {item.slug?.current ? (
-                <Link
-                  href={`/news/${item.slug.current}`}
-                  className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
-                >
-                  {item.title}
-                </Link>
-              ) : (
-                item.title
-              )}
-            </h2>
+            <SharedElement name={item.slug?.current ? `news-title-${item.slug.current}` : null}>
+              <h2 id={`news-title-${item._id}`} className="text-2xl font-bold text-eaa-blue mb-3">
+                {item.slug?.current ? (
+                  <Link
+                    href={`/news/${item.slug.current}`}
+                    className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+                  >
+                    {item.title}
+                  </Link>
+                ) : (
+                  item.title
+                )}
+              </h2>
+            </SharedElement>
             {item.excerpt && (
               <p className="text-gray-700">{item.excerpt}</p>
             )}
