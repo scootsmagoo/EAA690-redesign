@@ -136,4 +136,5 @@ npx tsx scripts/create-admin.ts email password "Name"  # Create admin via CLI
 
 - **Next.js:** stay on the latest **16.x** release line (security fixes landed in **16.2.5+**; see [Next.js / RSC advisories, May 2026](https://cyberpress.org/vulnerabilities-patched-in-next-js-and-react/)). After `git pull`, run `npm install` so `package-lock.json` matches.
 - **`npm audit`:** useful signal; some items are transitive (e.g. Sanity tooling, PostCSS bundled with Next) and clear only when upstream packages ship updates—avoid `npm audit fix --force` unless you intend major downgrades.
+- **React / Next features:** what we adopted from React 19.3 (view transitions, `browser()`, `useEffectEvent`) and what we deliberately deferred (React Compiler, Trusted Types) is recorded in [`docs/react-19-followups.md`](docs/react-19-followups.md). Read it before enabling either.
 - **Stripe:** the server SDK **`apiVersion`** is pinned in `lib/stripe.ts`. When you upgrade the `stripe` package, TypeScript will expect the new literal—keep it aligned with your [Stripe API version](https://stripe.com/docs/api/versioning) / Dashboard default.
