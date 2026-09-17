@@ -32,6 +32,22 @@ updates:
       # (see the better-auth 1.7 incident).
       - dependency-name: better-auth
         update-types: [version-update:semver-major, version-update:semver-minor]
+      # Majors that are blocked upstream or need a real migration. Dependabot
+      # reopened them weekly and CI (correctly) failed every time. Remove an
+      # entry when its condition is met, then do the upgrade deliberately.
+      #  - better-sqlite3 13: better-auth 1.7.x peers on better-sqlite3 ^12, so
+      #    `npm ci` cannot resolve. Unblock when better-auth widens that range.
+      - dependency-name: better-sqlite3
+        update-types: [version-update:semver-major]
+      #  - eslint 10: the react / import / jsx-a11y plugins bundled by
+      #    eslint-config-next only support ESLint <= 9 (lint crashes on load).
+      #    Unblock when eslint-config-next supports ESLint 10.
+      - dependency-name: eslint
+        update-types: [version-update:semver-major]
+      #  - FullCalendar 7: breaking API/type changes in components/EventCalendar.tsx,
+      #    and all @fullcalendar/* packages must move together. Planned migration.
+      - dependency-name: '@fullcalendar/*'
+        update-types: [version-update:semver-major]
       # Keep Node type definitions on the runtime we actually deploy with
       # (Vercel + CI run Node 22); bump deliberately alongside the engine.
       - dependency-name: '@types/node'
