@@ -1,7 +1,7 @@
 name: Uptime check
 
 # Free, zero-dependency uptime monitor: every 15 minutes, hit the health
-# endpoint and the sign-in page on the live site. A failing run emails the
+# endpoint, the auth API and the sign-in page on the live site. A failing run emails the
 # repository owner via GitHub's normal workflow-failure notifications.
 #
 # Notes:
@@ -26,6 +26,16 @@ jobs:
         run: |
           set -euo pipefail
           body=$(curl -fsS --retry 3 --retry-delay 10 --max-time 30 "$SITE_URL/api/health")
+          echo "$body"
+          echo "$body" | grep -q '"ok":true'
+
+      # The sign-in PAGE renders even when the auth API is down, so hit the API
+      # itself: Better Auth's /ok goes through the same request pipeline (incl.
+      # its schema validation) as sign-in and get-session.
+      - name: Auth API responds
+        run: |
+          set -euo pipefail
+          body=$(curl -fsS --retry 3 --retry-delay 10 --max-time 30 "$SITE_URL/api/auth/ok")
           echo "$body"
           echo "$body" | grep -q '"ok":true'
 

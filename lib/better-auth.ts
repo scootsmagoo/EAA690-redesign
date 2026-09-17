@@ -7,7 +7,7 @@ import { getSiteBaseURL } from "./site-url"
 import { sendPasswordResetEmail } from "./password-reset-email"
 import { ensureUserApprovalSchema } from "./account-approval-db"
 import { ensureStripeCustomerIdColumn } from "./stripe-customer-db"
-import { ensureAccountIssuerColumn } from "./account-issuer-migration"
+import { relaxAccountIssuerColumn } from "./account-issuer-migration"
 
 // Postgres: shared process-wide pool (see lib/pg-pool.ts)
 function getPool(): Pool | null {
@@ -200,9 +200,9 @@ export async function ensureBetterAuthSchema(): Promise<void> {
   if (!getAuthDatabase()) return
   if (!schemaReady) {
     schemaReady = (async () => {
-      // Better Auth 1.7 added a required account.issuer column; runMigrations()
-      // cannot add it to a populated table, so backfill it first.
-      await ensureAccountIssuerColumn()
+      // Better Auth 1.7.3+ rejects every request while the account.issuer column
+      // left behind by 1.7.0–1.7.2 is still NOT NULL; relax it first.
+      await relaxAccountIssuerColumn()
       const ctx = await getAuth().$context
       await ctx.runMigrations()
       await ensureUserApprovalSchema()
@@ -218,4 +218,28 @@ export async function ensureBetterAuthSchema(): Promise<void> {
     })
   }
   await schemaReady
+}
+
+/**
+ * Schema problems that make Better Auth reject EVERY request at runtime (1.7.3+
+ * validates the live schema in `onRequest`): required columns it never writes,
+ * plus any table/column a migration failed to create. Empty array = healthy.
+ *
+ * Used by `scripts/migrate.ts` so a bad schema fails the deploy rather than the
+ * users. Computed from `getMigrations()` because Better Auth's own runtime check
+ * only registers inside the bundled Next server, not under tsx.
+ */
+export async function findAuthSchemaProblems(): Promise<string[]> {
+  if (!getAuthDatabase()) return []
+  const { getMigrations } = await import("better-auth/db/migration")
+  const { schemaProblems, toBeCreated, toBeAdded } = await getMigrations(getAuth().options)
+  return [
+    ...schemaProblems,
+    ...toBeCreated.map((t) => `Table "${t.table}" is still missing after migrations ran.`),
+    ...toBeAdded.flatMap((t) =>
+      Object.keys(t.fields).map(
+        (f) => `Column "${t.table}.${f}" is still missing after migrations ran.`
+      )
+    ),
+  ]
 }
