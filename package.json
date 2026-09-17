@@ -21,7 +21,7 @@
     "@portabletext/types": "^4.0.2",
     "@sanity/client": "^8.6.1",
     "@sanity/image-url": "^2.1.1",
-    "@sanity/vision": "^5.31.2",
+    "@sanity/vision": "^6.13.2",
     "@types/pg": "^8.23.1",
     "@vercel/analytics": "^2.0.1",
     "better-auth": "~1.7.4",
