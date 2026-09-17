@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import PasswordField from '@/components/PasswordField'
 import { signUp } from '@/lib/better-auth-client'
+import { authErrorMessage } from '@/lib/auth-error-message'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -41,7 +42,7 @@ export default function SignupPage() {
       })
 
       if ('error' in result && result.error) {
-        setError((result.error as { message?: string }).message || 'Failed to create account')
+        setError(authErrorMessage(result.error, 'Failed to create account'))
       } else {
         router.push('/sign-in?message=Registration+submitted.+An+EAA+690+admin+will+review+your+account+before+member+access+is+enabled.')
       }

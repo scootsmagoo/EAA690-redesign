@@ -17,6 +17,11 @@ updates:
         patterns: ['react', 'react-dom', '@types/react', '@types/react-dom']
       next:
         patterns: ['next', 'eslint-config-next']
+      # Auth gets its own PR, never bundled: a bad bump locks every member out,
+      # so it must be reviewable and revertable on its own. CI's auth-upgrade
+      # job is the gate for these PRs — do not merge one while it is red.
+      auth:
+        patterns: ['better-auth', '@better-auth/*']
       # Everything else: one PR per week for routine minor/patch bumps; majors
       # arrive individually so their changelogs get read.
       minor-and-patch:
