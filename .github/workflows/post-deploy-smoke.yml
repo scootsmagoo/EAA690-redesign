@@ -1,0 +1,31 @@
+name: Post-deploy smoke test
+
+# Runs the moment Vercel reports a finished PRODUCTION deployment, instead of
+# waiting for the next 15-minute uptime tick. A failure emails the repository
+# owner like any failed workflow. Read-only: no sign-up, no credentials.
+#
+# If it fails: Vercel -> Deployments -> previous deployment -> "Promote to
+# Production" (instant rollback), then investigate.
+
+on:
+  deployment_status:
+
+jobs:
+  smoke:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      BASE_URL: ${{ vars.SITE_URL || 'https://eaa-960-redesign.vercel.app' }}
+      CI_AUTH_SKIP_SIGNUP: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: scripts/ci-auth-smoke.mjs
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: node scripts/ci-auth-smoke.mjs

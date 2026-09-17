@@ -39,3 +39,90 @@ jobs:
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
+
+  # Auth UPGRADE test. Both Sept 2026 sign-in outages were upgrade bugs: the new
+  # better-auth version was fine on a fresh database and broken on the one the
+  # previous version had created. So: build the schema and a member with the BASE
+  # commit (= what production runs), then build + start the HEAD commit on that
+  # same Postgres and sign that member in through the real production server.
+  auth-upgrade:
+    name: Auth upgrade (base schema -> head, Postgres)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: eaa_ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # `localhost` matters: lib/pg-pool.ts disables TLS for it.
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/eaa_ci
+      BETTER_AUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_BETTER_AUTH_URL: http://localhost:3000
+      BETTER_AUTH_SECRET: ci-only-secret-not-used-anywhere-else-0123456789
+      CI_AUTH_EMAIL: ci-upgrade-probe@example.com
+      CI_AUTH_PASSWORD: Ci-upgrade-Passw0rd!
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: head
+
+      - name: Resolve base commit
+        id: base
+        working-directory: head
+        run: |
+          sha="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [ -z "$sha" ] || [ "$sha" = "0000000000000000000000000000000000000000" ]; then
+            git fetch --depth=2 origin "${{ github.sha }}"
+            sha=$(git rev-parse "${{ github.sha }}^")
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.base.outputs.sha }}
+          path: base
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            head/package-lock.json
+            base/package-lock.json
+
+      - name: 'Base: create schema + member with the currently deployed versions'
+        working-directory: base
+        run: |
+          npm ci
+          cp ../head/scripts/ci-auth-seed.ts scripts/ci-auth-seed.ts
+          npx tsx scripts/ci-auth-seed.ts
+
+      - name: 'Head: install, migrate + build against the base database'
+        working-directory: head
+        run: |
+          npm ci
+          npm run build
+
+      - name: 'Head: start production server and run the auth smoke test'
+        working-directory: head
+        run: |
+          npx next start -p 3000 > server.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -fsS -o /dev/null http://localhost:3000/api/health && break
+            sleep 1
+          done
+          node scripts/ci-auth-smoke.mjs
+
+      - name: Server log
+        if: always()
+        working-directory: head
+        run: cat server.log || true

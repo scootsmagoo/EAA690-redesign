@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import PasswordField from '@/components/PasswordField'
 import { signIn } from '@/lib/better-auth-client'
+import { authErrorMessage } from '@/lib/auth-error-message'
 
 /** Only allow relative paths — reject absolute URLs to prevent open redirect. */
 function safeRedirect(value: string | null): string {
@@ -31,7 +32,7 @@ function LoginForm() {
     try {
       const result = await signIn.email({ email, password })
       if (result.error) {
-        setError((result.error as { message?: string }).message || 'Invalid email or password')
+        setError(authErrorMessage(result.error, 'Invalid email or password'))
         return
       }
       router.push(redirect)
