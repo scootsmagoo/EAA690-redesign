@@ -16,7 +16,7 @@
     "@fullcalendar/daygrid": "^6.1.21",
     "@fullcalendar/interaction": "^6.1.21",
     "@fullcalendar/list": "^6.1.21",
-    "@fullcalendar/react": "^6.1.21",
+    "@fullcalendar/react": "^7.1.0",
     "@portabletext/react": "^6.2.0",
     "@portabletext/types": "^4.0.2",
     "@sanity/client": "^8.6.1",
