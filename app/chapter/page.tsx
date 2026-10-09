@@ -1,6 +1,20 @@
 import Link from 'next/link'
+import MissionStatement from '@/components/MissionStatement'
+import { getSiteSettings } from '@/lib/sanity'
+import { resolveMissionStatement } from '@/lib/site-settings-display'
 
-export default function ChapterPage() {
+export const revalidate = 30
+
+export default async function ChapterPage() {
+  let missionFromCms: string | undefined
+  try {
+    const settings = (await getSiteSettings()) as { missionStatement?: string } | null
+    missionFromCms = settings?.missionStatement
+  } catch {
+    // fall back to the default wording
+  }
+  const mission = resolveMissionStatement(missionFromCms)
+
   const chapterLinks = [
     { name: 'Board', href: '/chapter/board', description: 'Meet the EAA 690 board members' },
     { name: 'General Info', href: '/chapter/general-info', description: 'General information about EAA 690' },
@@ -10,7 +24,9 @@ export default function ChapterPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold text-eaa-blue mb-8">Chapter Information</h1>
-      
+
+      <MissionStatement mission={mission} className="mb-8 max-w-4xl" />
+
       <div className="prose max-w-none mb-8">
         <p className="text-lg text-gray-700">
           EAA 690 is a vibrant chapter of the Experimental Aircraft Association, serving aviation enthusiasts in the

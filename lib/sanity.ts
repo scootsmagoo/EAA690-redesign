@@ -224,6 +224,7 @@ export async function getSiteSettings() {
     *[_type == "siteSettings"][0] {
       siteName,
       tagline,
+      missionStatement,
       logo,
       contactEmail,
       phone,

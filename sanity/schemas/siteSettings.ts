@@ -16,6 +16,16 @@ export default {
       type: 'string',
     },
     {
+      name: 'missionStatement',
+      title: 'Mission statement',
+      type: 'text',
+      rows: 3,
+      description:
+        'Shown prominently on the home page (under the main heading) and on Chapter Info. Leave blank to use the default wording.',
+      initialValue:
+        'EAA Chapter 690 promotes aviation education, safety, and youth involvement in the Atlanta Metro area through hands-on aircraft building programs, Young Eagles flights, mentorship, and public outreach.',
+    },
+    {
       name: 'logo',
       title: 'Logo',
       type: 'image',

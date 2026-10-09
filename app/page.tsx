@@ -4,9 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { PortableText } from '@portabletext/react'
 import CookieBanner from '@/components/CookieBanner'
+import MissionStatement from '@/components/MissionStatement'
 import LatestNavcomCard from '@/components/newsletter/LatestNavcomCard'
 import { getHomePage, getLatestNewsletterIssue, getSiteSettings, urlFor } from '@/lib/sanity'
 import { isSafeSiteHref, safePortableTextLinkHref } from '@/lib/search-safety'
+import { resolveMissionStatement } from '@/lib/site-settings-display'
 import type { HomePageContent, HomeProgramCard } from '@/lib/sanity-types'
 
 export const revalidate = 30
@@ -251,6 +253,7 @@ export default async function Home() {
   }
   const siteSettings = await getSiteSettings()
   const fallbackPdfUrl = siteSettings?.newsletterUrl?.trim() || null
+  const mission = resolveMissionStatement(siteSettings?.missionStatement)
 
   let home: HomePageContent | null = null
   try {
@@ -291,6 +294,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div>
             <h1 className="text-4xl font-bold text-eaa-blue mb-6">{heroHeadline}</h1>
+            <MissionStatement mission={mission} className="mb-6" />
             {blockHasContent(home?.heroIntro as unknown[] | undefined) ? (
               <div className="mb-4">
                 <PortableText value={home!.heroIntro as never} components={portableTextComponents} />
