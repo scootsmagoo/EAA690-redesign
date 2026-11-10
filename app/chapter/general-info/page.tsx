@@ -49,9 +49,19 @@ export default function GeneralInfoPage() {
             Are you using Slack? Anyone is welcome to join by contacting any participating member and having them send you
             an invitation. There are many interests to choose from.
           </p>
+          <p className="text-gray-700 mb-4">
+            Our chapter has been using Slack for a few years now. Slack is a communication tool that allows people to
+            message each other based upon interest or individually.
+          </p>
           <p className="text-gray-700">
-            Slack is a great way to stay up to date on chapter activities, ask questions, and connect with fellow members
-            between meetings.
+            If you are interested in participating in Slack, you may{' '}
+            <a
+              href="mailto:info@eaa690.org?subject=Joining%20the%20Chapter%20Slack%20Group"
+              className="text-eaa-light-blue hover:underline"
+            >
+              contact us
+            </a>{' '}
+            to join the group.
           </p>
         </div>
 

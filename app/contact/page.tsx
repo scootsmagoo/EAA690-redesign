@@ -121,11 +121,42 @@ export default function ContactPage() {
 
             <div>
               <h3 className="font-semibold text-gray-800 mb-2">Email</h3>
-              <p className="text-gray-700">
-                <a href="mailto:info@eaa690.org" className="text-eaa-light-blue hover:underline">
-                  info@eaa690.org
+              <p className="text-gray-700 mb-3">
+                For inquiries about any chapter activities, email{' '}
+                <a href="mailto:eaa690@gmail.com" className="text-eaa-light-blue hover:underline">
+                  eaa690@gmail.com
                 </a>
+                .
               </p>
+              <ul className="space-y-1 text-gray-700">
+                <li>
+                  General chapter info &amp; questions:{' '}
+                  <a href="mailto:info@eaa690.org?subject=General%20Questions" className="text-eaa-light-blue hover:underline">
+                    info@eaa690.org
+                  </a>
+                </li>
+                <li>
+                  Membership questions:{' '}
+                  <a href="mailto:membership@eaa690.org?subject=Membership%20Question" className="text-eaa-light-blue hover:underline">
+                    membership@eaa690.org
+                  </a>
+                </li>
+                <li>
+                  Board of Directors questions:{' '}
+                  <a href="mailto:bod@eaa690.org?subject=BOD%20Question" className="text-eaa-light-blue hover:underline">
+                    bod@eaa690.org
+                  </a>
+                </li>
+                <li>
+                  Tech Counselor help desk:{' '}
+                  <a
+                    href="mailto:info@eaa690.org?subject=Tech%20Counselor%20Website%20Query"
+                    className="text-eaa-light-blue hover:underline"
+                  >
+                    info@eaa690.org
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
 
