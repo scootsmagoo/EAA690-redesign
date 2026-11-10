@@ -1,7 +1,18 @@
 {
-  "_comment": "NAVCOM archive manifest — one entry per issue. Used by scripts/import-navcom-archive.ts to seed Sanity. Re-runs are idempotent (matched by slug or pdfUrl). The 'sections' array references newsletterSection slugs in Sanity; create those documents first (or omit the field).",
-  "_required": ["title", "issueDate", "pdfUrl"],
-  "_optional": ["slug", "volumeLabel", "excerpt", "pageCount", "featured", "sections"],
+  "_comment": "NAVCOM archive manifest — one entry per issue. Used by scripts/import-navcom-archive.ts to seed Sanity. Re-runs are idempotent (matched by slug or pdfUrl). The 'sections' array references newsletterSection slugs in Sanity; create those documents first (or omit the field). Entries below were listed from the public Drive archive folders 2025 and 2026 on 2026-11-10 (Feb and Apr 2025 are not in Drive; June 2025 has two files there, the first is used).",
+  "_required": [
+    "title",
+    "issueDate",
+    "pdfUrl"
+  ],
+  "_optional": [
+    "slug",
+    "volumeLabel",
+    "excerpt",
+    "pageCount",
+    "featured",
+    "sections"
+  ],
   "_example": {
     "title": "NAVCOM — June 2025",
     "issueDate": "2025-06-01T12:00:00.000Z",
@@ -10,14 +21,138 @@
     "excerpt": "Pancake breakfast recap, Young Eagles rally photos, and June presenter spotlight.",
     "pageCount": 16,
     "featured": false,
-    "sections": ["presidents-column", "young-eagles", "classifieds"]
+    "sections": [
+      "presidents-column",
+      "young-eagles",
+      "classifieds"
+    ]
   },
   "issues": [
     {
-      "title": "NAVCOM — Latest issue",
-      "issueDate": "2025-04-01T12:00:00.000Z",
-      "pdfUrl": "https://drive.google.com/file/d/1oRU-HD5w5tQOrBfrBBgzzt_hvzhz0oBb/view?usp=share_link",
-      "excerpt": "The most recent NAVCOM issue published on the chapter site. Update this entry once you import the full Drive archive."
+      "title": "NAVCOM — November 2026",
+      "slug": "november-2026",
+      "issueDate": "2026-11-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1_UtyjB2bEZpDEEOaNAg8jtrNloBHM48-/view"
+    },
+    {
+      "title": "NAVCOM — October 2026",
+      "slug": "october-2026",
+      "issueDate": "2026-10-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1efPFIjYRvDzZiD4Ta6jemeSyGH8GYh5p/view"
+    },
+    {
+      "title": "NAVCOM — September 2026",
+      "slug": "september-2026",
+      "issueDate": "2026-09-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/10LCHF1DX_xv0B74rVYQcaObP0JT_M0mj/view"
+    },
+    {
+      "title": "NAVCOM — August 2026",
+      "slug": "august-2026",
+      "issueDate": "2026-08-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/14DoIsDHH8ZS-VueBu5sO9Ev9l8BWfWPh/view"
+    },
+    {
+      "title": "NAVCOM — July 2026",
+      "slug": "july-2026",
+      "issueDate": "2026-07-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1SQNqmBvCx9KJBB88s-LEjWaeGKZUkyR2/view"
+    },
+    {
+      "title": "NAVCOM — June 2026",
+      "slug": "june-2026",
+      "issueDate": "2026-06-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1o_riyPtZMRLLK20fGyB8lo6gpv_jEbRX/view"
+    },
+    {
+      "title": "NAVCOM — May 2026",
+      "slug": "may-2026",
+      "issueDate": "2026-05-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1qabgqG8V5iGEAWpIIhpZ0ARKTTgYHQl-/view"
+    },
+    {
+      "title": "NAVCOM — April 2026",
+      "slug": "april-2026",
+      "issueDate": "2026-04-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1oRU-HD5w5tQOrBfrBBgzzt_hvzhz0oBb/view"
+    },
+    {
+      "title": "NAVCOM — March 2026",
+      "slug": "march-2026",
+      "issueDate": "2026-03-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1tTH9d-BxEsknEbwyrD2U90eA8voaTARu/view"
+    },
+    {
+      "title": "NAVCOM — February 2026",
+      "slug": "february-2026",
+      "issueDate": "2026-02-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1KmzqAOBuKC238Aqybr6AYbh_34_hKPwZ/view"
+    },
+    {
+      "title": "NAVCOM — January 2026",
+      "slug": "january-2026",
+      "issueDate": "2026-01-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/18fLRPAptTHH-WaV7ZOx6BrZik2SkJsCn/view"
+    },
+    {
+      "title": "NAVCOM — December 2025",
+      "slug": "december-2025",
+      "issueDate": "2025-12-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1d3ZzcDNOCRunksjlSvoHdn9UXW1WM6pv/view"
+    },
+    {
+      "title": "NAVCOM — November 2025",
+      "slug": "november-2025",
+      "issueDate": "2025-11-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1rjgDmgrbusppqxxfLHFmfpwV6dFpmX1n/view"
+    },
+    {
+      "title": "NAVCOM — October 2025",
+      "slug": "october-2025",
+      "issueDate": "2025-10-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1ENEm3HTM5RsbGwOlEBa9nz5-8SoZ97YS/view"
+    },
+    {
+      "title": "NAVCOM — September 2025",
+      "slug": "september-2025",
+      "issueDate": "2025-09-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1JB5qHDNQOg3vf-TD0q9TUc_AYAul1Ddb/view"
+    },
+    {
+      "title": "NAVCOM — August 2025",
+      "slug": "august-2025",
+      "issueDate": "2025-08-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1-dngJsjE4OqdEFc6FCEkSEW1h6avKTLv/view"
+    },
+    {
+      "title": "NAVCOM — July 2025",
+      "slug": "july-2025",
+      "issueDate": "2025-07-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1mQrLTkfaU263QNauk2OPUkCTvBRKf_f3/view"
+    },
+    {
+      "title": "NAVCOM — June 2025",
+      "slug": "june-2025",
+      "issueDate": "2025-06-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1-_eKT5yrHSBeI0vA1kCNF24uqEaFPI5o/view"
+    },
+    {
+      "title": "NAVCOM — May 2025",
+      "slug": "may-2025",
+      "issueDate": "2025-05-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1lYMuLerKQOrobUskomSAN5wtkvppzfrb/view"
+    },
+    {
+      "title": "NAVCOM — March 2025",
+      "slug": "march-2025",
+      "issueDate": "2025-03-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/12Jjl1OBpgcAthX2Y2eNOJZnCsMyN6r06/view"
+    },
+    {
+      "title": "NAVCOM — January 2025",
+      "slug": "january-2025",
+      "issueDate": "2025-01-01T12:00:00.000Z",
+      "pdfUrl": "https://drive.google.com/file/d/1BdpHFChCiJNQVBezT02JS1xUCc96Vcht/view"
     }
   ]
 }
