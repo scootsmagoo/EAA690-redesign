@@ -1,6 +1,6 @@
 /**
  * Fallback store data when Sanity has no products yet.
- * Modeled after https://www.eaa690.org/store (memberships, food events,
+ * Modeled after the legacy Squarespace store (memberships, food events,
  * memorials, prints, merch, fees, donations).
  */
 import type { StoreCategory, StoreProduct } from '@/lib/sanity-types'
@@ -59,9 +59,9 @@ export const fallbackStoreProducts: StoreProduct[] = [
     title: 'Family Membership',
     slug: { current: 'family-membership' },
     priceDisplay: '$45.00 every 12 months',
-    shortDescription: 'Family membership — join or renew (recurring billing on the legacy store until a Stripe Price is configured here).',
+    shortDescription: 'Family membership — join or renew.',
     categories: cats('memberships'),
-    externalPurchaseUrl: 'https://www.eaa690.org/store/p/family-membership-dMl4c',
+    externalPurchaseUrl: '/join',
     /** Used by /join when STRIPE_PRICE_FAMILY_MEMBERSHIP and catalog Price ID are unset. */
     unitAmountCents: 4500,
     sortOrder: 30,
@@ -72,9 +72,9 @@ export const fallbackStoreProducts: StoreProduct[] = [
     title: 'Individual Membership',
     slug: { current: 'individual-membership' },
     priceDisplay: '$35.00 every 12 months',
-    shortDescription: 'Individual membership — join or renew (recurring billing on the legacy store until a Stripe Price is configured here).',
+    shortDescription: 'Individual membership — join or renew.',
     categories: cats('memberships'),
-    externalPurchaseUrl: 'https://www.eaa690.org/store/p/individual-membership-j9am4-vXxPq',
+    externalPurchaseUrl: '/join',
     unitAmountCents: 3500,
     sortOrder: 40,
     isActive: true,

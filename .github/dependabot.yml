@@ -35,10 +35,6 @@ updates:
       # Majors that are blocked upstream or need a real migration. Dependabot
       # reopened them weekly and CI (correctly) failed every time. Remove an
       # entry when its condition is met, then do the upgrade deliberately.
-      #  - better-sqlite3 13: better-auth 1.7.x peers on better-sqlite3 ^12, so
-      #    `npm ci` cannot resolve. Unblock when better-auth widens that range.
-      - dependency-name: better-sqlite3
-        update-types: [version-update:semver-major]
       #  - eslint 10: the react / import / jsx-a11y plugins bundled by
       #    eslint-config-next only support ESLint <= 9 (lint crashes on load).
       #    Unblock when eslint-config-next supports ESLint 10.
