@@ -99,7 +99,7 @@ export default function StoreCartPageClient() {
         Review your items, then continue to secure checkout (Stripe). You can add more from the{' '}
         <Link
           href="/store"
-          className="text-eaa-light-blue font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
+          className="text-eaa-light-blue font-medium hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-xs"
         >
           store
         </Link>
@@ -113,7 +113,7 @@ export default function StoreCartPageClient() {
           role="alert"
           aria-live="assertive"
           tabIndex={-1}
-          className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-800 text-sm outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
+          className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-800 text-sm outline-hidden focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
         >
           {checkoutError}
         </div>
@@ -128,7 +128,7 @@ export default function StoreCartPageClient() {
           <p className="text-gray-700 mb-4">Your cart is empty.</p>
           <Link
             href="/store"
-            className="inline-flex bg-eaa-yellow text-eaa-blue px-5 py-2.5 rounded-lg font-semibold hover:bg-yellow-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+            className="inline-flex bg-eaa-yellow text-eaa-blue px-5 py-2.5 rounded-lg font-semibold hover:bg-yellow-400 transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
           >
             Browse the store
           </Link>
@@ -139,7 +139,7 @@ export default function StoreCartPageClient() {
             <h2 id="cart-items-heading" className="sr-only">
               Items in your cart
             </h2>
-            <ul className="divide-y divide-gray-200 border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+            <ul className="divide-y divide-gray-200 border border-gray-200 rounded-xl overflow-hidden bg-white shadow-xs">
               {lines.map((line) => (
                 <li key={line.productId} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex-1 min-w-0">
@@ -153,7 +153,7 @@ export default function StoreCartPageClient() {
                     <div className="flex items-center rounded-lg border border-gray-300 bg-white">
                       <button
                         type="button"
-                        className="min-h-[44px] min-w-[44px] px-2 text-lg leading-none text-gray-700 hover:bg-gray-50 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset"
+                        className="min-h-[44px] min-w-[44px] px-2 text-lg leading-none text-gray-700 hover:bg-gray-50 disabled:opacity-40 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset"
                         aria-label={`Decrease quantity for ${line.title}`}
                         disabled={line.quantity <= 1}
                         onClick={() => setQuantity(line.productId, line.quantity - 1)}
@@ -176,11 +176,11 @@ export default function StoreCartPageClient() {
                           if (!Number.isFinite(v) || v < 1) setQuantity(line.productId, 1)
                           else if (v > 10) setQuantity(line.productId, 10)
                         }}
-                        className="w-12 min-h-[44px] text-center border-x border-gray-300 py-2 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset"
+                        className="w-12 min-h-[44px] text-center border-x border-gray-300 py-2 text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset"
                       />
                       <button
                         type="button"
-                        className="min-h-[44px] min-w-[44px] px-2 text-lg leading-none text-gray-700 hover:bg-gray-50 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset"
+                        className="min-h-[44px] min-w-[44px] px-2 text-lg leading-none text-gray-700 hover:bg-gray-50 disabled:opacity-40 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset"
                         aria-label={`Increase quantity for ${line.title}`}
                         disabled={line.quantity >= 10}
                         onClick={() => setQuantity(line.productId, line.quantity + 1)}
@@ -190,7 +190,7 @@ export default function StoreCartPageClient() {
                     </div>
                     <button
                       type="button"
-                      className="text-sm text-red-800 hover:underline font-medium min-h-[44px] px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-700 focus-visible:ring-offset-2 rounded"
+                      className="text-sm text-red-800 hover:underline font-medium min-h-[44px] px-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-red-700 focus-visible:ring-offset-2 rounded-sm"
                       onClick={() => remove(line.productId)}
                       aria-label={`Remove ${line.title} from cart`}
                     >
@@ -251,7 +251,7 @@ export default function StoreCartPageClient() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/store"
-                className="inline-flex min-h-[44px] items-center justify-center px-5 py-2.5 rounded-lg border border-eaa-blue text-eaa-blue font-semibold hover:bg-blue-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+                className="inline-flex min-h-[44px] items-center justify-center px-5 py-2.5 rounded-lg border border-eaa-blue text-eaa-blue font-semibold hover:bg-blue-50 transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
               >
                 Continue shopping
               </Link>
@@ -260,7 +260,7 @@ export default function StoreCartPageClient() {
                 onClick={handleCheckout}
                 disabled={checkingOut}
                 aria-busy={checkingOut}
-                className="inline-flex min-h-[44px] items-center justify-center bg-eaa-yellow text-eaa-blue px-6 py-2.5 rounded-lg font-semibold hover:bg-yellow-400 transition-colors disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+                className="inline-flex min-h-[44px] items-center justify-center bg-eaa-yellow text-eaa-blue px-6 py-2.5 rounded-lg font-semibold hover:bg-yellow-400 transition-colors disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
               >
                 {checkingOut ? 'Redirecting…' : 'Proceed to checkout'}
               </button>

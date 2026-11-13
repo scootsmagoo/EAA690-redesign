@@ -18,7 +18,7 @@ export default function SubscribeCta({ blurb }: Props) {
   return (
     <aside
       aria-labelledby="navcom-subscribe-heading"
-      className="my-12 rounded-2xl border border-eaa-yellow/40 bg-gradient-to-br from-eaa-yellow/15 to-blue-50 dark:from-eaa-yellow/10 dark:to-eaa-surface-dark px-6 py-7 sm:px-8 sm:py-8"
+      className="my-12 rounded-2xl border border-eaa-yellow/40 bg-linear-to-br from-eaa-yellow/15 to-blue-50 dark:from-eaa-yellow/10 dark:to-eaa-surface-dark px-6 py-7 sm:px-8 sm:py-8"
     >
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
         <div className="flex-1">
@@ -28,11 +28,11 @@ export default function SubscribeCta({ blurb }: Props) {
           >
             Get NAVCOM by email
           </h2>
-          <p className="text-gray-700 text-sm sm:text-base leading-relaxed max-w-2xl">{text}</p>
+          <p className="text-gray-700 text-sm sm:text-base leading-relaxed sm:leading-6 max-w-2xl">{text}</p>
         </div>
         <a
           href="#footer-newsletter-signup"
-          className="inline-flex items-center justify-center rounded-full bg-eaa-blue text-white px-6 py-2.5 text-sm font-bold hover:bg-eaa-light-blue transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+          className="inline-flex items-center justify-center rounded-full bg-eaa-blue text-white px-6 py-2.5 text-sm font-bold hover:bg-eaa-light-blue transition-colors whitespace-nowrap focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
         >
           Subscribe
           <svg className="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

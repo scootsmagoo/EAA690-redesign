@@ -99,7 +99,7 @@ const portableTextComponents = {
         return (
           <a
             href={safe}
-            className="text-eaa-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+            className="text-eaa-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -110,7 +110,7 @@ const portableTextComponents = {
       return (
         <Link
           href={safe}
-          className="text-eaa-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+          className="text-eaa-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
         >
           {children}
         </Link>
@@ -250,7 +250,7 @@ export default async function NewsletterIssuePage({
       <nav className="text-sm text-eaa-light-blue mb-6 print:hidden" aria-label="Breadcrumb">
         <Link
           href="/"
-          className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+          className="hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
         >
           Home
         </Link>
@@ -259,7 +259,7 @@ export default async function NewsletterIssuePage({
         </span>
         <Link
           href="/newsletter"
-          className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+          className="hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
         >
           NAVCOM
         </Link>
@@ -298,7 +298,7 @@ export default async function NewsletterIssuePage({
                 <li key={s._id}>
                   <Link
                     href={`/newsletter/sections/${s.slug.current}`}
-                    className="inline-flex items-center rounded-full border border-eaa-blue/20 bg-blue-50 text-eaa-blue px-2.5 py-0.5 text-xs font-medium hover:bg-blue-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
+                    className="inline-flex items-center rounded-full border border-eaa-blue/20 bg-blue-50 text-eaa-blue px-2.5 py-0.5 text-xs font-medium hover:bg-blue-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
                   >
                     {s.title}
                   </Link>
@@ -363,7 +363,7 @@ export default async function NewsletterIssuePage({
 
       <Link
         href="/newsletter"
-        className="mt-10 inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded print:hidden"
+        className="mt-10 inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm print:hidden"
       >
         <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

@@ -153,7 +153,7 @@ export default function AdminContactPage() {
             {messages.map((m) => {
               const isOpen = expanded === m.id
               return (
-                <div key={m.id} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div key={m.id} className="bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
                   <button
                     className="w-full flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 px-5 py-4 text-left hover:bg-gray-50 transition-colors"
                     onClick={() => setExpanded(isOpen ? null : m.id)}
@@ -206,7 +206,7 @@ export default function AdminContactPage() {
                         </div>
                         <div>
                           <dt className="font-medium text-gray-500">Name</dt>
-                          <dd className="text-gray-800 break-words">{fmt(m.data.name)}</dd>
+                          <dd className="text-gray-800 wrap-break-word">{fmt(m.data.name)}</dd>
                         </div>
                         <div>
                           <dt className="font-medium text-gray-500">Email</dt>
@@ -229,7 +229,7 @@ export default function AdminContactPage() {
                         </div>
                         <div className="sm:col-span-2">
                           <dt className="font-medium text-gray-500">Message</dt>
-                          <dd className="text-gray-800 whitespace-pre-wrap break-words mt-1 p-3 bg-white rounded-lg border border-gray-100">
+                          <dd className="text-gray-800 whitespace-pre-wrap wrap-break-word mt-1 p-3 bg-white rounded-lg border border-gray-100">
                             {fmt(m.data.message)}
                           </dd>
                         </div>

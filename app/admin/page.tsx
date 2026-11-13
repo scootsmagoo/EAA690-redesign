@@ -126,7 +126,7 @@ export default function AdminPage() {
         <h1 className="text-4xl font-bold text-eaa-blue mb-2">Admin Dashboard</h1>
         <p className="text-gray-500 mb-8">EAA 690 site administration, grouped by the work you need to do.</p>
 
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-xs overflow-hidden">
           <div className="border-b border-gray-200 bg-gray-50 px-4 py-3 sm:px-6">
             <div className="flex flex-wrap gap-2" role="tablist" aria-label="Admin sections">
               {ADMIN_TABS.map((tab) => {
@@ -140,7 +140,7 @@ export default function AdminPage() {
                     onClick={() => setActiveTabId(tab.id)}
                     className={`rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
                       selected
-                        ? 'bg-eaa-blue text-white shadow-sm'
+                        ? 'bg-eaa-blue text-white shadow-xs'
                         : 'text-gray-600 hover:bg-white hover:text-eaa-blue'
                     }`}
                   >

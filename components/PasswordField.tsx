@@ -88,7 +88,7 @@ export default function PasswordField({
       />
       <button
         type="button"
-        className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-eaa-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-0 rounded-r-md"
+        className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-eaa-blue focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-0 rounded-r-md"
         onClick={() => setVisible((v) => !v)}
         aria-label={visible ? 'Hide password' : 'Show password'}
         aria-pressed={visible}

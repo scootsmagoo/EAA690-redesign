@@ -68,7 +68,7 @@ const portableTextComponents = {
         return (
           <a
             href={safe}
-            className="text-eaa-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+            className="text-eaa-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -79,7 +79,7 @@ const portableTextComponents = {
       return (
         <Link
           href={safe}
-          className="text-eaa-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+          className="text-eaa-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
         >
           {children}
         </Link>
@@ -131,7 +131,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Link
         href="/news"
-        className="inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold mb-8 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+        className="inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold mb-8 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
         aria-label="Back to news listing"
       >
         <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

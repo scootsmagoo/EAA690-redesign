@@ -150,7 +150,7 @@ export default function FooterSignup() {
                 className={[
                   'w-full rounded-lg px-4 py-2.5 text-sm text-eaa-blue bg-white',
                   'placeholder:text-gray-400',
-                  'focus:outline-none focus:ring-2 focus:ring-eaa-yellow',
+                  'focus:outline-hidden focus:ring-2 focus:ring-eaa-yellow',
                   'disabled:opacity-60 disabled:cursor-not-allowed',
                   status === 'error' ? 'ring-2 ring-red-400' : '',
                 ]
@@ -166,7 +166,7 @@ export default function FooterSignup() {
               className={[
                 'bg-eaa-yellow text-eaa-blue px-6 py-2.5 rounded-lg font-bold text-sm',
                 'hover:bg-yellow-400 transition-colors whitespace-nowrap',
-                'focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-eaa-blue',
+                'focus:outline-hidden focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-eaa-blue',
                 'disabled:opacity-60 disabled:cursor-not-allowed',
               ].join(' ')}
             >

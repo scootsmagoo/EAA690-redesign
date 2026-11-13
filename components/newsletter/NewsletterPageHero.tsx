@@ -49,14 +49,14 @@ export default function NewsletterPageHero({ page }: Props) {
           {/* Gradient overlay — non-decorative content sits on top with WCAG 1.4.3 contrast against this layer. */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/55 to-black/30"
+            className="absolute inset-0 bg-linear-to-r from-black/70 via-black/55 to-black/30"
           />
         </div>
         <div className="relative px-6 py-14 sm:px-10 sm:py-20 max-w-3xl">
           <p className="text-eaa-yellow font-semibold tracking-wide uppercase text-xs sm:text-sm mb-2">
             EAA Chapter 690
           </p>
-          <h1 className="font-display text-4xl sm:text-5xl text-white drop-shadow-sm mb-3">
+          <h1 className="font-display text-4xl sm:text-5xl text-white drop-shadow-xs mb-3">
             {title}
           </h1>
           <p className="text-white/90 text-lg font-medium mb-3">{tagline}</p>

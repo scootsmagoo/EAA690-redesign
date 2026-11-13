@@ -48,10 +48,10 @@ export default function IssueCard({
       : null
     return (
       <li>
-        <article className="group h-full rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
+        <article className="group h-full rounded-xl border border-gray-200 bg-white shadow-xs hover:shadow-md transition-shadow overflow-hidden flex flex-col">
           <Link
             href={`/newsletter/${slug}`}
-            className="relative block aspect-[4/3] bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+            className="relative block aspect-4/3 bg-gray-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             aria-label={`Read NAVCOM: ${issue.title}`}
           >
             {cover ? (
@@ -70,7 +70,7 @@ export default function IssueCard({
               </div>
             )}
             {issue.featured ? (
-              <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-eaa-yellow text-eaa-blue px-2.5 py-0.5 text-xs font-bold shadow">
+              <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-eaa-yellow text-eaa-blue px-2.5 py-0.5 text-xs font-bold shadow-sm">
                 <span aria-hidden="true">★</span>
                 <span>Featured</span>
               </span>
@@ -87,7 +87,7 @@ export default function IssueCard({
               <h3 className="text-base font-bold text-eaa-blue mb-2 leading-snug">
                 <Link
                   href={`/newsletter/${slug}`}
-                  className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+                  className="hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
                 >
                   {issue.title}
                 </Link>
@@ -103,7 +103,7 @@ export default function IssueCard({
                     <li key={s._id}>
                       <Link
                         href={`/newsletter/sections/${s.slug.current}`}
-                        className="inline-flex items-center rounded-full border border-eaa-blue/20 bg-blue-50 text-eaa-blue px-2 py-0.5 text-xs font-medium hover:bg-blue-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
+                        className="inline-flex items-center rounded-full border border-eaa-blue/20 bg-blue-50 text-eaa-blue px-2 py-0.5 text-xs font-medium hover:bg-blue-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
                       >
                         {s.title}
                       </Link>
@@ -120,7 +120,7 @@ export default function IssueCard({
             <div className="mt-auto flex flex-wrap gap-x-3 gap-y-1 text-sm">
               <Link
                 href={`/newsletter/${slug}`}
-                className="font-semibold text-eaa-light-blue hover:text-eaa-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+                className="font-semibold text-eaa-light-blue hover:text-eaa-blue focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
               >
                 Read online
                 <span aria-hidden="true"> →</span>
@@ -130,7 +130,7 @@ export default function IssueCard({
                   href={pdfHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-gray-600 hover:text-eaa-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+                  className="font-semibold text-gray-600 hover:text-eaa-blue focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
                   aria-label={`Download PDF for ${issue.title} (opens in a new tab)`}
                 >
                   PDF
@@ -149,7 +149,7 @@ export default function IssueCard({
     : null
   return (
     <li>
-      <article className="flex flex-col sm:flex-row gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+      <article className="flex flex-col sm:flex-row gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-xs hover:shadow-md transition-shadow">
         {cover ? (
           <div className="relative h-36 w-full shrink-0 sm:w-44 rounded-lg overflow-hidden bg-gray-100">
             <SharedElement name={coverName}>
@@ -162,7 +162,7 @@ export default function IssueCard({
               />
             </SharedElement>
             {issue.featured ? (
-              <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-eaa-yellow text-eaa-blue px-2 py-0.5 text-[10px] font-bold shadow">
+              <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-eaa-yellow text-eaa-blue px-2 py-0.5 text-[10px] font-bold shadow-sm">
                 <span aria-hidden="true">★</span>
                 <span>Featured</span>
               </span>
@@ -186,7 +186,7 @@ export default function IssueCard({
           <h2 className="text-xl font-bold text-eaa-blue mb-2">
             <Link
               href={`/newsletter/${slug}`}
-              className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+              className="hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
             >
               {issue.title}
               {issue.featured && !cover ? (
@@ -208,7 +208,7 @@ export default function IssueCard({
                   <li key={s._id}>
                     <Link
                       href={`/newsletter/sections/${s.slug.current}`}
-                      className="inline-flex items-center rounded-full border border-eaa-blue/20 bg-blue-50 text-eaa-blue px-2 py-0.5 text-xs font-medium hover:bg-blue-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
+                      className="inline-flex items-center rounded-full border border-eaa-blue/20 bg-blue-50 text-eaa-blue px-2 py-0.5 text-xs font-medium hover:bg-blue-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
                     >
                       {s.title}
                     </Link>
@@ -225,7 +225,7 @@ export default function IssueCard({
           <div className="flex flex-wrap gap-3 text-sm">
             <Link
               href={`/newsletter/${slug}`}
-              className="font-semibold text-eaa-light-blue hover:text-eaa-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+              className="font-semibold text-eaa-light-blue hover:text-eaa-blue focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
             >
               Read online
               <span aria-hidden="true"> →</span>
@@ -235,7 +235,7 @@ export default function IssueCard({
                 href={pdfHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-gray-600 hover:text-eaa-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+                className="font-semibold text-gray-600 hover:text-eaa-blue focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
                 aria-label={`Download PDF for ${issue.title} (opens in a new tab)`}
               >
                 PDF

@@ -104,8 +104,8 @@ export default function AuthGuard({ children, requireAuth = false }: AuthGuardPr
           {stalled && (
             <p className="mt-4 text-sm text-gray-500">
               This is taking longer than expected. Try a hard refresh (Ctrl+Shift+R) or stop and restart{' '}
-              <code className="text-xs bg-gray-100 px-1 rounded">npm run dev</code> and clear the{' '}
-              <code className="text-xs bg-gray-100 px-1 rounded">.next</code> folder if the problem
+              <code className="text-xs bg-gray-100 px-1 rounded-sm">npm run dev</code> and clear the{' '}
+              <code className="text-xs bg-gray-100 px-1 rounded-sm">.next</code> folder if the problem
               persists.
             </p>
           )}
@@ -142,7 +142,7 @@ export default function AuthGuard({ children, requireAuth = false }: AuthGuardPr
     const rejected = approval.status === 'rejected'
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-        <div className="max-w-md text-center bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+        <div className="max-w-md text-center bg-white rounded-lg shadow-xs border border-gray-200 p-8">
           <h1 className="text-2xl font-bold text-eaa-blue mb-3">
             {rejected ? 'Account access not approved' : 'Account pending approval'}
           </h1>

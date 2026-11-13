@@ -14,7 +14,7 @@ export default function GoogleCalendarEmbed({
   title = 'EAA Chapter 690 events calendar',
 }: GoogleCalendarEmbedProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
       <iframe
         src={embedUrl}
         title={title}

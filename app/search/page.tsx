@@ -44,7 +44,7 @@ export default async function SearchPage({ searchParams }: Props) {
 
       {q && results.length === 0 && (
         <p className="text-gray-700" role="status">
-          No results for &ldquo;<span className="break-words">{q}</span>
+          No results for &ldquo;<span className="wrap-break-word">{q}</span>
           &rdquo;. Try different words, or browse the{' '}
           <Link href="/chapter" className="text-eaa-light-blue font-semibold hover:underline">
             chapter

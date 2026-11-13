@@ -76,7 +76,7 @@ async function LegacySanityCalendar() {
       <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
         <strong>Preview mode:</strong> This site is not yet connected to the chapter Google Calendar.
         Events shown here come from the CMS or sample data. To go live, set{' '}
-        <code className="text-xs bg-white/70 px-1 rounded">NEXT_PUBLIC_GOOGLE_CALENDAR_ID</code> (see
+        <code className="text-xs bg-white/70 px-1 rounded-sm">NEXT_PUBLIC_GOOGLE_CALENDAR_ID</code> (see
         Admin → Chapter calendar).
       </div>
       <EventCalendar events={events} />

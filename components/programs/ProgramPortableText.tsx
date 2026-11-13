@@ -62,11 +62,11 @@ function buildComponents(variant: ProgramPortableTextVariant): PortableTextCompo
   const listText = isDark ? 'text-white/95' : 'text-gray-700'
   const mutedSpan = isDark ? 'text-white/80' : 'decoration-gray-400'
   const linkExternal = isDark
-    ? 'text-eaa-yellow underline decoration-eaa-yellow/80 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
-    : 'text-eaa-light-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2'
+    ? 'text-eaa-yellow underline decoration-eaa-yellow/80 rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
+    : 'text-eaa-light-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2'
   const linkInternal = isDark
-    ? 'text-eaa-yellow underline decoration-eaa-yellow/80 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
-    : 'text-eaa-light-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2'
+    ? 'text-eaa-yellow underline decoration-eaa-yellow/80 rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
+    : 'text-eaa-light-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2'
 
   return {
     block: {

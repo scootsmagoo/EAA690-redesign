@@ -159,7 +159,7 @@ export default async function KudosPage() {
             >
               {tagline}
             </h1>
-            <p className="mt-4 sm:mt-5 text-base sm:text-lg md:text-xl leading-relaxed font-normal">
+            <p className="mt-4 sm:mt-5 text-base sm:text-lg md:text-xl leading-relaxed sm:leading-7 font-normal">
               {intro}
             </p>
           </div>
@@ -239,7 +239,7 @@ export default async function KudosPage() {
                                 <Link
                                   href={detailHref}
                                   aria-label={detailLabel}
-                                  className="hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+                                  className="hover:underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
                                 >
                                   {kudo.name}
                                 </Link>
@@ -272,7 +272,7 @@ export default async function KudosPage() {
                           <Link
                             href={detailHref}
                             aria-label={detailLabel}
-                            className="inline-flex items-center gap-1 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+                            className="inline-flex items-center gap-1 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue transition-colors rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
                           >
                             See Full Story
                             <svg
@@ -294,7 +294,7 @@ export default async function KudosPage() {
                             <Link
                               href={`${detailHref}#gallery`}
                               aria-label={galleryLabel}
-                              className="inline-flex items-center gap-1 text-sm font-semibold text-gray-600 hover:text-eaa-blue transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+                              className="inline-flex items-center gap-1 text-sm font-semibold text-gray-600 hover:text-eaa-blue transition-colors rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
                             >
                               <svg
                                 className="w-4 h-4"
@@ -333,7 +333,7 @@ export default async function KudosPage() {
               No kudos have been published yet. Check back soon — or{' '}
               <Link
                 href="/contact"
-                className="text-eaa-light-blue font-semibold hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+                className="text-eaa-light-blue font-semibold hover:underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
               >
                 nominate someone
               </Link>{' '}
@@ -348,7 +348,7 @@ export default async function KudosPage() {
             Know someone who deserves recognition?{' '}
             <Link
               href="/contact"
-              className="text-eaa-light-blue font-semibold hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+              className="text-eaa-light-blue font-semibold hover:underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             >
               Contact us
             </Link>{' '}

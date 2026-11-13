@@ -3,7 +3,7 @@ export default function MissionStatement({ mission, className = '' }: { mission:
   return (
     <section
       aria-labelledby="mission-heading"
-      className={`rounded-r-lg border-l-4 border-eaa-yellow bg-white py-4 pl-5 pr-4 shadow-sm ${className}`}
+      className={`rounded-r-lg border-l-4 border-eaa-yellow bg-white py-4 pl-5 pr-4 shadow-xs ${className}`}
     >
       <h2 id="mission-heading" className="mb-1 text-sm font-bold uppercase tracking-wider text-eaa-light-blue">
         Our Mission

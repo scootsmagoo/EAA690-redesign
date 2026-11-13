@@ -49,7 +49,7 @@ export default function LatestIssueHero({ issue }: Props) {
         ) : null}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-5 gap-0">
-        <div className="md:col-span-2 relative bg-gray-100 aspect-[4/3] md:aspect-auto md:min-h-[280px]">
+        <div className="md:col-span-2 relative bg-gray-100 aspect-4/3 md:aspect-auto md:min-h-[280px]">
           {cover ? (
             <SharedElement name={`navcom-cover-${slug}`}>
               <Image
@@ -78,10 +78,10 @@ export default function LatestIssueHero({ issue }: Props) {
             ) : null}
           </p>
           <SharedElement name={`navcom-title-${slug}`}>
-            <h3 className="text-2xl sm:text-3xl font-bold text-eaa-blue mb-3 leading-tight">
+            <h3 className="text-2xl sm:text-3xl font-bold text-eaa-blue mb-3 leading-tight sm:leading-9">
               <Link
                 href={`/newsletter/${slug}`}
-                className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+                className="hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
               >
                 {issue.title}
               </Link>
@@ -97,7 +97,7 @@ export default function LatestIssueHero({ issue }: Props) {
                   <li key={s._id}>
                     <Link
                       href={`/newsletter/sections/${s.slug.current}`}
-                      className="inline-flex items-center rounded-full border border-eaa-blue/20 bg-blue-50 text-eaa-blue px-2.5 py-0.5 text-xs font-medium hover:bg-blue-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
+                      className="inline-flex items-center rounded-full border border-eaa-blue/20 bg-blue-50 text-eaa-blue px-2.5 py-0.5 text-xs font-medium hover:bg-blue-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
                     >
                       {s.title}
                     </Link>
@@ -109,7 +109,7 @@ export default function LatestIssueHero({ issue }: Props) {
           <div className="flex flex-wrap gap-3">
             <Link
               href={`/newsletter/${slug}`}
-              className="inline-flex items-center justify-center rounded-full bg-eaa-blue text-white px-5 py-2.5 text-sm font-semibold hover:bg-eaa-light-blue transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+              className="inline-flex items-center justify-center rounded-full bg-eaa-blue text-white px-5 py-2.5 text-sm font-semibold hover:bg-eaa-light-blue transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             >
               Read online
             </Link>
@@ -118,7 +118,7 @@ export default function LatestIssueHero({ issue }: Props) {
                 href={pdfHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full border-2 border-eaa-blue text-eaa-blue px-5 py-2.5 text-sm font-semibold hover:bg-blue-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center rounded-full border-2 border-eaa-blue text-eaa-blue px-5 py-2.5 text-sm font-semibold hover:bg-blue-50 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
                 aria-label={`Download PDF for ${issue.title} (opens in a new tab)`}
               >
                 Download PDF

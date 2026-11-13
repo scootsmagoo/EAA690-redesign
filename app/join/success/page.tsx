@@ -21,7 +21,7 @@ export default function JoinSuccessPage() {
             Check the{' '}
             <Link
               href="/calendar"
-              className="text-eaa-light-blue font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue rounded-sm"
+              className="text-eaa-light-blue font-semibold hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue rounded-xs"
             >
               events calendar
             </Link>{' '}
@@ -31,13 +31,13 @@ export default function JoinSuccessPage() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/"
-            className="bg-eaa-blue text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-900 transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue"
+            className="bg-eaa-blue text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-900 transition-colors motion-reduce:transition-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue"
           >
             Back to Home
           </Link>
           <Link
             href="/members"
-            className="bg-eaa-yellow text-eaa-blue px-6 py-3 rounded-xl font-semibold hover:bg-yellow-400 transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue"
+            className="bg-eaa-yellow text-eaa-blue px-6 py-3 rounded-xl font-semibold hover:bg-yellow-400 transition-colors motion-reduce:transition-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue"
           >
             Member Area
           </Link>

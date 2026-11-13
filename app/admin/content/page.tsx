@@ -148,7 +148,7 @@ function ContentInner() {
           {error}
           {error.includes('SANITY_API_TOKEN') && (
             <p className="mt-1 text-xs">
-              Add <code className="bg-red-100 px-1 rounded">SANITY_API_TOKEN</code> to your Vercel environment variables.
+              Add <code className="bg-red-100 px-1 rounded-sm">SANITY_API_TOKEN</code> to your Vercel environment variables.
             </p>
           )}
         </div>

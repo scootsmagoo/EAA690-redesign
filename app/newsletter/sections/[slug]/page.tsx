@@ -84,7 +84,7 @@ export default async function NewsletterSectionPage({
       <nav className="text-sm text-eaa-light-blue mb-6" aria-label="Breadcrumb">
         <Link
           href="/"
-          className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+          className="hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
         >
           Home
         </Link>
@@ -93,7 +93,7 @@ export default async function NewsletterSectionPage({
         </span>
         <Link
           href="/newsletter"
-          className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+          className="hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
         >
           NAVCOM
         </Link>
@@ -134,7 +134,7 @@ export default async function NewsletterSectionPage({
 
       <Link
         href="/newsletter"
-        className="mt-10 inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+        className="mt-10 inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
       >
         <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

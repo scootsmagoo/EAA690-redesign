@@ -31,7 +31,7 @@ const productDescriptionComponents = {
         return (
           <a
             href={safe}
-            className="underline text-eaa-blue hover:text-blue-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-eaa-blue rounded-sm"
+            className="underline text-eaa-blue hover:text-blue-800 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-eaa-blue rounded-xs"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -42,7 +42,7 @@ const productDescriptionComponents = {
       return (
         <Link
           href={safe}
-          className="underline text-eaa-blue hover:text-blue-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-eaa-blue rounded-sm"
+          className="underline text-eaa-blue hover:text-blue-800 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-eaa-blue rounded-xs"
         >
           {children}
         </Link>
@@ -156,7 +156,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
             Showing sample inventory. Add products in{' '}
             <Link
               href="/studio"
-              className="underline font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
+              className="underline font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-xs"
             >
               Sanity Studio
             </Link>{' '}
@@ -174,7 +174,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
             type="button"
             onClick={() => setActiveSlug('all')}
             aria-pressed={activeSlug === 'all'}
-            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1 ${
+            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1 ${
               activeSlug === 'all'
                 ? 'bg-eaa-blue text-white'
                 : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
@@ -188,7 +188,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
               type="button"
               onClick={() => setActiveSlug(cat.slug.current)}
               aria-pressed={activeSlug === cat.slug.current}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1 ${
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1 ${
                 activeSlug === cat.slug.current
                   ? 'bg-eaa-blue text-white'
                   : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
@@ -206,7 +206,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
             role="alert"
             aria-live="assertive"
             tabIndex={-1}
-            className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-700 text-sm outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
+            className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-700 text-sm outline-hidden focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
           >
             {checkoutError}
           </div>
@@ -241,7 +241,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
                   {(item.categories || []).map((c) => (
                     <span
                       key={c._id}
-                      className="text-xs bg-blue-50 text-eaa-blue px-2 py-0.5 rounded"
+                      className="text-xs bg-blue-50 text-eaa-blue px-2 py-0.5 rounded-sm"
                     >
                       {c.title}
                     </span>
@@ -262,7 +262,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
                       <button
                         type="button"
                         onClick={() => handleAddToCart(item)}
-                        className="bg-eaa-yellow text-eaa-blue px-4 py-2 rounded-md font-semibold hover:bg-yellow-400 transition-colors text-center text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
+                        className="bg-eaa-yellow text-eaa-blue px-4 py-2 rounded-md font-semibold hover:bg-yellow-400 transition-colors text-center text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
                         aria-label={`Add ${item.title} to cart`}
                       >
                         Add to cart
@@ -277,7 +277,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
                             ? `Loading checkout for ${item.title}`
                             : `Buy ${item.title} now with Stripe`
                         }
-                        className="border border-eaa-blue text-eaa-blue bg-white px-4 py-2 rounded-md font-semibold hover:bg-blue-50 transition-colors text-center text-sm disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
+                        className="border border-eaa-blue text-eaa-blue bg-white px-4 py-2 rounded-md font-semibold hover:bg-blue-50 transition-colors text-center text-sm disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
                       >
                         {loadingId === item._id ? 'Loading…' : 'Buy now'}
                       </button>
@@ -300,7 +300,7 @@ export default function StoreCatalog({ categories, products, fromSanity }: Props
           or in-person purchases, please{' '}
           <a
             href="/contact"
-            className="text-eaa-light-blue hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
+            className="text-eaa-light-blue hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-xs"
           >
             contact us
           </a>

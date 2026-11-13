@@ -120,7 +120,7 @@ export default function AdminPaymentsPage() {
               {data.activeSubscriptions.length === 0 ? (
                 <p className="text-gray-500 text-sm py-4">No active subscriptions found.</p>
               ) : (
-                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-xs">
                   <table className="min-w-full divide-y divide-gray-100 text-sm">
                     <thead className="bg-gray-50">
                       <tr>
@@ -188,7 +188,7 @@ export default function AdminPaymentsPage() {
               {data.charges.length === 0 ? (
                 <p className="text-gray-500 text-sm py-4">No charges found.</p>
               ) : (
-                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-xs">
                   <table className="min-w-full divide-y divide-gray-100 text-sm">
                     <thead className="bg-gray-50">
                       <tr>

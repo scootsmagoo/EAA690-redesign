@@ -12,7 +12,7 @@ export default function ProgramRegistrationClosed({ title, message }: Props) {
 
   return (
     <section
-      className="bg-amber-50 border border-amber-200 rounded-lg p-6 shadow-sm"
+      className="bg-amber-50 border border-amber-200 rounded-lg p-6 shadow-xs"
       role="status"
       aria-live="polite"
       aria-labelledby="program-registration-unavailable-title"

@@ -289,7 +289,7 @@ export default async function Home() {
     (spotlightSubtitle ? `Illustration: ${spotlightSubtitle}` : `Illustration: ${spotlightTitle}`)
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white dark:from-eaa-bg-dark dark:to-eaa-bg-dark">
+    <div className="bg-linear-to-b from-blue-50 to-white dark:from-eaa-bg-dark dark:to-eaa-bg-dark">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div>
@@ -322,7 +322,7 @@ export default async function Home() {
           </div>
           <div className="flex justify-center lg:justify-end">
             {showHeroImage && home?.heroImage ? (
-              <div className="relative w-full max-w-md aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+              <div className="relative w-full max-w-md aspect-4/3 rounded-2xl overflow-hidden shadow-lg">
                 <Image
                   src={urlFor(home.heroImage).width(800).height(600).fit('crop').url()}
                   alt={heroImageAltText}
@@ -389,7 +389,7 @@ export default async function Home() {
                 )}
               </div>
               {home?.spotlightImage ? (
-                <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-md">
+                <div className="relative w-full aspect-4/3 rounded-lg overflow-hidden shadow-md">
                   <Image
                     src={urlFor(home.spotlightImage).width(900).height(675).fit('crop').url()}
                     alt={spotlightPhotoAlt}

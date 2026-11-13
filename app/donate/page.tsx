@@ -91,7 +91,7 @@ export default function DonatePage() {
                       type="button"
                       onClick={() => handlePresetClick(amount)}
                       aria-pressed={!isCustom && selectedAmount === amount}
-                      className={`py-3 rounded-xl font-bold text-lg border-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
+                      className={`py-3 rounded-xl font-bold text-lg border-2 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
                         !isCustom && selectedAmount === amount
                           ? 'bg-eaa-blue text-white border-eaa-blue shadow-md'
                           : 'bg-white text-eaa-blue border-gray-200 hover:border-eaa-blue hover:bg-blue-50'
@@ -104,7 +104,7 @@ export default function DonatePage() {
                     type="button"
                     onClick={handleCustomSelect}
                     aria-pressed={isCustom}
-                    className={`py-3 rounded-xl font-bold text-lg border-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
+                    className={`py-3 rounded-xl font-bold text-lg border-2 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
                       isCustom
                         ? 'bg-eaa-blue text-white border-eaa-blue shadow-md'
                         : 'bg-white text-eaa-blue border-gray-200 hover:border-eaa-blue hover:bg-blue-50'
@@ -132,7 +132,7 @@ export default function DonatePage() {
                       onChange={handleCustomChange}
                       placeholder="0.00"
                       aria-label="Custom donation amount in dollars"
-                      className="w-full pl-8 pr-4 py-3 border-2 border-eaa-blue rounded-xl text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue/50"
+                      className="w-full pl-8 pr-4 py-3 border-2 border-eaa-blue rounded-xl text-lg focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue/50"
                     />
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export default function DonatePage() {
                     ? `Donate $${donationAmount.toFixed(2)} to EAA Chapter 690`
                     : 'Select an amount to donate'
                 }
-                className={`block w-full text-center py-4 rounded-xl font-bold text-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue ${
+                className={`block w-full text-center py-4 rounded-xl font-bold text-lg transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue ${
                   donationAmount >= 1 && !loading
                     ? 'bg-eaa-yellow text-eaa-blue hover:bg-yellow-400 shadow-md hover:shadow-lg cursor-pointer'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
@@ -204,7 +204,7 @@ export default function DonatePage() {
                 { icon: '🏕️', label: 'Summer Camp', desc: 'Aviation summer programming' },
                 { icon: '🔧', label: 'Build Programs', desc: 'Hands-on aircraft construction' },
               ].map(({ icon, label, desc }) => (
-                <div key={label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex gap-3 items-start">
+                <div key={label} className="bg-white rounded-xl border border-gray-100 shadow-xs p-4 flex gap-3 items-start">
                   <span className="text-2xl" aria-hidden="true">{icon}</span>
                   <div>
                     <p className="font-semibold text-eaa-blue">{label}</p>

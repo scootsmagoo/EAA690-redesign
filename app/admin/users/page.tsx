@@ -141,7 +141,7 @@ function UserManagementInner() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-eaa-blue" />
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-lg shadow-xs border border-gray-200 overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>

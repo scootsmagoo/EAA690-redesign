@@ -176,12 +176,12 @@ function EventDetail({ event, onClose }: { event: Event; onClose: () => void }) 
       aria-modal="true"
       aria-labelledby={titleId}
     >
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-xs" />
 
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className="relative bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden animate-slide-up focus:outline-none"
+        className="relative bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden animate-slide-up focus:outline-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Coloured header */}
@@ -190,7 +190,7 @@ function EventDetail({ event, onClose }: { event: Event; onClose: () => void }) 
             <h2 id={titleId} className="text-xl font-bold text-white leading-snug">{event.title}</h2>
             <button
               onClick={onClose}
-              className="flex-shrink-0 text-white/70 hover:text-white transition-colors mt-0.5"
+              className="shrink-0 text-white/70 hover:text-white transition-colors mt-0.5"
               aria-label="Close event detail"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -207,7 +207,7 @@ function EventDetail({ event, onClose }: { event: Event; onClose: () => void }) 
         <div className="px-6 py-5 space-y-4">
           {event.location && (
             <div className="flex items-start gap-3">
-              <svg className="w-5 h-5 text-eaa-blue mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5 text-eaa-blue mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -221,7 +221,7 @@ function EventDetail({ event, onClose }: { event: Event; onClose: () => void }) 
 
           {event.isRecurring && event.recurringInfo && (
             <div className="flex items-center gap-2 text-sm text-eaa-light-blue">
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
               <span>Recurring: {event.recurringInfo}</span>
@@ -358,7 +358,7 @@ export default function EventCalendar({ events }: { events: Event[] }) {
             aria-pressed={view === 'dayGridMonth'}
             className={`px-4 py-2 rounded-lg font-semibold text-sm transition-colors ${
               view === 'dayGridMonth'
-                ? 'bg-eaa-blue text-white shadow-sm'
+                ? 'bg-eaa-blue text-white shadow-xs'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -369,7 +369,7 @@ export default function EventCalendar({ events }: { events: Event[] }) {
             aria-pressed={view === 'listYear'}
             className={`px-4 py-2 rounded-lg font-semibold text-sm transition-colors ${
               view === 'listYear'
-                ? 'bg-eaa-blue text-white shadow-sm'
+                ? 'bg-eaa-blue text-white shadow-xs'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -381,7 +381,7 @@ export default function EventCalendar({ events }: { events: Event[] }) {
           {LEGEND_ITEMS.map(({ label, type }) => (
             <li key={type} className="flex items-center gap-1.5 text-xs text-gray-600">
               <span
-                className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                className="w-2.5 h-2.5 rounded-full shrink-0"
                 style={{ backgroundColor: EVENT_COLORS[type].bg }}
                 aria-hidden="true"
               />
@@ -392,7 +392,7 @@ export default function EventCalendar({ events }: { events: Event[] }) {
       </div>
 
       {/* Calendar */}
-      <div className="fc-eaa bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-6">
+      <div className="fc-eaa bg-white rounded-xl shadow-xs border border-gray-100 p-3 sm:p-6">
         {mounted ? (
           <FullCalendar
             ref={calendarRef}

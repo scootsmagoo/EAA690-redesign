@@ -71,7 +71,7 @@ export default function ContactPage() {
           ref={successRef}
           role="status"
           tabIndex={-1}
-          className="max-w-xl bg-green-50 border border-green-200 rounded-xl p-8 focus:outline-none"
+          className="max-w-xl bg-green-50 border border-green-200 rounded-xl p-8 focus:outline-hidden"
         >
           <div className="text-4xl mb-3" aria-hidden="true">
             ✉️

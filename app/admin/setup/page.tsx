@@ -103,7 +103,7 @@ export default function AdminSetupPage() {
           <p className="mt-2 text-center text-sm text-gray-600">
             Set up the first administrator account for EAA 690
           </p>
-          <p className="mt-2 text-center text-xs text-yellow-600 bg-yellow-50 p-2 rounded">
+          <p className="mt-2 text-center text-xs text-yellow-600 bg-yellow-50 p-2 rounded-sm">
             This page is only accessible before the first admin account is created.
           </p>
         </div>
@@ -128,7 +128,7 @@ export default function AdminSetupPage() {
                 name="name"
                 type="text"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-hidden focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
                 placeholder="Admin User"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -144,7 +144,7 @@ export default function AdminSetupPage() {
                 type="email"
                 autoComplete="email"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-hidden focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
                 placeholder="admin@eaa690.org"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -160,7 +160,7 @@ export default function AdminSetupPage() {
                 type="password"
                 autoComplete="new-password"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-hidden focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
                 placeholder="At least 8 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -172,7 +172,7 @@ export default function AdminSetupPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-eaa-blue hover:bg-eaa-light-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-eaa-blue disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-eaa-blue hover:bg-eaa-light-blue focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-eaa-blue disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Creating admin account...' : 'Create Admin Account'}
             </button>

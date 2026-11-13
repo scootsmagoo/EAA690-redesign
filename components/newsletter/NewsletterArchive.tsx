@@ -171,13 +171,13 @@ export default function NewsletterArchive({
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by title, volume, or section…"
               aria-describedby={liveRegionId}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-eaa-blue focus:border-eaa-blue"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-hidden focus:ring-2 focus:ring-eaa-blue focus:border-eaa-blue"
             />
             {query ? (
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-eaa-blue text-sm font-semibold rounded px-2 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-eaa-blue text-sm font-semibold rounded-sm px-2 py-1 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue"
                 aria-label="Clear search"
               >
                 Clear
@@ -195,7 +195,7 @@ export default function NewsletterArchive({
               type="button"
               onClick={() => persistView('list')}
               aria-pressed={view === 'list'}
-              className={`px-3 py-2 text-sm font-semibold inline-flex items-center gap-1.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset ${
+              className={`px-3 py-2 text-sm font-semibold inline-flex items-center gap-1.5 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset ${
                 view === 'list' ? 'bg-eaa-blue text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
             >
@@ -208,7 +208,7 @@ export default function NewsletterArchive({
               type="button"
               onClick={() => persistView('grid')}
               aria-pressed={view === 'grid'}
-              className={`px-3 py-2 text-sm font-semibold inline-flex items-center gap-1.5 border-l border-gray-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset ${
+              className={`px-3 py-2 text-sm font-semibold inline-flex items-center gap-1.5 border-l border-gray-300 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-inset ${
                 view === 'grid' ? 'bg-eaa-blue text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
             >
@@ -230,7 +230,7 @@ export default function NewsletterArchive({
             type="button"
             onClick={() => chooseYear(null)}
             aria-pressed={year === null}
-            className={`rounded-full px-3 py-1 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
+            className={`rounded-full px-3 py-1 text-sm font-medium transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
               year === null ? 'bg-eaa-blue text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -242,7 +242,7 @@ export default function NewsletterArchive({
               type="button"
               onClick={() => chooseYear(y)}
               aria-pressed={year === y}
-              className={`rounded-full px-3 py-1 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
+              className={`rounded-full px-3 py-1 text-sm font-medium transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
                 year === y ? 'bg-eaa-blue text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -261,7 +261,7 @@ export default function NewsletterArchive({
             type="button"
             onClick={() => chooseSection(null)}
             aria-pressed={sectionSlug === null}
-            className={`rounded-full px-3 py-1 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
+            className={`rounded-full px-3 py-1 text-sm font-medium transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
               sectionSlug === null ? 'bg-eaa-blue text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -275,7 +275,7 @@ export default function NewsletterArchive({
                 type="button"
                 onClick={() => chooseSection(slug)}
                 aria-pressed={sectionSlug === slug}
-                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 ${
                   sectionSlug === slug ? 'bg-eaa-blue text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >

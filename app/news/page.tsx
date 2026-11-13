@@ -115,7 +115,7 @@ export default async function NewsPage() {
                 {item.slug?.current ? (
                   <Link
                     href={`/news/${item.slug.current}`}
-                    className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+                    className="hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
                   >
                     {item.title}
                   </Link>
@@ -137,7 +137,7 @@ export default async function NewsPage() {
           For the latest news and updates, be sure to check our{' '}
           <Link
             href="/newsletter"
-            className="text-eaa-light-blue hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+            className="text-eaa-light-blue hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
           >
             NAVCOM newsletter
           </Link>{' '}
@@ -161,7 +161,7 @@ export default async function NewsPage() {
           href={legacyArchiveUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
         >
           Open full NAVCOM archive (Google Drive)
           <span className="sr-only"> (opens in a new tab)</span>
