@@ -12,11 +12,6 @@
     "migrate": "tsx scripts/migrate.ts"
   },
   "dependencies": {
-    "@fullcalendar/core": "^6.1.22",
-    "@fullcalendar/daygrid": "^6.1.22",
-    "@fullcalendar/interaction": "^6.1.22",
-    "@fullcalendar/list": "^6.1.22",
-    "@fullcalendar/react": "^6.1.22",
     "@portabletext/react": "^8.0.1",
     "@portabletext/types": "^4.0.2",
     "@sanity/client": "^8.16.0",

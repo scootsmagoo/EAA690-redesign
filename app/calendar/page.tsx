@@ -1,7 +1,4 @@
-import { getAllEvents } from '@/lib/sanity'
 import { getSiteBaseURL } from '@/lib/site-url'
-import type { Event } from '@/lib/sanity-types'
-import EventCalendar from '@/components/EventCalendar'
 import GoogleCalendarEmbed from '@/components/GoogleCalendarEmbed'
 import CalendarSubscribe from '@/components/CalendarSubscribe'
 import {
@@ -39,32 +36,11 @@ const REGULAR_EVENTS = (
   </div>
 )
 
-/** Legacy Sanity + demo path when Google Calendar is not configured (local preview only). */
-async function LegacySanityCalendar() {
-  const fallbackEvents: Event[] = [
-    {
-      _id: 'fallback-1',
-      date: '2026-04-05',
-      startTime: '8:00 AM',
-      endTime: '10:00 AM',
-      title: '1st Saturday Pancake Breakfast',
-      description:
-        'Breakfast served 8:00 to 10:00 AM, Program at 10:00 AM. Alex Ortlano — "Dust Off" presentation.',
-      location: 'Briscoe Field (KLZU)',
-      eventType: 'breakfast',
-      isRecurring: true,
-      recurringInfo: '1st Saturday of each month',
-    },
-  ]
-
-  let events: Event[] = fallbackEvents
-  try {
-    const sanityEvents = await getAllEvents()
-    if (sanityEvents?.length) events = sanityEvents
-  } catch {
-    console.log('Using fallback events (Sanity not configured or unreachable)')
-  }
-
+/**
+ * Shown when NEXT_PUBLIC_GOOGLE_CALENDAR_ID is unset (local dev / previews).
+ * Production always renders the Google Calendar embed.
+ */
+function CalendarNotConfigured() {
   const baseUrl = getSiteBaseURL().replace(/\/$/, '')
   const feedHttpsUrl = `${baseUrl}/api/calendar.ics`
   const webcalUrl = buildWebcalUrl(feedHttpsUrl)
@@ -74,12 +50,10 @@ async function LegacySanityCalendar() {
   return (
     <>
       <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-        <strong>Preview mode:</strong> This site is not yet connected to the chapter Google Calendar.
-        Events shown here come from the CMS or sample data. To go live, set{' '}
-        <code className="text-xs bg-white/70 px-1 rounded-sm">NEXT_PUBLIC_GOOGLE_CALENDAR_ID</code> (see
-        Admin → Chapter calendar).
+        <strong>Calendar not connected:</strong> set{' '}
+        <code className="text-xs bg-white/70 px-1 rounded-sm">NEXT_PUBLIC_GOOGLE_CALENDAR_ID</code> to show
+        the chapter Google Calendar here (see Admin → Chapter calendar).
       </div>
-      <EventCalendar events={events} />
       <CalendarSubscribe
         googleSubscribeUrl={googleSubscribeUrl}
         webcalUrl={webcalUrl}
@@ -120,13 +94,12 @@ export default async function CalendarPage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-eaa-blue">Calendar</h1>
         <p className="text-gray-500 mt-2">
-          {useGoogle
-            ? 'Chapter events from our shared Google Calendar. This page is read-only — to add or change events, use Google Calendar with an editor account.'
-            : 'Select any event for details. Use Month or List view to browse.'}
+          Chapter events from our shared Google Calendar. This page is read-only — to add or change
+          events, use Google Calendar with an editor account.
         </p>
       </div>
 
-      {useGoogle ? <GoogleCalendarSection /> : <LegacySanityCalendar />}
+      {useGoogle ? <GoogleCalendarSection /> : <CalendarNotConfigured />}
     </div>
   )
 }

@@ -8,9 +8,7 @@ updates:
     open-pull-requests-limit: 5
     groups:
       # Packages that share a peer-dependency contract must bump together, or
-      # npm refuses to install (e.g. @fullcalendar/core 7 vs daygrid 6 peers).
-      fullcalendar:
-        patterns: ['@fullcalendar/*']
+      # npm refuses to install.
       sanity:
         patterns: ['sanity', '@sanity/*', 'next-sanity', '@portabletext/*']
       react:
@@ -39,10 +37,6 @@ updates:
       #    eslint-config-next only support ESLint <= 9 (lint crashes on load).
       #    Unblock when eslint-config-next supports ESLint 10.
       - dependency-name: eslint
-        update-types: [version-update:semver-major]
-      #  - FullCalendar 7: breaking API/type changes in components/EventCalendar.tsx,
-      #    and all @fullcalendar/* packages must move together. Planned migration.
-      - dependency-name: '@fullcalendar/*'
         update-types: [version-update:semver-major]
       # Keep Node type definitions on the runtime we actually deploy with
       # (Vercel + CI run Node 22); bump deliberately alongside the engine.
