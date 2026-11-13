@@ -51,7 +51,8 @@ const productDescriptionComponents = {
   },
 }
 
-const LIVE_STORE = 'https://www.eaa690.org/store'
+/** Products with no on-site price and no purchase URL: ask the chapter directly. */
+const NO_CHECKOUT_FALLBACK = '/contact'
 
 type Props = {
   categories: StoreCategory[]
@@ -67,14 +68,14 @@ function isSafeSameOriginPath(href: string): boolean {
 }
 
 function ExternalPurchaseLink({ item }: { item: StoreProduct }) {
-  const href = item.externalPurchaseUrl || LIVE_STORE
+  const href = item.externalPurchaseUrl || NO_CHECKOUT_FALLBACK
   const isInternal = isSafeSameOriginPath(href)
-  const label = item.externalPurchaseUrl ? 'Purchase' : 'View on chapter store'
+  const label = item.externalPurchaseUrl ? 'Purchase' : 'Contact us to purchase'
   const className =
     'bg-eaa-yellow text-eaa-blue px-4 py-2 rounded-md font-semibold hover:bg-yellow-400 transition-colors text-center text-sm whitespace-nowrap'
   const aria = item.externalPurchaseUrl
     ? `Purchase ${item.title}${isInternal ? '' : ' (opens external site)'}`
-    : `View ${item.title} on the chapter store (opens external site)`
+    : `Contact the chapter to purchase ${item.title}`
 
   if (isInternal) {
     return (

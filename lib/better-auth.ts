@@ -94,7 +94,8 @@ function getSecret(): string {
  */
 let _auth: ReturnType<typeof betterAuth> | null = null
 
-const PRODUCTION_TRUSTED_ORIGINS = [
+/** Production origins — shared with the CORS allowlist in app/api/auth/[...all]/route.ts. */
+export const PRODUCTION_TRUSTED_ORIGINS = [
   "https://eaa690.org",
   "https://www.eaa690.org",
   "https://eaa-960-redesign.vercel.app",
