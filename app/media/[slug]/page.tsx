@@ -89,7 +89,7 @@ const richDescriptionComponents = {
         return (
           <a
             href={safe}
-            className="text-eaa-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+            className="text-eaa-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -100,7 +100,7 @@ const richDescriptionComponents = {
       return (
         <Link
           href={safe}
-          className="text-eaa-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+          className="text-eaa-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
         >
           {children}
         </Link>

@@ -132,7 +132,7 @@ export default function MediaImageGrid({ images }: Props) {
             <button
               key={i}
               onClick={(e) => openAt(i, e.currentTarget)}
-              className="w-full break-inside-avoid rounded overflow-hidden cursor-zoom-in focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow block"
+              className="w-full break-inside-avoid rounded-sm overflow-hidden cursor-zoom-in focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow block"
               aria-label={`View ${alt}`}
             >
               <Image
@@ -178,7 +178,7 @@ export default function MediaImageGrid({ images }: Props) {
               ref={closeBtnRef}
               onClick={close}
               aria-label="Close lightbox"
-              className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-10 h-10 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow z-10"
+              className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full w-10 h-10 flex items-center justify-center focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow z-10"
             >
               <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -227,7 +227,7 @@ export default function MediaImageGrid({ images }: Props) {
               <button
                 onClick={(e) => { e.stopPropagation(); prev() }}
                 aria-label="Previous image"
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-12 h-12 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-12 h-12 rounded-full flex items-center justify-center focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow"
               >
                 <svg aria-hidden="true" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -240,7 +240,7 @@ export default function MediaImageGrid({ images }: Props) {
               <button
                 onClick={(e) => { e.stopPropagation(); next() }}
                 aria-label="Next image"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-12 h-12 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-12 h-12 rounded-full flex items-center justify-center focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow"
               >
                 <svg aria-hidden="true" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />

@@ -51,7 +51,7 @@ export default function IssueTableOfContents({ items, issue, headingId = 'navcom
             sectionTitle && sectionSlug ? (
               <Link
                 href={`/newsletter/sections/${sectionSlug}`}
-                className="ml-2 inline-flex items-center rounded-full border border-eaa-blue/20 bg-white text-eaa-blue px-2 py-0.5 text-xs font-medium hover:bg-blue-100 align-middle focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
+                className="ml-2 inline-flex items-center rounded-full border border-eaa-blue/20 bg-white text-eaa-blue px-2 py-0.5 text-xs font-medium hover:bg-blue-100 align-middle focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-1"
               >
                 §&nbsp;{sectionTitle}
               </Link>
@@ -66,7 +66,7 @@ export default function IssueTableOfContents({ items, issue, headingId = 'navcom
               <div className="flex items-baseline gap-3">
                 {typeof item.pageNumber === 'number' ? (
                   <span
-                    className="shrink-0 inline-flex items-center justify-center rounded-md bg-white border border-eaa-blue/20 text-eaa-blue text-xs font-bold tabular-nums px-2 py-0.5 min-w-[2.25rem]"
+                    className="shrink-0 inline-flex items-center justify-center rounded-md bg-white border border-eaa-blue/20 text-eaa-blue text-xs font-bold tabular-nums px-2 py-0.5 min-w-9"
                     aria-label={`Page ${item.pageNumber}`}
                   >
                     p.&nbsp;{item.pageNumber}
@@ -80,7 +80,7 @@ export default function IssueTableOfContents({ items, issue, headingId = 'navcom
                         {...(isExternal
                           ? { target: '_blank', rel: 'noopener noreferrer' }
                           : {})}
-                        className="font-semibold text-eaa-blue hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+                        className="font-semibold text-eaa-blue hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
                       >
                         {item.heading}
                         {isExternal ? (

@@ -83,7 +83,7 @@ const portableTextComponents = {
         return (
           <a
             href={safe}
-            className="text-eaa-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+            className="text-eaa-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -94,7 +94,7 @@ const portableTextComponents = {
       return (
         <Link
           href={safe}
-          className="text-eaa-blue underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+          className="text-eaa-blue underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
         >
           {children}
         </Link>
@@ -169,7 +169,7 @@ export default async function KudosDetailPage({
           <li>
             <Link
               href="/"
-              className="hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+              className="hover:underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             >
               Home
             </Link>
@@ -180,7 +180,7 @@ export default async function KudosDetailPage({
           <li>
             <Link
               href="/kudos"
-              className="hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+              className="hover:underline rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             >
               Kudos
             </Link>
@@ -197,7 +197,7 @@ export default async function KudosDetailPage({
       <Link
         href="/kudos"
         aria-label="Back to all kudos"
-        className="inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold mb-8 transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+        className="inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold mb-8 transition-colors rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
       >
         <svg
           className="w-4 h-4 shrink-0"
@@ -289,7 +289,7 @@ export default async function KudosDetailPage({
         <Link
           href="/kudos"
           aria-label="Back to all kudos"
-          className="inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+          className="inline-flex items-center gap-1 text-sm text-eaa-light-blue hover:text-eaa-blue font-semibold transition-colors rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
         >
           <svg
             className="w-4 h-4 shrink-0"

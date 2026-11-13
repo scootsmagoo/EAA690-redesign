@@ -22,7 +22,7 @@ export default function CalendarSubscribe({
         </p>
         {sourceNote && <p className="text-xs text-gray-400 mt-2">{sourceNote}</p>}
       </div>
-      <div className="flex flex-wrap gap-2 sm:flex-shrink-0">
+      <div className="flex flex-wrap gap-2 sm:shrink-0">
         <a
           href={googleSubscribeUrl}
           target="_blank"

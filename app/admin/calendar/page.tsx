@@ -43,11 +43,11 @@ function CalendarAdminInner() {
         </p>
         {configured ? (
           <p className="text-sm text-gray-700 mt-2 break-all">
-            Calendar ID: <code className="text-xs bg-white/80 px-1 py-0.5 rounded">{calendarId}</code>
+            Calendar ID: <code className="text-xs bg-white/80 px-1 py-0.5 rounded-sm">{calendarId}</code>
           </p>
         ) : (
           <p className="text-sm text-gray-700 mt-2">
-            Set <code className="text-xs bg-white/80 px-1 py-0.5 rounded">NEXT_PUBLIC_GOOGLE_CALENDAR_ID</code>{' '}
+            Set <code className="text-xs bg-white/80 px-1 py-0.5 rounded-sm">NEXT_PUBLIC_GOOGLE_CALENDAR_ID</code>{' '}
             in your environment (Vercel → Settings → Environment Variables), then redeploy.
           </p>
         )}

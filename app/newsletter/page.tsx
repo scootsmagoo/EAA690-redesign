@@ -113,7 +113,7 @@ export default async function NewsletterArchivePage({ searchParams }: Props) {
       <nav className="text-sm text-eaa-light-blue mb-6" aria-label="Breadcrumb">
         <Link
           href="/"
-          className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+          className="hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
         >
           Home
         </Link>
@@ -135,7 +135,7 @@ export default async function NewsletterArchivePage({ searchParams }: Props) {
             href={fallbackPdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-full bg-eaa-blue text-white px-5 py-2.5 text-sm font-semibold hover:bg-eaa-light-blue transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-full bg-eaa-blue text-white px-5 py-2.5 text-sm font-semibold hover:bg-eaa-light-blue transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
             aria-label="Open latest NAVCOM PDF (opens in a new tab)"
           >
             Open latest PDF
@@ -168,7 +168,7 @@ export default async function NewsletterArchivePage({ searchParams }: Props) {
           </div>
           <a
             href="/newsletter/feed.xml"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
           >
             <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M3 5a1 1 0 011-1c7.18 0 13 5.82 13 13a1 1 0 11-2 0c0-6.075-4.925-11-11-11a1 1 0 01-1-1z" />
@@ -205,7 +205,7 @@ export default async function NewsletterArchivePage({ searchParams }: Props) {
             href={legacyArchiveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-eaa-light-blue hover:text-eaa-blue underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2 rounded-sm"
           >
             Open full NAVCOM archive (Google Drive)
             <span className="sr-only"> (opens in a new tab)</span>

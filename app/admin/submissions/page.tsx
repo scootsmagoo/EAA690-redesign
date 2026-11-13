@@ -178,7 +178,7 @@ export default function SubmissionsPage() {
                   '(no name)'
 
               return (
-                <div key={s.id} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div key={s.id} className="bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
                   {/* Row header — W5: aria-expanded + aria-controls link button to its panel */}
                   <button
                     className="w-full flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 px-5 py-4 text-left hover:bg-gray-50 transition-colors"
@@ -236,7 +236,7 @@ export default function SubmissionsPage() {
                                 <td className="py-2 pr-4 font-medium text-gray-500 whitespace-nowrap align-top w-48">
                                   {submissionFieldLabel(k)}
                                 </td>
-                                <td className="py-2 text-gray-800 break-words">
+                                <td className="py-2 text-gray-800 wrap-break-word">
                                   {fmt(v)}
                                 </td>
                               </tr>

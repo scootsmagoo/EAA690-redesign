@@ -171,7 +171,7 @@ export default function SettingsForm() {
           {/* THEME */}
           <section
             aria-labelledby={`${groupId}-theme`}
-            className="bg-white dark:bg-eaa-surface-dark rounded-lg shadow-sm border border-gray-200 dark:border-eaa-border-dark p-6"
+            className="bg-white dark:bg-eaa-surface-dark rounded-lg shadow-xs border border-gray-200 dark:border-eaa-border-dark p-6"
           >
             <header className="flex items-start justify-between gap-4 mb-1">
               <h2
@@ -236,7 +236,7 @@ export default function SettingsForm() {
           {/* ACCESSIBILITY */}
           <section
             aria-labelledby={`${groupId}-a11y`}
-            className="bg-white dark:bg-eaa-surface-dark rounded-lg shadow-sm border border-gray-200 dark:border-eaa-border-dark p-6"
+            className="bg-white dark:bg-eaa-surface-dark rounded-lg shadow-xs border border-gray-200 dark:border-eaa-border-dark p-6"
           >
             <h2
               id={`${groupId}-a11y`}
@@ -314,7 +314,7 @@ export default function SettingsForm() {
           {/* PRIVACY / COOKIES */}
           <section
             aria-labelledby={`${groupId}-privacy`}
-            className="bg-white dark:bg-eaa-surface-dark rounded-lg shadow-sm border border-gray-200 dark:border-eaa-border-dark p-6"
+            className="bg-white dark:bg-eaa-surface-dark rounded-lg shadow-xs border border-gray-200 dark:border-eaa-border-dark p-6"
           >
             <h2
               id={`${groupId}-privacy`}
@@ -376,7 +376,7 @@ export default function SettingsForm() {
           {/* MEMBER / ADMIN LINKS */}
           <section
             aria-labelledby={`${groupId}-more`}
-            className="bg-white dark:bg-eaa-surface-dark rounded-lg shadow-sm border border-gray-200 dark:border-eaa-border-dark p-6"
+            className="bg-white dark:bg-eaa-surface-dark rounded-lg shadow-xs border border-gray-200 dark:border-eaa-border-dark p-6"
           >
             <h2
               id={`${groupId}-more`}
@@ -451,7 +451,7 @@ function ToggleRow({
         aria-checked={checked}
         aria-describedby={hintId}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors mt-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-light-blue focus-visible:ring-offset-2 dark:focus-visible:ring-offset-eaa-surface-dark ${
+        className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors mt-0.5 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-light-blue focus-visible:ring-offset-2 dark:focus-visible:ring-offset-eaa-surface-dark ${
           checked ? 'bg-eaa-blue dark:bg-eaa-yellow' : 'bg-gray-300 dark:bg-eaa-border-dark'
         }`}
       >

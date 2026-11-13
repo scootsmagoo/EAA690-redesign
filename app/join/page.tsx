@@ -172,7 +172,7 @@ export default function JoinPage() {
                 href="https://www.eaa.org/eaa/join-eaa"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline font-semibold text-amber-950 hover:text-amber-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900 rounded-sm"
+                className="underline font-semibold text-amber-950 hover:text-amber-900 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900 rounded-xs"
               >
                 EAA National
                 <span className="sr-only"> (opens in new tab)</span>
@@ -196,7 +196,7 @@ export default function JoinPage() {
             id="join-checkout-error"
             role="alert"
             tabIndex={-1}
-            className="bg-red-50 border border-red-200 rounded-xl p-4 mb-8 text-red-900 text-sm outline-none focus-visible:ring-2 focus-visible:ring-red-700 focus-visible:ring-offset-2"
+            className="bg-red-50 border border-red-200 rounded-xl p-4 mb-8 text-red-900 text-sm outline-hidden focus-visible:ring-2 focus-visible:ring-red-700 focus-visible:ring-offset-2"
           >
             {error}
           </div>
@@ -288,7 +288,7 @@ export default function JoinPage() {
                       ? `Opening checkout for ${tier.name} membership in a new tab`
                       : `Join or renew ${tier.name} membership — ${tier.price} ${tier.period}`
                   }
-                  className={`block w-full text-center py-3 rounded-xl font-bold transition-all motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue ${
+                  className={`block w-full text-center py-3 rounded-xl font-bold transition-all motion-reduce:transition-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue ${
                     tier.highlight
                       ? 'bg-eaa-yellow text-eaa-blue hover:bg-yellow-400 shadow-md'
                       : 'bg-eaa-blue text-white hover:bg-blue-900'
@@ -308,7 +308,7 @@ export default function JoinPage() {
         </section>
 
         {/* Benefits section */}
-        <div className="bg-gradient-to-br from-blue-50 to-white dark:from-eaa-surface-dark dark:to-eaa-bg-dark rounded-2xl p-10 mb-12">
+        <div className="bg-linear-to-br from-blue-50 to-white dark:from-eaa-surface-dark dark:to-eaa-bg-dark rounded-2xl p-10 mb-12">
           <h2 className="text-3xl font-bold text-eaa-blue mb-2 text-center">Why Join Chapter 690?</h2>
           <p className="text-center text-gray-500 mb-10">
             Awarded EAA&apos;s top-level <strong>Gold Chapter</strong> status — here&apos;s what you get as a member.
@@ -374,7 +374,7 @@ export default function JoinPage() {
                 a: 'EAA Chapter 690 is a 501(c)(3) non-profit. Please consult your tax advisor regarding the deductibility of your membership dues.',
               },
             ].map(({ q, a }) => (
-              <div key={q} className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+              <div key={q} className="bg-white rounded-xl border border-gray-200 p-6 shadow-xs">
                 <h3 className="font-semibold text-eaa-blue mb-2">{q}</h3>
                 <p className="text-gray-700 text-sm leading-relaxed">{a}</p>
               </div>
@@ -389,7 +389,7 @@ export default function JoinPage() {
           </p>
           <Link
             href="/donate"
-            className="inline-block bg-eaa-yellow text-eaa-blue px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue"
+            className="inline-block bg-eaa-yellow text-eaa-blue px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-colors motion-reduce:transition-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-eaa-blue"
           >
             Donate Today<span aria-hidden="true"> →</span>
           </Link>

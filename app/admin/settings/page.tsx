@@ -293,7 +293,7 @@ function SiteSettingsForm() {
         <p className="text-gray-500">Loading…</p>
       ) : (
         <form onSubmit={onSubmit} className="space-y-8">
-          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <section className="bg-white rounded-lg shadow-xs border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-eaa-blue mb-4">Brand</h2>
             <div className="space-y-4">
               <div>
@@ -322,7 +322,7 @@ function SiteSettingsForm() {
                 <p className="text-sm font-medium text-gray-700 mb-2">Logo</p>
                 {logoPreviewUrl ? (
                   <div className="flex items-start gap-4">
-                    <div className="relative w-32 h-20 border border-gray-200 rounded bg-gray-50 overflow-hidden shrink-0">
+                    <div className="relative w-32 h-20 border border-gray-200 rounded-sm bg-gray-50 overflow-hidden shrink-0">
                       <Image
                         src={logoPreviewUrl}
                         alt="Current logo"
@@ -352,7 +352,7 @@ function SiteSettingsForm() {
             </div>
           </section>
 
-          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <section className="bg-white rounded-lg shadow-xs border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-eaa-blue mb-4">Contact</h2>
             <div className="space-y-4">
               <div>
@@ -393,7 +393,7 @@ function SiteSettingsForm() {
             </div>
           </section>
 
-          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <section className="bg-white rounded-lg shadow-xs border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-eaa-blue mb-4">Programs & links</h2>
             <div className="space-y-4">
               <div>
@@ -458,7 +458,7 @@ function SiteSettingsForm() {
             </div>
           </section>
 
-          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <section className="bg-white rounded-lg shadow-xs border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-eaa-blue mb-1">Site-wide announcement</h2>
             <p className="text-sm text-gray-500 mb-4">
               Optional banner below the main navigation on every public page. Use for weather cancellations,
@@ -468,7 +468,7 @@ function SiteSettingsForm() {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                  className="rounded-sm border-gray-300 text-eaa-blue focus:ring-eaa-blue"
                   checked={form.siteAnnouncement.enabled}
                   onChange={(e) =>
                     setForm((f) => ({
@@ -599,10 +599,10 @@ function SiteSettingsForm() {
             </div>
           </section>
 
-          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <section className="bg-white rounded-lg shadow-xs border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-eaa-blue mb-1">Program forms & PDFs</h2>
             <p className="text-sm text-gray-500 mb-4">
-              Control online forms and chapter PDF links on <code className="text-xs bg-gray-100 px-1 rounded">/programs</code>{' '}
+              Control online forms and chapter PDF links on <code className="text-xs bg-gray-100 px-1 rounded-sm">/programs</code>{' '}
               pages (same fields exist in Sanity Studio under Site Settings → Program registration & documents).
             </p>
             <div className="space-y-8">
@@ -641,7 +641,7 @@ function SiteSettingsForm() {
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                        className="rounded-sm border-gray-300 text-eaa-blue focus:ring-eaa-blue"
                         checked={form.programForms[key].registrationOpen}
                         onChange={(e) =>
                           setForm((f) => ({
@@ -659,7 +659,7 @@ function SiteSettingsForm() {
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="checkbox"
-                          className="rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                          className="rounded-sm border-gray-300 text-eaa-blue focus:ring-eaa-blue"
                           checked={form.programForms[key].documentsVisible}
                           onChange={(e) =>
                             setForm((f) => ({
@@ -700,20 +700,20 @@ function SiteSettingsForm() {
             </div>
           </section>
 
-          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <section className="bg-white rounded-lg shadow-xs border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-eaa-blue mb-1">Form notifications (alerts)</h2>
             <p className="text-sm text-gray-500 mb-4">
               Who gets an email when a website form submission reaches the database. Per-form lists, when set,
               replace the defaults for that form. SMS scaffolding is in place but does nothing until Twilio
-              env vars (<code className="text-xs bg-gray-100 px-1 rounded">TWILIO_ACCOUNT_SID</code>,{' '}
-              <code className="text-xs bg-gray-100 px-1 rounded">TWILIO_AUTH_TOKEN</code>,{' '}
-              <code className="text-xs bg-gray-100 px-1 rounded">TWILIO_FROM_NUMBER</code>) are configured.
+              env vars (<code className="text-xs bg-gray-100 px-1 rounded-sm">TWILIO_ACCOUNT_SID</code>,{' '}
+              <code className="text-xs bg-gray-100 px-1 rounded-sm">TWILIO_AUTH_TOKEN</code>,{' '}
+              <code className="text-xs bg-gray-100 px-1 rounded-sm">TWILIO_FROM_NUMBER</code>) are configured.
             </p>
 
             <label className="flex items-center gap-2 cursor-pointer mb-4">
               <input
                 type="checkbox"
-                className="rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                className="rounded-sm border-gray-300 text-eaa-blue focus:ring-eaa-blue"
                 checked={form.formNotifications.enabled}
                 onChange={(e) =>
                   setForm((f) => ({
@@ -753,7 +753,7 @@ function SiteSettingsForm() {
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Used for any program form unless a per-form list below is set. Leave empty to fall back to
-                  the <code className="text-xs bg-gray-100 px-1 rounded">CONTACT_EMAIL_TO</code> environment
+                  the <code className="text-xs bg-gray-100 px-1 rounded-sm">CONTACT_EMAIL_TO</code> environment
                   variable.
                 </p>
               </div>
@@ -821,7 +821,7 @@ function SiteSettingsForm() {
                   }
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Use E.164 format with country code (e.g. <code className="text-xs bg-gray-100 px-1 rounded">+14045551234</code>).
+                  Use E.164 format with country code (e.g. <code className="text-xs bg-gray-100 px-1 rounded-sm">+14045551234</code>).
                   Numbers are saved now but no SMS will be sent until Twilio env vars are configured on the server.
                 </p>
               </div>
@@ -829,7 +829,7 @@ function SiteSettingsForm() {
               <label className="flex items-start gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="mt-0.5 rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                  className="mt-0.5 rounded-sm border-gray-300 text-eaa-blue focus:ring-eaa-blue"
                   checked={form.formNotifications.adminUserCreatedAlerts}
                   onChange={(e) =>
                     setForm((f) => ({
@@ -852,7 +852,7 @@ function SiteSettingsForm() {
             </div>
           </section>
 
-          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <section className="bg-white rounded-lg shadow-xs border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-eaa-blue mb-1">Store</h2>
             <p className="text-sm text-gray-500 mb-4">
               Turn off to hide the Store link and cart in the navigation and show a notice on store pages.
@@ -860,7 +860,7 @@ function SiteSettingsForm() {
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
-                className="rounded border-gray-300 text-eaa-blue focus:ring-eaa-blue"
+                className="rounded-sm border-gray-300 text-eaa-blue focus:ring-eaa-blue"
                 checked={form.storeSectionVisible}
                 onChange={(e) => setForm((f) => ({ ...f, storeSectionVisible: e.target.checked }))}
               />
@@ -868,7 +868,7 @@ function SiteSettingsForm() {
             </label>
           </section>
 
-          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <section className="bg-white rounded-lg shadow-xs border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-eaa-blue mb-4">Social media</h2>
             <p className="text-sm text-gray-500 mb-4">Full URLs to chapter pages (leave blank to hide).</p>
             <div className="space-y-4">

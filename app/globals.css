@@ -1,6 +1,69 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-eaa-blue: #003366;
+  --color-eaa-yellow: #ffd700;
+  --color-eaa-light-blue: #0066cc;
+  --color-eaa-blue-dark: #0a4f8f;
+  --color-eaa-bg-dark: #0b1220;
+  --color-eaa-surface-dark: #111827;
+  --color-eaa-border-dark: #1f2937;
+
+  --font-display:
+    var(--font-cormorant), Cormorant, Georgia, Times New Roman, serif;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  /*
+    More v3 parity. v4's preflight switched buttons to the default cursor and
+    zeroed the browser's padding inside date/time inputs, which made them 2px
+    shorter than the selects beside them.
+  */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+  ::-webkit-date-and-time-value,
+  ::-webkit-datetime-edit,
+  ::-webkit-datetime-edit-fields-wrapper,
+  ::-webkit-datetime-edit-year-field,
+  ::-webkit-datetime-edit-month-field,
+  ::-webkit-datetime-edit-day-field,
+  ::-webkit-datetime-edit-hour-field,
+  ::-webkit-datetime-edit-minute-field,
+  ::-webkit-datetime-edit-second-field,
+  ::-webkit-datetime-edit-millisecond-field,
+  ::-webkit-datetime-edit-meridiem-field {
+    min-height: revert;
+    padding: revert;
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
 
 @layer base {
   /**
@@ -140,7 +203,8 @@
   }
 }
 
-/**
+@layer utilities {
+  /**
  * Dark-mode utility-class compatibility layer.
  *
  * The site has hundreds of hardcoded Tailwind color utilities (`bg-white`,
@@ -153,59 +217,60 @@
  * Scoped to `body` to avoid touching Sanity Studio (which renders inside the
  * studio iframe under /studio with its own theme) — see SiteChrome.
  */
-.dark body .bg-white,
-.dark body .bg-gray-50,
-.dark body .bg-slate-50 {
-  background-color: rgb(var(--eaa-surface));
-}
-.dark body .bg-gray-100,
-.dark body .bg-slate-100 {
-  background-color: rgb(var(--eaa-surface-2));
-}
-.dark body .bg-gray-200,
-.dark body .bg-slate-200 {
-  background-color: rgb(var(--eaa-surface-3));
-}
-.dark body .text-gray-900,
-.dark body .text-slate-900,
-.dark body .text-black {
-  color: rgb(var(--eaa-text));
-}
-.dark body .text-gray-800,
-.dark body .text-gray-700,
-.dark body .text-slate-800,
-.dark body .text-slate-700 {
-  color: rgb(var(--eaa-text));
-}
-.dark body .text-gray-600,
-.dark body .text-gray-500,
-.dark body .text-slate-600,
-.dark body .text-slate-500 {
-  color: rgb(var(--eaa-text-muted));
-}
-.dark body .text-gray-400,
-.dark body .text-slate-400 {
-  color: rgb(var(--eaa-text-subtle));
-}
-.dark body .border-gray-100,
-.dark body .border-gray-200,
-.dark body .border-slate-100,
-.dark body .border-slate-200 {
-  border-color: rgb(var(--eaa-border));
-}
-.dark body .border-gray-300,
-.dark body .border-slate-300 {
-  border-color: rgb(var(--eaa-border-strong));
-}
-.dark body .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
-.dark body .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
-  border-color: rgb(var(--eaa-border));
-}
-/** Soft tinted hero/info backgrounds — keep brand intent but darken. */
-.dark body .bg-blue-50 {
-  background-color: rgb(17 24 39);
-}
-/**
+  .dark body .bg-white,
+  .dark body .bg-gray-50,
+  .dark body .bg-slate-50 {
+    background-color: rgb(var(--eaa-surface));
+  }
+  .dark body .bg-gray-100,
+  .dark body .bg-slate-100 {
+    background-color: rgb(var(--eaa-surface-2));
+  }
+  .dark body .bg-gray-200,
+  .dark body .bg-slate-200 {
+    background-color: rgb(var(--eaa-surface-3));
+  }
+  .dark body .text-gray-900,
+  .dark body .text-slate-900,
+  .dark body .text-black {
+    color: rgb(var(--eaa-text));
+  }
+  .dark body .text-gray-800,
+  .dark body .text-gray-700,
+  .dark body .text-slate-800,
+  .dark body .text-slate-700 {
+    color: rgb(var(--eaa-text));
+  }
+  .dark body .text-gray-600,
+  .dark body .text-gray-500,
+  .dark body .text-slate-600,
+  .dark body .text-slate-500 {
+    color: rgb(var(--eaa-text-muted));
+  }
+  .dark body .text-gray-400,
+  .dark body .text-slate-400 {
+    color: rgb(var(--eaa-text-subtle));
+  }
+  .dark body .border-gray-100,
+  .dark body .border-gray-200,
+  .dark body .border-slate-100,
+  .dark body .border-slate-200 {
+    border-color: rgb(var(--eaa-border));
+  }
+  .dark body .border-gray-300,
+  .dark body .border-slate-300 {
+    border-color: rgb(var(--eaa-border-strong));
+  }
+  /* v4 draws dividers as a bottom border on every child except the last. */
+  .dark body .divide-gray-100 > :not(:last-child),
+  .dark body .divide-gray-200 > :not(:last-child) {
+    border-color: rgb(var(--eaa-border));
+  }
+  /** Soft tinted hero/info backgrounds — keep brand intent but darken. */
+  .dark body .bg-blue-50 {
+    background-color: rgb(17 24 39);
+  }
+  /**
  * Safety net for Tailwind gradient utilities on light-tinted backgrounds.
  * `bg-gradient-to-* from-blue-50 to-white` and friends set --tw-gradient-from
  * /--tw-gradient-to as raw CSS variables, so the .bg-blue-50 remap above
@@ -214,80 +279,77 @@
  * gradient in dark mode should set explicit dark:from-/dark:to- classes,
  * which win on source order.
  */
-.dark body .from-blue-50 {
-  --tw-gradient-from: rgb(var(--eaa-bg)) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(var(--eaa-bg) / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.dark body .to-white,
-.dark body .to-blue-50 {
-  --tw-gradient-to: rgb(var(--eaa-bg)) var(--tw-gradient-to-position);
-}
-.dark body .via-white {
-  --tw-gradient-via: rgb(var(--eaa-bg)) var(--tw-gradient-via-position);
-}
-.dark body .bg-yellow-50 {
-  background-color: rgb(31 26 11);
-}
-.dark body .bg-amber-50 {
-  background-color: rgb(31 26 11);
-}
-.dark body .bg-green-50 {
-  background-color: rgb(8 24 18);
-}
-.dark body .bg-red-50 {
-  background-color: rgb(40 12 14);
-}
-.dark body .bg-sky-50 {
-  background-color: rgb(8 22 36);
-}
-/** Color-tinted text on those backgrounds needs to lighten for contrast. */
-.dark body .text-amber-950,
-.dark body .text-amber-900,
-.dark body .text-amber-800,
-.dark body .text-amber-700 {
-  color: rgb(252 211 77);
-}
-.dark body .text-blue-900,
-.dark body .text-blue-800 {
-  color: rgb(147 197 253);
-}
-.dark body .text-green-900,
-.dark body .text-green-800,
-.dark body .text-green-700 {
-  color: rgb(134 239 172);
-}
-.dark body .text-red-900,
-.dark body .text-red-800,
-.dark body .text-red-700,
-.dark body .text-red-600 {
-  color: rgb(252 165 165);
-}
-.dark body .text-sky-950,
-.dark body .text-sky-900 {
-  color: rgb(125 211 252);
-}
-/** Form controls in dark mode (default browser appearance). */
-.dark body input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
-.dark body select,
-.dark body textarea {
-  background-color: rgb(var(--eaa-input-bg));
-  color: rgb(var(--eaa-text));
-  border-color: rgb(var(--eaa-input-border));
-}
-.dark body input::placeholder,
-.dark body textarea::placeholder {
-  color: rgb(var(--eaa-text-subtle));
-}
-/** Shadow utilities look harsh on dark surfaces — ease them off. */
-.dark body .shadow-sm,
-.dark body .shadow,
-.dark body .shadow-md,
-.dark body .shadow-lg {
-  --tw-shadow-color: rgb(0 0 0 / 0.5);
-}
+  /* v4: the --tw-gradient-* stop variables hold only a color; positions and
+     direction live in separate variables that the utilities combine. */
+  .dark body .from-blue-50 {
+    --tw-gradient-from: rgb(var(--eaa-bg));
+  }
+  .dark body .to-white,
+  .dark body .to-blue-50 {
+    --tw-gradient-to: rgb(var(--eaa-bg));
+  }
+  .dark body .via-white {
+    --tw-gradient-via: rgb(var(--eaa-bg));
+  }
+  .dark body .bg-yellow-50 {
+    background-color: rgb(31 26 11);
+  }
+  .dark body .bg-amber-50 {
+    background-color: rgb(31 26 11);
+  }
+  .dark body .bg-green-50 {
+    background-color: rgb(8 24 18);
+  }
+  .dark body .bg-red-50 {
+    background-color: rgb(40 12 14);
+  }
+  .dark body .bg-sky-50 {
+    background-color: rgb(8 22 36);
+  }
+  /** Color-tinted text on those backgrounds needs to lighten for contrast. */
+  .dark body .text-amber-950,
+  .dark body .text-amber-900,
+  .dark body .text-amber-800,
+  .dark body .text-amber-700 {
+    color: rgb(252 211 77);
+  }
+  .dark body .text-blue-900,
+  .dark body .text-blue-800 {
+    color: rgb(147 197 253);
+  }
+  .dark body .text-green-900,
+  .dark body .text-green-800,
+  .dark body .text-green-700 {
+    color: rgb(134 239 172);
+  }
+  .dark body .text-red-900,
+  .dark body .text-red-800,
+  .dark body .text-red-700,
+  .dark body .text-red-600 {
+    color: rgb(252 165 165);
+  }
+  .dark body .text-sky-950,
+  .dark body .text-sky-900 {
+    color: rgb(125 211 252);
+  }
+  /** Form controls in dark mode (default browser appearance). */
+  .dark
+    body
+    input:not([type='checkbox']):not([type='radio']):not([type='range']):not(
+      [type='color']
+    ),
+  .dark body select,
+  .dark body textarea {
+    background-color: rgb(var(--eaa-input-bg));
+    color: rgb(var(--eaa-text));
+    border-color: rgb(var(--eaa-input-border));
+  }
+  .dark body input::placeholder,
+  .dark body textarea::placeholder {
+    color: rgb(var(--eaa-text-subtle));
+  }
 
-/**
+  /**
  * Brand-color overrides for dark mode.
  *
  * The site uses `text-eaa-blue` for hundreds of headings and `bg-eaa-blue` for
@@ -299,7 +361,7 @@
  * Excluded: inside .bg-eaa-blue (text on a blue button stays white) and
  * components that explicitly opt out via `.no-dark-brand-shift`.
  */
-/**
+  /**
  * Skip yellow-tinted surfaces in two ways:
  *   1. The element itself carrying both `bg-eaa-yellow` + `text-eaa-blue`
  *      (the DONATE / Join CTAs are a single <a> with both classes).
@@ -309,29 +371,51 @@
  * stay #003366 in either case. Otherwise we flip it to #FFD700 → yellow-
  * on-yellow → invisible (WCAG 1.4.3 fail).
  */
-.dark body :where(.text-eaa-blue):not(:is(.bg-eaa-blue, .bg-eaa-yellow, .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500)):not(:is(.bg-eaa-blue, .bg-eaa-yellow, .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500) *):not(.no-dark-brand-shift) {
-  color: #FFD700;
-}
-.dark body :where(.bg-eaa-blue):not(.no-dark-brand-shift) {
-  background-color: #0a4f8f;
-}
-.dark body :where(.bg-eaa-light-blue):not(.no-dark-brand-shift) {
-  background-color: #0066CC;
-}
-.dark body :where(.border-eaa-blue):not(.no-dark-brand-shift) {
-  border-color: #FFD700;
-}
-.dark body :where(.text-eaa-light-blue):not(.bg-eaa-blue *):not(.no-dark-brand-shift) {
-  color: #93c5fd; /* sky-300 — readable accent on dark slate */
-}
-/** Hover variants of `text-eaa-blue` that flip to light-blue should also shift. */
-.dark body :where(a:hover .text-eaa-blue, .hover\:text-eaa-blue:hover) {
-  color: #FFD700;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .dark
+    body
+    :where(.text-eaa-blue):not(
+      :is(
+        .bg-eaa-blue,
+        .bg-eaa-yellow,
+        .bg-yellow-50,
+        .bg-yellow-100,
+        .bg-yellow-200,
+        .bg-yellow-300,
+        .bg-yellow-400,
+        .bg-yellow-500
+      )
+    ):not(
+      :is(
+          .bg-eaa-blue,
+          .bg-eaa-yellow,
+          .bg-yellow-50,
+          .bg-yellow-100,
+          .bg-yellow-200,
+          .bg-yellow-300,
+          .bg-yellow-400,
+          .bg-yellow-500
+        )
+        *
+    ):not(.no-dark-brand-shift) {
+    color: #ffd700;
+  }
+  .dark body :where(.bg-eaa-blue):not(.no-dark-brand-shift) {
+    background-color: #0a4f8f;
+  }
+  .dark body :where(.bg-eaa-light-blue):not(.no-dark-brand-shift) {
+    background-color: #0066cc;
+  }
+  .dark body :where(.border-eaa-blue):not(.no-dark-brand-shift) {
+    border-color: #ffd700;
+  }
+  .dark
+    body
+    :where(.text-eaa-light-blue):not(.bg-eaa-blue *):not(.no-dark-brand-shift) {
+    color: #93c5fd; /* sky-300 — readable accent on dark slate */
+  }
+  /** Hover variants of `text-eaa-blue` that flip to light-blue should also shift. */
+  .dark body :where(a:hover .text-eaa-blue, .hover\:text-eaa-blue:hover) {
+    color: #ffd700;
   }
 }
 

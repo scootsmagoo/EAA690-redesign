@@ -75,8 +75,8 @@ export default function SearchForm({
           onChange={(e) => setValue(e.target.value.slice(0, MAX_SEARCH_QUERY_LENGTH))}
           className={
             compact
-              ? 'w-full rounded-md border border-white/40 bg-white/10 px-2.5 py-1.5 text-sm text-white placeholder:text-white/75 focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
-              : 'w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 shadow-sm focus:border-eaa-light-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-light-blue/40 focus-visible:ring-offset-2'
+              ? 'w-full rounded-md border border-white/40 bg-white/10 px-2.5 py-1.5 text-sm text-white placeholder:text-white/75 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
+              : 'w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 shadow-xs focus:border-eaa-light-blue focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-light-blue/40 focus-visible:ring-offset-2'
           }
         />
       </div>
@@ -84,8 +84,8 @@ export default function SearchForm({
         type="submit"
         className={
           compact
-            ? 'shrink-0 rounded-md bg-eaa-yellow px-2.5 py-1.5 text-sm font-semibold text-eaa-blue hover:bg-yellow-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
-            : 'rounded-lg bg-eaa-blue px-6 py-2.5 font-semibold text-white hover:bg-eaa-light-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2'
+            ? 'shrink-0 rounded-md bg-eaa-yellow px-2.5 py-1.5 text-sm font-semibold text-eaa-blue hover:bg-yellow-400 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
+            : 'rounded-lg bg-eaa-blue px-6 py-2.5 font-semibold text-white hover:bg-eaa-light-blue focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2'
         }
       >
         Search

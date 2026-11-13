@@ -86,7 +86,7 @@ export default function MediaSlideshowCarousel({ images }: Props) {
           <button
             onClick={() => setPaused((p) => !p)}
             aria-label={paused ? 'Resume automatic slide advancement' : 'Pause automatic slide advancement'}
-            className="text-xs text-gray-500 hover:text-eaa-blue underline focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow rounded px-1 py-0.5"
+            className="text-xs text-gray-500 hover:text-eaa-blue underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow rounded-sm px-1 py-0.5"
           >
             {paused ? '▶ Resume' : '⏸ Pause'}
           </button>
@@ -99,7 +99,7 @@ export default function MediaSlideshowCarousel({ images }: Props) {
         role="group"
         aria-roledescription="slide"
         aria-label={`Slide ${current + 1} of ${count}`}
-        className="relative w-full aspect-[4/3] sm:aspect-[16/9] bg-gray-900 overflow-hidden rounded-lg"
+        className="relative w-full aspect-4/3 sm:aspect-video bg-gray-900 overflow-hidden rounded-lg"
       >
         <ViewTransition
           key={current}
@@ -134,7 +134,7 @@ export default function MediaSlideshowCarousel({ images }: Props) {
               onClick={prev}
               aria-label="Previous image"
               aria-controls={slideId}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow"
             >
               <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -144,7 +144,7 @@ export default function MediaSlideshowCarousel({ images }: Props) {
               onClick={next}
               aria-label="Next image"
               aria-controls={slideId}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow"
             >
               <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -197,7 +197,7 @@ export default function MediaSlideshowCarousel({ images }: Props) {
                 aria-controls={slideId}
                 data-active={isActive}
                 onClick={() => { setPaused(true); goTo(i, i > current ? 'next' : 'prev') }}
-                className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow ${
+                className={`shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-all focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow ${
                   isActive
                     ? 'border-eaa-yellow opacity-100'
                     : 'border-transparent opacity-60 hover:opacity-90'

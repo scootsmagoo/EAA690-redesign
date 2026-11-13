@@ -93,7 +93,7 @@ export default async function MediaPage() {
                 <Link
                   key={gallery._id}
                   href={`/media/${slug}`}
-                  className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow"
+                  className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow"
                 >
                   {/* Thumbnail */}
                   <div className="relative h-52 bg-gray-200 overflow-hidden">
@@ -111,7 +111,7 @@ export default async function MediaPage() {
                       </div>
                     )}
                     {/* Display type badge */}
-                    <span className="absolute top-2 left-2 bg-eaa-blue text-white text-xs font-medium px-2 py-0.5 rounded">
+                    <span className="absolute top-2 left-2 bg-eaa-blue text-white text-xs font-medium px-2 py-0.5 rounded-sm">
                       {label}
                     </span>
                   </div>

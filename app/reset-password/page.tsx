@@ -152,7 +152,7 @@ function ResetForm() {
                     placeholder="At least 8 characters"
                     value={password}
                     onChange={setPassword}
-                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
+                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-hidden focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
                   />
                 </div>
                 <div>
@@ -167,7 +167,7 @@ function ResetForm() {
                     placeholder="Re-enter your new password"
                     value={confirmPassword}
                     onChange={setConfirmPassword}
-                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
+                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-hidden focus:ring-eaa-blue focus:border-eaa-blue sm:text-sm"
                   />
                 </div>
               </div>
@@ -179,7 +179,7 @@ function ResetForm() {
                   type="submit"
                   disabled={isLoading || !password || !confirmPassword}
                   aria-busy={isLoading}
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-eaa-blue hover:bg-eaa-light-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-eaa-blue disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-eaa-blue hover:bg-eaa-light-blue focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-eaa-blue disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? 'Updating…' : 'Update password'}
                 </button>

@@ -31,7 +31,7 @@ export default function IssuePdfPanel({ issue }: Props) {
   return (
     <aside
       aria-labelledby="navcom-pdf-panel-heading"
-      className="not-prose mb-8 rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+      className="not-prose mb-8 rounded-xl border border-gray-200 bg-white p-5 shadow-xs"
     >
       <div className="flex items-start gap-4">
         <div
@@ -68,7 +68,7 @@ export default function IssuePdfPanel({ issue }: Props) {
               href={pdfHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-full bg-eaa-blue text-white px-5 py-2 text-sm font-bold hover:bg-eaa-light-blue transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+              className="inline-flex items-center justify-center rounded-full bg-eaa-blue text-white px-5 py-2 text-sm font-bold hover:bg-eaa-light-blue transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
               aria-label={`Open NAVCOM PDF for ${issue.title} in a new tab`}
             >
               Open PDF
@@ -82,7 +82,7 @@ export default function IssuePdfPanel({ issue }: Props) {
               <a
                 href={pdfHref}
                 download={filename}
-                className="inline-flex items-center justify-center rounded-full border-2 border-eaa-blue text-eaa-blue px-5 py-2 text-sm font-bold hover:bg-blue-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center rounded-full border-2 border-eaa-blue text-eaa-blue px-5 py-2 text-sm font-bold hover:bg-blue-50 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-blue focus-visible:ring-offset-2"
               >
                 Download
               </a>

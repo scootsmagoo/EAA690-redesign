@@ -56,7 +56,7 @@ function ShoppingCartNavLink({
         {totalItems > 0 ? (
           <span
             aria-hidden="true"
-            className="absolute -right-2 -top-2 flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-eaa-yellow px-0.5 text-[10px] font-bold leading-none text-eaa-blue"
+            className="absolute -right-2 -top-2 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-eaa-yellow px-0.5 text-[10px] font-bold leading-none text-eaa-blue"
           >
             {totalItems > 99 ? '99+' : totalItems}
           </span>
@@ -217,7 +217,7 @@ export default function Navigation({
                         <Link
                           key={subitem.name}
                           href={subitem.href}
-                          className="block px-4 py-2 text-sm hover:bg-eaa-blue hover:text-white dark:hover:bg-eaa-yellow dark:hover:text-eaa-blue focus-visible:bg-eaa-blue focus-visible:text-white dark:focus-visible:bg-eaa-yellow dark:focus-visible:text-eaa-blue focus-visible:outline-none transition-colors"
+                          className="block px-4 py-2 text-sm hover:bg-eaa-blue hover:text-white dark:hover:bg-eaa-yellow dark:hover:text-eaa-blue focus-visible:bg-eaa-blue focus-visible:text-white dark:focus-visible:bg-eaa-yellow dark:focus-visible:text-eaa-blue focus-visible:outline-hidden transition-colors"
                         >
                           {subitem.name}
                         </Link>
@@ -235,7 +235,7 @@ export default function Navigation({
             {showStore ? (
               <ShoppingCartNavLink
                 totalItems={totalItems}
-                className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
+                className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
               />
             ) : null}
             {isPending ? (
@@ -244,7 +244,7 @@ export default function Navigation({
               <div className="flex items-center gap-3 min-w-0">
                 <Link
                   href="/members"
-                  className="text-sm text-gray-200 min-w-0 max-w-[10rem] xl:max-w-[13rem] truncate hover:text-eaa-yellow transition-colors"
+                  className="text-sm text-gray-200 min-w-0 max-w-40 xl:max-w-52 truncate hover:text-eaa-yellow transition-colors"
                   title={navUserLabel?.full ? `${navUserLabel.full} — Members area` : 'Members area'}
                 >
                   {navUserLabel?.compact ||
@@ -255,7 +255,7 @@ export default function Navigation({
                 {isAdmin && (
                   <Link
                     href="/admin"
-                    className="px-3 py-1 text-xs font-semibold rounded border border-eaa-yellow text-eaa-yellow hover:bg-eaa-yellow hover:text-eaa-blue transition-colors"
+                    className="px-3 py-1 text-xs font-semibold rounded-sm border border-eaa-yellow text-eaa-yellow hover:bg-eaa-yellow hover:text-eaa-blue transition-colors"
                   >
                     Admin
                   </Link>
@@ -263,7 +263,7 @@ export default function Navigation({
                 {(isAdmin || isEditor) && (
                   <Link
                     href="/studio"
-                    className="px-3 py-1 text-xs font-semibold rounded border border-gray-400 text-gray-300 hover:bg-gray-400 hover:text-eaa-blue transition-colors"
+                    className="px-3 py-1 text-xs font-semibold rounded-sm border border-gray-400 text-gray-300 hover:bg-gray-400 hover:text-eaa-blue transition-colors"
                   >
                     Studio
                   </Link>
@@ -290,7 +290,7 @@ export default function Navigation({
             {showStore ? (
               <ShoppingCartNavLink
                 totalItems={totalItems}
-                className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
+                className="rounded-md p-2 text-white hover:bg-white/10 hover:text-eaa-yellow focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue dark:focus-visible:ring-offset-eaa-bg-dark"
               />
             ) : null}
             <button
@@ -351,7 +351,7 @@ export default function Navigation({
 
                 return (
                   <div key={item.name}>
-                    <div className="flex min-h-[2.75rem] items-stretch overflow-hidden rounded-md hover:bg-white/5">
+                    <div className="flex min-h-11 items-stretch overflow-hidden rounded-md hover:bg-white/5">
                       <Link
                         href={item.href}
                         className="flex flex-1 items-center px-3 py-2 text-base font-medium hover:bg-eaa-light-blue"
@@ -361,7 +361,7 @@ export default function Navigation({
                       </Link>
                       <button
                         type="button"
-                        className="flex shrink-0 items-center justify-center px-3 text-white hover:bg-eaa-light-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-inset"
+                        className="flex shrink-0 items-center justify-center px-3 text-white hover:bg-eaa-light-blue focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-inset"
                         aria-expanded={sectionOpen}
                         aria-controls={subId}
                         aria-label={`${sectionOpen ? 'Collapse' : 'Expand'} ${item.name} submenu`}

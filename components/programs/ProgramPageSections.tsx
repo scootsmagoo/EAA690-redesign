@@ -48,8 +48,8 @@ function CtaBannerButton({
 
   const className =
     tone === 'onYellow'
-      ? 'inline-flex justify-center items-center min-h-[44px] px-6 py-3 rounded-md font-semibold text-center bg-eaa-blue text-white hover:bg-eaa-light-blue transition-colors shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-yellow'
-      : 'inline-flex justify-center items-center min-h-[44px] px-6 py-3 rounded-md font-semibold text-center bg-eaa-yellow text-eaa-blue hover:bg-yellow-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
+      ? 'inline-flex justify-center items-center min-h-[44px] px-6 py-3 rounded-md font-semibold text-center bg-eaa-blue text-white hover:bg-eaa-light-blue transition-colors shadow-xs focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-yellow'
+      : 'inline-flex justify-center items-center min-h-[44px] px-6 py-3 rounded-md font-semibold text-center bg-eaa-yellow text-eaa-blue hover:bg-yellow-400 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-eaa-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-eaa-blue'
 
   if (t.startsWith('http://') || t.startsWith('https://')) {
     return (
@@ -118,7 +118,7 @@ export default async function ProgramPageSections({ sections }: { sections: unkn
           <div key={k} className="bg-white rounded-lg shadow-md p-6 mb-8">
             {heading ? <h2 className="text-2xl font-bold text-eaa-blue mb-4">{heading}</h2> : null}
             {/* flow-root contains floats from inline images so they don't bleed past the card */}
-            <div className="prose max-w-none [display:flow-root]">
+            <div className="prose max-w-none flow-root">
               <ProgramPortableText value={body} />
             </div>
           </div>

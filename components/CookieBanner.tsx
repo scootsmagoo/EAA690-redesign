@@ -53,7 +53,7 @@ function CookieBannerContent() {
               "Accept" button into the already-dark banner. */}
           <button
             onClick={() => dismiss('accepted')}
-            className="!bg-white !text-gray-800 dark:!bg-eaa-yellow dark:!text-eaa-blue px-6 py-2 rounded-full font-semibold hover:opacity-90 transition-colors"
+            className="bg-white! text-gray-800! dark:bg-eaa-yellow! dark:text-eaa-blue! px-6 py-2 rounded-full font-semibold hover:opacity-90 transition-colors"
           >
             Accept
           </button>

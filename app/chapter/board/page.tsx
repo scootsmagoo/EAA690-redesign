@@ -95,7 +95,7 @@ export default async function BoardPage() {
         {members.map((member, index) => (
           <article key={member.key} className="text-center">
             {member.imageSrc && (
-              <div className="relative rounded-xl overflow-hidden shadow-md mb-4 mx-auto w-full max-w-xs aspect-[3/4] bg-gray-100">
+              <div className="relative rounded-xl overflow-hidden shadow-md mb-4 mx-auto w-full max-w-xs aspect-3/4 bg-gray-100">
                 <Image
                   src={member.imageSrc}
                   alt={`Portrait of ${member.name}, ${member.title}`}

@@ -166,7 +166,7 @@ function RegistrationsInner() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-eaa-blue" />
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-lg shadow-xs border border-gray-200 overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -214,20 +214,20 @@ function RegistrationsInner() {
                             rows={2}
                             maxLength={500}
                             placeholder="Optional rejection reason"
-                            className="w-full min-w-56 text-xs border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-eaa-blue focus:border-eaa-blue"
+                            className="w-full min-w-56 text-xs border border-gray-300 rounded-md px-2 py-1 focus:outline-hidden focus:ring-eaa-blue focus:border-eaa-blue"
                           />
                           <div className="flex gap-2 flex-wrap">
                             <button
                               disabled={isUpdating}
                               onClick={() => updateStatus(user, 'approved')}
-                              className="px-3 py-1 text-xs rounded border border-green-600 text-green-700 hover:bg-green-600 hover:text-white disabled:opacity-50"
+                              className="px-3 py-1 text-xs rounded-sm border border-green-600 text-green-700 hover:bg-green-600 hover:text-white disabled:opacity-50"
                             >
                               {isUpdating ? '…' : 'Approve'}
                             </button>
                             <button
                               disabled={isUpdating}
                               onClick={() => updateStatus(user, 'rejected')}
-                              className="px-3 py-1 text-xs rounded border border-red-600 text-red-700 hover:bg-red-600 hover:text-white disabled:opacity-50"
+                              className="px-3 py-1 text-xs rounded-sm border border-red-600 text-red-700 hover:bg-red-600 hover:text-white disabled:opacity-50"
                             >
                               {isUpdating ? '…' : 'Reject'}
                             </button>
@@ -239,7 +239,7 @@ function RegistrationsInner() {
                             <button
                               disabled={isUpdating}
                               onClick={() => updateStatus(user, 'approved')}
-                              className="px-3 py-1 text-xs rounded border border-green-600 text-green-700 hover:bg-green-600 hover:text-white disabled:opacity-50"
+                              className="px-3 py-1 text-xs rounded-sm border border-green-600 text-green-700 hover:bg-green-600 hover:text-white disabled:opacity-50"
                             >
                               {isUpdating ? '…' : 'Approve'}
                             </button>

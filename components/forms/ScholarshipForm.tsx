@@ -3,7 +3,7 @@
 import { useState, FormEvent, useRef, useEffect } from 'react'
 import UsPhoneInput from '@/components/forms/UsPhoneInput'
 
-const INPUT = 'w-full border border-gray-500 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-eaa-blue focus:border-transparent'
+const INPUT = 'w-full border border-gray-500 rounded-md px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-eaa-blue focus:border-transparent'
 const LABEL = 'block text-sm font-medium text-gray-700 mb-1'
 const FIELD = 'mb-5'
 const FIELDSET = 'mb-5 border-0 m-0 p-0'
@@ -51,7 +51,7 @@ export default function ScholarshipForm() {
         ref={successRef}
         role="status"
         tabIndex={-1}
-        className="bg-green-50 border border-green-200 rounded-xl p-8 text-center focus:outline-none"
+        className="bg-green-50 border border-green-200 rounded-xl p-8 text-center focus:outline-hidden"
       >
         <div className="text-4xl mb-3" aria-hidden="true">✅</div>
         <h3 className="text-xl font-bold text-green-800 mb-2">Application Submitted!</h3>
