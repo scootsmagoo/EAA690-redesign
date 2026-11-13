@@ -24,7 +24,7 @@
     "@sanity/vision": "^6.23.0",
     "@types/pg": "^8.23.1",
     "@vercel/analytics": "^2.0.1",
-    "better-auth": "~1.7.19",
+    "better-auth": "~1.7.23",
     "better-sqlite3": "^13.1.1",
     "fuse.js": "^7.5.0",
     "next": "^16.4.6",
