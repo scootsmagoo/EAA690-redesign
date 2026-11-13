@@ -1,3 +1,67 @@
+/**
+ * Old Squarespace URLs (docs/launch/squarespace-urls.txt) → their pages on this site.
+ * Paths that already exist here with the same slug (/calendar, /contact, /kudos, /news,
+ * /media/<gallery>, /store) need no entry. Still unmapped, pending the chapter:
+ * /agenda, /slack, /spaghetti-rsvp (and the /blank-master template leftovers, which 404).
+ */
+const PROGRAM_SLUGS = [
+  'aopa-teen-membership',
+  'eagle-flights',
+  'outreach',
+  'scholarships',
+  'summer-camp',
+  'vmc-imc-club',
+  'young-eagles',
+  'youth-aviation-program',
+]
+
+/** Old top-level person pages → Kudos profile slugs in Sanity. */
+const KUDOS_PAGES = {
+  agudelo: 'stephen-agudelo',
+  'alex-kirkland': 'alex-kirkland',
+  'alex-short': 'alex-short',
+  clement: 'zak-clement',
+  haile: 'biya-haile',
+  hale: 'maddie-hale',
+  'harrison-curry': 'harrison-curry',
+  'jeff-coffey': 'jeff-coffey',
+  'josh-franklin': 'josh-franklin',
+  klos: 'christian-klos',
+  'luke-jordan': 'luke-jordan',
+  'steve-hurst': 'steve-hurst',
+}
+
+/** Old store category pages. Listed explicitly: /store/cart and /store/success are real routes. */
+const STORE_CATEGORIES =
+  'memoriam|merchandise|name-tags|pancake-breakfast|spaghetti-dinner|special-events|summer-camp-fees'
+
+const LEGACY_SQUARESPACE_REDIRECTS = [
+  { source: '/home', destination: '/' },
+  { source: '/board', destination: '/chapter/board' },
+  { source: '/general-info', destination: '/chapter/general-info' },
+  { source: '/visit', destination: '/chapter/visit-us' },
+  { source: '/bylaws', destination: '/members/bylaws' },
+  { source: '/hangar-rental', destination: '/members/hangar-rental' },
+  { source: '/ground-school', destination: '/programs' },
+  { source: '/events', destination: '/calendar' },
+  { source: '/events/:path*', destination: '/calendar' },
+  ...PROGRAM_SLUGS.map((slug) => ({ source: `/${slug}`, destination: `/programs/${slug}` })),
+  ...Object.entries(KUDOS_PAGES).map(([oldSlug, slug]) => ({
+    source: `/${oldSlug}`,
+    destination: `/kudos/${slug}`,
+  })),
+  { source: '/maria-hernandez', destination: '/kudos' },
+  { source: '/media/duane-huff-georgia-hall-of-fame-induction', destination: '/media/duane-huff-hall-of-fame-induction' },
+  { source: '/media/video', destination: '/media' },
+  // Store: memberships and donations have dedicated pages; everything else lands on /store.
+  { source: '/store/memberships', destination: '/join' },
+  { source: '/store/p/:slug(.*membership.*)', destination: '/join' },
+  { source: '/store/donations', destination: '/donate' },
+  { source: '/store/p/donations', destination: '/donate' },
+  { source: `/store/:category(${STORE_CATEGORIES})`, destination: '/store' },
+  { source: '/store/p/:slug', destination: '/store' },
+].map((r) => ({ ...r, permanent: true }))
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -29,6 +93,7 @@ const nextConfig = {
         destination: '/sign-in',
         permanent: true,
       },
+      ...LEGACY_SQUARESPACE_REDIRECTS,
     ]
   },
   async headers() {

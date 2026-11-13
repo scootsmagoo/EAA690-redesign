@@ -1,4 +1,9 @@
-import { getAuth, DEV_SECRET_FALLBACK, ensureBetterAuthSchema } from "@/lib/better-auth"
+import {
+  getAuth,
+  DEV_SECRET_FALLBACK,
+  ensureBetterAuthSchema,
+  PRODUCTION_TRUSTED_ORIGINS,
+} from "@/lib/better-auth"
 import { toNextJsHandler } from "better-auth/next-js"
 import { NextRequest } from "next/server"
 
@@ -16,8 +21,7 @@ const ALLOWED_ORIGINS = new Set(
   [
     process.env.BETTER_AUTH_URL,
     process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
-    'https://eaa690.org',
-    'https://eaa-960-redesign.vercel.app',
+    ...PRODUCTION_TRUSTED_ORIGINS,
     'http://localhost:3000',
     'http://localhost:3333',
   ].filter(Boolean) as string[]
