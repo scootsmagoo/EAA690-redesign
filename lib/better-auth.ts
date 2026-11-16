@@ -5,7 +5,10 @@ import { getPgPool } from "./pg-pool"
 import { getEffectiveDatabaseUrl, isPostgresUrl, resolveSqliteFilePath } from "./db-resolver"
 import { getSiteBaseURL } from "./site-url"
 import { sendPasswordResetEmail } from "./password-reset-email"
+import { sendVerificationEmail } from "./verification-email"
 import { ensureUserApprovalSchema } from "./account-approval-db"
+import { ensureMemberRosterSchema } from "./member-roster-db"
+import { autoApproveFromRoster } from "./roster-auto-approval"
 import { ensureStripeCustomerIdColumn } from "./stripe-customer-db"
 import { relaxAccountIssuerColumn } from "./account-issuer-migration"
 
@@ -156,6 +159,43 @@ export function getAuth(): NonNullable<typeof _auth> {
         revokeSessionsOnPasswordReset: true,
       },
       /**
+       * Verification is optional for signing in (requireEmailVerification stays false), but it's
+       * what unlocks automatic approval: once a member proves they own an address that's on the
+       * chapter roster, their account is approved without waiting for an admin. Delivery errors
+       * are logged and swallowed so a mail outage never blocks sign-up; the member can resend
+       * from the "pending approval" screen, and admins can still approve by hand.
+       */
+      emailVerification: {
+        sendOnSignUp: true,
+        autoSignInAfterVerification: true,
+        expiresIn: 60 * 60 * 24,
+        sendVerificationEmail: async ({ user, url }) => {
+          try {
+            await sendVerificationEmail({
+              to: user.email,
+              name: (user as { name?: string | null }).name ?? null,
+              verifyUrl: url,
+            })
+          } catch (err) {
+            console.error("sendVerificationEmail failed:", {
+              email: user.email,
+              error: err instanceof Error ? err.message : String(err),
+            })
+          }
+        },
+        afterEmailVerification: async (user) => {
+          try {
+            await autoApproveFromRoster(String(user.id))
+          } catch (err) {
+            // The account simply stays pending for manual review.
+            console.error("Roster auto-approval failed:", {
+              userId: user.id,
+              error: err instanceof Error ? err.message : String(err),
+            })
+          }
+        },
+      },
+      /**
        * Per-route rate limiting. Defaults are 100 req / 10s per IP per path which is far too lax
        * for the password-reset request endpoint — an attacker could email-bomb arbitrary inboxes
        * or our own SMTP quota. 5 requests / 60s is the OWASP cheat-sheet recommendation for this
@@ -207,6 +247,7 @@ export async function ensureBetterAuthSchema(): Promise<void> {
       const ctx = await getAuth().$context
       await ctx.runMigrations()
       await ensureUserApprovalSchema()
+      await ensureMemberRosterSchema()
       await ensureStripeCustomerIdColumn()
     })().catch((err) => {
       // "already exists" (42P07) means tables are already set up — safe to ignore

@@ -6,7 +6,7 @@ interface ResetEmailArgs {
   resetUrl: string
 }
 
-function escapeHtml(s: string): string {
+export function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -21,7 +21,7 @@ function escapeHtml(s: string): string {
  * user's display name to corrupt the plaintext layout or smuggle anything through if a future
  * provider swap is less strict (mirrors the contact-form helper in lib/contact-email.ts).
  */
-function stripCtl(s: string, max = 200): string {
+export function stripCtl(s: string, max = 200): string {
   return s.replace(/[\x00-\x1F\x7F]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max)
 }
 

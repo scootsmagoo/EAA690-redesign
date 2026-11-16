@@ -16,6 +16,8 @@ export type UserApprovalState = {
   rejectedBy: string | null
   rejectionReason: string | null
   createdAt: string | null
+  /** True once the person has clicked the link in their verification email. */
+  emailVerified: boolean
 }
 
 function usingPostgres(): boolean {
@@ -48,6 +50,8 @@ function mapApprovalRow(row: Record<string, unknown>): UserApprovalState {
     rejectedBy: typeof row.rejectedBy === 'string' ? row.rejectedBy : null,
     rejectionReason: typeof row.rejectionReason === 'string' ? row.rejectionReason : null,
     createdAt: typeof row.createdAt === 'string' ? row.createdAt : row.createdAt ? String(row.createdAt) : null,
+    // Postgres returns a boolean; SQLite stores 0/1.
+    emailVerified: row.emailVerified === true || row.emailVerified === 1,
   }
 }
 
@@ -144,7 +148,7 @@ export async function getUserApprovalState(userId: string): Promise<UserApproval
     const pool = getPgPool()
     const res = await pool.query(
       `SELECT id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-              "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"
+              "rejectedAt", "rejectedBy", "rejectionReason", "createdAt", "emailVerified"
        FROM "user"
        WHERE id = $1
        LIMIT 1`,
@@ -158,7 +162,7 @@ export async function getUserApprovalState(userId: string): Promise<UserApproval
     const row = db
       .prepare(
         `SELECT id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-                "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"
+                "rejectedAt", "rejectedBy", "rejectionReason", "createdAt", "emailVerified"
          FROM "user"
          WHERE id = ?
          LIMIT 1`
@@ -179,7 +183,7 @@ export async function listUsersByApprovalStatus(status?: ApprovalStatus): Promis
     const values = status ? [status] : []
     const res = await pool.query(
       `SELECT id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-              "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"
+              "rejectedAt", "rejectedBy", "rejectionReason", "createdAt", "emailVerified"
        FROM "user"
        ${status ? 'WHERE "approvalStatus" = $1' : ''}
        ORDER BY
@@ -194,7 +198,7 @@ export async function listUsersByApprovalStatus(status?: ApprovalStatus): Promis
   try {
     const sql = `
       SELECT id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-             "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"
+             "rejectedAt", "rejectedBy", "rejectionReason", "createdAt", "emailVerified"
       FROM "user"
       ${status ? 'WHERE "approvalStatus" = ?' : ''}
       ORDER BY
@@ -233,7 +237,7 @@ export async function setUserApprovalStatus(args: {
                "rejectionReason" = NULL
            WHERE id = $1
            RETURNING id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-                     "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"`
+                     "rejectedAt", "rejectedBy", "rejectionReason", "createdAt", "emailVerified"`
         : `UPDATE "user"
            SET "approvalStatus" = $3,
                "rejectedAt" = CASE WHEN $3 = 'rejected' THEN NOW() ELSE "rejectedAt" END,
@@ -241,7 +245,7 @@ export async function setUserApprovalStatus(args: {
                "rejectionReason" = CASE WHEN $3 = 'rejected' THEN $4 ELSE "rejectionReason" END
            WHERE id = $1
            RETURNING id, name, email, role, "approvalStatus", "approvedAt", "approvedBy",
-                     "rejectedAt", "rejectedBy", "rejectionReason", "createdAt"`,
+                     "rejectedAt", "rejectedBy", "rejectionReason", "createdAt", "emailVerified"`,
       args.status === 'approved'
         ? [args.userId, args.actorId]
         : [args.userId, args.actorId, args.status, reason]
