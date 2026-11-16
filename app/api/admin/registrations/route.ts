@@ -7,6 +7,8 @@ import {
   setUserApprovalStatus,
   type ApprovalStatus,
 } from '@/lib/account-approval-db'
+import { isRosterEntryCurrent } from '@/lib/member-roster'
+import { getRosterMatches } from '@/lib/member-roster-db'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -52,7 +54,18 @@ export async function GET(request: NextRequest) {
 
   try {
     const users = await listUsersByApprovalStatus(status)
-    return NextResponse.json({ users })
+    // Annotate each account with its roster entry (member type + expiration only) so
+    // admins can see why an account is still pending.
+    const roster = await getRosterMatches(users.map((u) => u.email))
+    const now = new Date()
+    const annotated = users.map((u) => {
+      const match = roster.get(u.email.trim().toLowerCase()) ?? null
+      return {
+        ...u,
+        roster: match ? { ...match, current: isRosterEntryCurrent(match, now) } : null,
+      }
+    })
+    return NextResponse.json({ users: annotated })
   } catch (error) {
     console.error('Failed to list registration approvals:', error)
     return NextResponse.json({ error: 'Failed to fetch registrations' }, { status: 500 })

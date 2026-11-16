@@ -13,9 +13,140 @@ type RegistrationUser = {
   role: string | null
   approvalStatus: ApprovalStatus
   approvedAt: string | null
+  approvedBy: string | null
   rejectedAt: string | null
   rejectionReason: string | null
   createdAt: string | null
+  emailVerified: boolean
+  roster: { memberType: string | null; expiresOn: string | null; current: boolean } | null
+}
+
+type RosterSummary = {
+  entryCount: number
+  importedAt: string | null
+  graceDays: number
+}
+
+type ImportResult = {
+  imported: number
+  skippedNoEmail: number
+  current: number
+  approvedNow: number
+}
+
+/** Must match ROSTER_APPROVER in lib/roster-auto-approval.ts. */
+const ROSTER_APPROVER = 'member-roster'
+
+/** Why a pending account hasn't been approved automatically, in plain words. */
+function pendingHint(user: RegistrationUser): string {
+  if (!user.roster) {
+    return 'Not on the roster. Family members often sign up with their own email, which the roster doesn’t list. Check by name.'
+  }
+  if (!user.roster.current) {
+    if (user.roster.memberType?.trim().toLowerCase() === 'non-member') {
+      return 'Listed on the roster as a non-member, so not approved automatically.'
+    }
+    return user.roster.expiresOn
+      ? `On the roster, but the membership expired ${user.roster.expiresOn}.`
+      : 'On the roster, but with no expiration date.'
+  }
+  if (!user.emailVerified) {
+    return 'On the roster. Approves automatically once they confirm their email.'
+  }
+  return 'On the roster and verified.'
+}
+
+function RosterPanel({ onImported }: { onImported: () => void }) {
+  const [summary, setSummary] = useState<RosterSummary | null>(null)
+  const [file, setFile] = useState<File | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [result, setResult] = useState<ImportResult | null>(null)
+  const [error, setError] = useState('')
+  const [inputKey, setInputKey] = useState(0)
+
+  const loadSummary = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/roster', { cache: 'no-store' })
+      const data = await res.json()
+      if (res.ok) setSummary(data)
+    } catch {
+      /* summary is informational only */
+    }
+  }, [])
+
+  useEffect(() => { loadSummary() }, [loadSummary])
+
+  async function upload() {
+    if (!file) return
+    setBusy(true)
+    setError('')
+    setResult(null)
+    try {
+      const body = new FormData()
+      body.append('file', file)
+      const res = await fetch('/api/admin/roster', { method: 'POST', body })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Upload failed')
+      setResult(data)
+      setFile(null)
+      setInputKey((k) => k + 1)
+      loadSummary()
+      onImported()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Upload failed')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <section className="bg-white border border-gray-200 rounded-lg p-5 mb-6" aria-labelledby="roster-heading">
+      <h2 id="roster-heading" className="text-lg font-semibold text-eaa-blue">Member roster</h2>
+      <p className="text-sm text-gray-600 mt-1">
+        {summary?.importedAt
+          ? `${summary.entryCount} member emails, last updated ${new Date(summary.importedAt).toLocaleString()}.`
+          : 'No roster uploaded yet.'}{' '}
+        When someone signs up and confirms an email that matches a current membership (or one that
+        expired less than {summary?.graceDays ?? 90} days ago), their account is approved
+        automatically. Everyone else waits here for review.
+      </p>
+      <p className="text-sm text-gray-600 mt-2">
+        To update it, export the member list from the EAA chapter roster site (Search Members →
+        export) and upload that file. Only names, emails, member type, EAA number and expiration
+        are kept; the file itself isn’t stored.
+      </p>
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <label htmlFor="roster-file" className="sr-only">Roster export file</label>
+        <input
+          key={inputKey}
+          id="roster-file"
+          type="file"
+          accept=".xls,.html,.htm,text/html,application/vnd.ms-excel"
+          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          className="text-sm"
+        />
+        <button
+          onClick={upload}
+          disabled={!file || busy}
+          className="px-4 py-2 text-sm rounded-md bg-eaa-blue text-white hover:bg-eaa-light-blue disabled:opacity-50"
+        >
+          {busy ? 'Uploading…' : 'Upload roster'}
+        </button>
+      </div>
+      {result && (
+        <p role="status" className="mt-3 text-sm text-green-800 bg-green-50 border border-green-200 rounded-md px-3 py-2">
+          Imported {result.imported} member emails ({result.current} current).
+          {result.skippedNoEmail > 0 && ` ${result.skippedNoEmail} rows had no email and were skipped.`}
+          {result.approvedNow > 0 && ` ${result.approvedNow} pending account${result.approvedNow === 1 ? ' was' : 's were'} approved automatically.`}
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="mt-3 text-sm text-red-800 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+          {error}
+        </p>
+      )}
+    </section>
+  )
 }
 
 const STATUS_LABELS: Record<ApprovalStatus, string> = {
@@ -128,9 +259,11 @@ function RegistrationsInner() {
       </div>
 
       <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 text-sm text-blue-950">
-        New signups can create credentials, but member-only pages stay locked until an admin approves
-        the account here.
+        New signups can create credentials, but member-only pages stay locked until their account is
+        approved, either automatically from the member roster below or by an admin here.
       </div>
+
+      <RosterPanel onImported={fetchUsers} />
 
       <div className="flex flex-wrap gap-2 mb-6">
         {(['pending', 'approved', 'rejected', 'all'] as const).map((status) => (
@@ -196,6 +329,12 @@ function RegistrationsInner() {
                     </td>
                     <td className="px-6 py-4">
                       <StatusBadge status={user.approvalStatus} />
+                      {user.approvalStatus === 'pending' && (
+                        <p className="text-xs text-gray-600 mt-2 max-w-xs">{pendingHint(user)}</p>
+                      )}
+                      {user.approvalStatus === 'approved' && user.approvedBy === ROSTER_APPROVER && (
+                        <p className="text-xs text-gray-500 mt-2">Approved automatically (on roster)</p>
+                      )}
                       {user.rejectionReason && (
                         <p className="text-xs text-gray-500 mt-2 max-w-xs">{user.rejectionReason}</p>
                       )}

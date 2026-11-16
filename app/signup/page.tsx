@@ -39,12 +39,19 @@ export default function SignupPage() {
         email,
         password,
         name,
+        // Where the link in the confirmation email lands after verifying.
+        callbackURL: '/members',
       })
 
       if ('error' in result && result.error) {
         setError(authErrorMessage(result.error, 'Failed to create account'))
       } else {
-        router.push('/sign-in?message=Registration+submitted.+An+EAA+690+admin+will+review+your+account+before+member+access+is+enabled.')
+        router.push(
+          '/sign-in?message=' +
+            encodeURIComponent(
+              'Account created. Check your email for a link to confirm your address. If it matches the chapter membership roster, member access turns on as soon as you confirm; otherwise an admin will review your request.'
+            )
+        )
       }
     } catch (err) {
       setError('An error occurred. Please try again.')
@@ -62,8 +69,9 @@ export default function SignupPage() {
             Request member account access
           </h2>
           <p className="mt-3 text-center text-sm text-gray-600">
-            Website accounts are limited to current EAA 690 members. After registering, an admin will
-            review your request before member-only access is enabled.
+            Website accounts are limited to current EAA 690 members. Use the email address the chapter
+            has on file for you: once you confirm it, member access turns on automatically. Otherwise an
+            admin will review your request.
           </p>
           <div className="mt-6 flex rounded-lg border border-gray-200 overflow-hidden">
             <Link
