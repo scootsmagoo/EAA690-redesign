@@ -156,7 +156,7 @@ export default function JoinPage() {
 
         {/* National requirement notice — region, not alert (informational) */}
         <section
-          className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-12 flex gap-4 items-start"
+          className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6 flex gap-4 items-start"
           aria-labelledby="join-national-notice-heading"
         >
           <span className="text-amber-500 text-2xl mt-0.5" aria-hidden="true">
@@ -179,6 +179,30 @@ export default function JoinPage() {
               </a>{' '}
               is required before joining at the local chapter level. If you are not yet an EAA National member,
               please join there first, then return here to complete your chapter membership.
+            </p>
+          </div>
+        </section>
+
+        {/*
+          Members who paid through the old Squarespace store are on Squarespace auto-renew.
+          The board chose to let those run out (no renewals after launch) and remind each
+          member to renew here near their date, so tell them not to pay twice.
+          Remove (with the matching FAQ entry) once the last old subscription has lapsed.
+        */}
+        <section
+          className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-12 flex gap-4 items-start"
+          aria-labelledby="join-existing-notice-heading"
+        >
+          <span className="text-blue-700 text-2xl mt-0.5" aria-hidden="true">
+            ℹ️
+          </span>
+          <div>
+            <h2 id="join-existing-notice-heading" className="text-lg font-semibold text-blue-950 mb-1">
+              Already paid dues on our previous website?
+            </h2>
+            <p className="text-blue-950 text-sm leading-relaxed">
+              Your membership stays active through the year you paid for, so you don&apos;t need to pay
+              again here. Before your renewal date, we&apos;ll email you a link to renew on this site.
             </p>
           </div>
         </section>
@@ -368,6 +392,10 @@ export default function JoinPage() {
               {
                 q: 'Can I cancel my recurring membership?',
                 a: 'Yes. Individual and Family memberships auto-renew annually, but you can cancel at any time before the renewal date.',
+              },
+              {
+                q: 'I set up auto-renew on the old website. Will I be charged twice?',
+                a: 'No. Renewals through the old website stop when this site launches, and your membership stays active through the year you already paid for. We\'ll email you before your renewal date with a link to renew here.',
               },
               {
                 q: 'Is my chapter membership fee tax-deductible?',
