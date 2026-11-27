@@ -97,10 +97,15 @@ function getSecret(): string {
  */
 let _auth: ReturnType<typeof betterAuth> | null = null
 
-/** Production origins — shared with the CORS allowlist in app/api/auth/[...all]/route.ts. */
+/**
+ * Production origins — shared with the CORS allowlist in app/api/auth/[...all]/route.ts.
+ * `new.eaa690.org` is the member-preview address used until the main domain moves
+ * over; it can be dropped after launch.
+ */
 export const PRODUCTION_TRUSTED_ORIGINS = [
   "https://eaa690.org",
   "https://www.eaa690.org",
+  "https://new.eaa690.org",
   "https://eaa-960-redesign.vercel.app",
 ] as const
 
